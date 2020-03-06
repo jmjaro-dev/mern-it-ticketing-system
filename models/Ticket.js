@@ -22,7 +22,7 @@ const TicketSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    default: open
+    default: 'open'
   },
   issuedBy: {
     type: String,
