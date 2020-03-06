@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://admin:admin@it-ticketing-system-6vwga.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "jmjaro-dev"
+}
