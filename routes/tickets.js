@@ -8,7 +8,7 @@ const User = require('../models/User');
 // @route   GET api/tickets
 // @desc    Get all tickets
 // @access  Private
-router.get('/', async (req,res) => {
+router.get('/', auth, async (req,res) => {
   try {
     // Gets all tickets and sort by latest tickets
     const tickets = await Ticket.find().sort({ dateIssued: -1 });
@@ -22,11 +22,11 @@ router.get('/', async (req,res) => {
 // @route   POST api/tickets
 // @desc    Add ticket
 // @access  Private
-router.post('/', [ 
+router.post('/', [ auth, [
   check('title', 'Please enter first name').not().isEmpty(),
   check('description', 'Please enter last name').not().isEmpty(),
   check('priorityLevel', 'Please enter a valid email').not().isEmpty()
-  ], async (req,res) => {
+  ] ], async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
@@ -57,11 +57,11 @@ router.post('/', [
 // @route   PUT api/tickets
 // @desc    Update ticket
 // @access  Private
-router.put('/:id', [ 
+router.put('/:id', [ auth, [
   check('title', 'Title is required').not().isEmpty(),
   check('description', 'Please enter a description for the ticket').not().isEmpty(),
   check('priorityLevel', 'Please select priority level').not().isEmpty()
-  ], async (req,res) => {
+  ] ], async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
@@ -100,7 +100,7 @@ router.put('/:id', [
 // @route   DELETE api/tickets
 // @desc    Delete a ticket
 // @access  Private
-router.delete('/:id', async (req,res) => {
+router.delete('/:id', auth, async (req,res) => {
   try {
     // Find the ticket by id
     let ticket = await Ticket.findById(req.params.id) 

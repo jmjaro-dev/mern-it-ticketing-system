@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-
+// Redux
+import { Provider } from 'react-redux';
+import store from './store';
 // Styles
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css/dist/js/materialize.min.js';
@@ -18,15 +20,17 @@ const App = () => {
   }, []);
   
   return (
-    <Router>
-      <Fragment>
-        <Navbar />
-        <div className="container">
-          <Route exact path ='/login' component={Login} />
-          <Route exact path ='/register' component={Register} />
-        </div>
-      </Fragment>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Fragment>
+          <Navbar />
+          <div className="container">
+            <Route exact path ='/login' component={Login} />
+            <Route exact path ='/register' component={Register} />
+          </div>
+        </Fragment>
+      </Router>
+    </Provider>
   );
 }
 

@@ -7,7 +7,7 @@ const Comment = require('../models/Comment');
 // @route   GET api/comments/:id
 // @desc    Get all for the ticket
 // @access  Private
-router.get('/:id', async (req,res) => {
+router.get('/:id', auth, async (req,res) => {
   try {
     // Gets all comments for the ticket and sort by latest in ascending manner
     const comments = await Comment.find({ ticketId: req.params.id }).sort({ date: -1 });
@@ -21,9 +21,9 @@ router.get('/:id', async (req,res) => {
 // @route   POST api/comments
 // @desc    Add comment
 // @access  Private
-router.post('/', [ 
+router.post('/', [ auth, [
   check('message', 'Please enter a message').not().isEmpty()
-  ], async (req,res) => {
+  ] ], async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
@@ -54,9 +54,9 @@ router.post('/', [
 // @route   PUT api/comments
 // @desc    Update comment message
 // @access  Private
-router.put('/:id', [ 
+router.put('/:id', [ auth, [ 
   check('message', 'Please enter a message').not().isEmpty()
-  ], async (req,res) => {
+  ] ], async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
@@ -92,7 +92,7 @@ router.put('/:id', [
 // @route   DELETE api/comments
 // @desc    Delete a comment
 // @access  Private
-router.delete('/:id', async (req,res) => {
+router.delete('/:id', auth, async (req,res) => {
   try {
     // Find the comment by id
     let comment = await Comment.findById(req.params.id) 

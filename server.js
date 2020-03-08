@@ -10,6 +10,7 @@ connectDB();
 app.use(express.json({ extended: false }));
 
 // Define Routes
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/tickets', require('./routes/tickets'));
 app.use('/api/comments', require('./routes/comments'));

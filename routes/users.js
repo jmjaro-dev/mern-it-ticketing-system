@@ -10,7 +10,7 @@ const User = require('../models/User');
 // @route   GET api/users
 // @desc    Get all users
 // @access  Private
-router.get('/', async (req,res) => {
+router.get('/', auth, async (req,res) => {
   try {
     // Gets all users and sort by date
     const users = await User.find().sort({ date: -1 });
@@ -24,13 +24,13 @@ router.get('/', async (req,res) => {
 // @route   POST api/users
 // @desc    Add user
 // @access  Private
-router.post('/', [ 
+router.post('/', [ auth, [  
   check('firstName', 'Please enter first name').not().isEmpty(),
   check('lastName', 'Please enter last name').not().isEmpty(),
   check('email', 'Please enter a valid email').isEmail(),
   check('password', 'Password must be > 6 characters.').isLength({ min: 6 }),
   check('userType', 'Please select user type').not().isEmpty()
-  ], async (req,res) => {
+  ] ], async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
@@ -90,10 +90,10 @@ router.post('/', [
 // @route   PUT api/users
 // @desc    Update user's first and last name
 // @access  Private
-router.put('/:id', [ 
+router.put('/:id', [ auth, [
   check('firstName', 'Please enter first name').not().isEmpty(),
   check('lastName', 'Please enter last name').not().isEmpty()
-  ], async (req,res) => {
+  ] ], async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
@@ -130,7 +130,7 @@ router.put('/:id', [
 // @route   DELETE api/users
 // @desc    Delete a user
 // @access  Private
-router.delete('/:id', async (req,res) => {
+router.delete('/:id', auth, async (req,res) => {
   try {
     // Find the user by id
     let user = await User.findById(req.params.id) 
