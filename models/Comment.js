@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const CommentSchema = mongoose.Schema({
   ticketId: {
-    type: Number,
+    type: String,
     required: true
   },
   userId: {
-    type: Number,
+    type: String,
     required: true
   },
   message: {

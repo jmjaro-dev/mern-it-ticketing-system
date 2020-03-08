@@ -54,8 +54,8 @@ router.post('/', [
   }
 });
 
-// @route   PUT api/users
-// @desc    Update user's first and last name
+// @route   PUT api/tickets
+// @desc    Update ticket
 // @access  Private
 router.put('/:id', [ 
   check('title', 'Title is required').not().isEmpty(),
