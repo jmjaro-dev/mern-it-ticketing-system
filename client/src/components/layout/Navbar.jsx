@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const Navbar = props => {
 
   const guestLinks = (
     <Fragment>
+      <li>
+        <Link to='/'>Home</Link>
+      </li>
       <li>
         <Link to='/login'>Login</Link>
       </li>
@@ -26,8 +29,8 @@ const Navbar = props => {
   )
 }
 
-Navbar.propTypes = {
+// Navbar.propTypes = {
 
-}
+// }
 
 export default Navbar;

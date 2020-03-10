@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alertActions';
+import { loadUser, login, clearErrors } from '../../actions/authActions';
+import PropTypes from 'prop-types';
 
+const Login =  ({ isAuthenticated, error, loadUser, login, clearErrors, setAlert, ...props})  => {
+  // Check if user is authenticated
+  useEffect(() => {
+    if(isAuthenticated) {
+      loadUser();
+      props.history.push('/');
+    }
 
-const Login = props => {
+    if(error === 'Invalid Crendentials') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, props.history]);
+
   const [user, setUser] = useState({
     email:'',
     password: ''  
@@ -16,9 +32,12 @@ const Login = props => {
     e.preventDefault();
 
     if(user.email === '' || password === '') {
-      console.log('Please fill in all fields', 'danger');
+      setAlert('Please fill in all fields', 'danger');
     } else {
-      console.log('User Logged in'); 
+      login({
+        email,
+        password
+      });
     }
   }
 
@@ -55,8 +74,14 @@ const styles = {
   }
 };
 
+login.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  error: PropTypes.bool.isRequired
+};
+
 const mapStateToProps = state => ({
-  log: state.log
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.auth.error
 });
 
-export default connect(mapStateToProps, {})(Login);
+export default connect(mapStateToProps, { loadUser, login, clearErrors, setAlert })(Login);

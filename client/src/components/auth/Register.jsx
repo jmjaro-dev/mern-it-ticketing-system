@@ -18,11 +18,11 @@ const Register = props => {
   const onSubmit = e => {
     e.preventDefault();
 
-    if(password !== password) {
-      console.log('Password did not match');
-    } else {
-      console.log('User registered successfully'); 
-    }
+    // if(password !== password) {
+    //   console.log('Password did not match');
+    // } else {
+    //   console.log('User registered successfully'); 
+    // }
   }
 
   return (

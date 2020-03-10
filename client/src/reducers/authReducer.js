@@ -6,8 +6,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS
-} from './types';
+  CLEAR_ERRORS,
+  SET_LOADING
+} from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
@@ -52,6 +53,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: null
+      }
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true
       }
     default:
       return state;

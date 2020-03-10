@@ -9,19 +9,20 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  SET_LOADING
 } from './types';
 
 // Load User
 export const loadUser = () => async dispatch => {
+  setLoading();
+
+  if(localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
   try {
-    setLoading();
-
-    if(localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-
-    const res = await axios.get(/api/auth);
+    const res = await axios.get('/api/auth');
   
     dispatch({
       type: USER_LOADED,
@@ -36,16 +37,16 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register User
-export const register = (formData) => async dispatch => {
-  try {
-    setLoading();
+export const register = formData => async dispatch => {
+  setLoading();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
     }
+  }
 
+  try {
     const res = await axios.post('/api/users', formData, config);
 
     dispatch({
@@ -62,16 +63,16 @@ export const register = (formData) => async dispatch => {
 };
 
 // Login User
-export const login = formData => async dispatch => {
-  try {
-    setLoading();
+export const login = formData => async (dispatch) => {
+  setLoading();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
     }
-
+  }
+  
+  try {
     const res = await axios.post('/api/auth', formData, config);
 
     dispatch({
@@ -88,7 +89,14 @@ export const login = formData => async dispatch => {
 };
 
 // Logout
-export const logout = () => dispatch({ type: LOGOUT });
+export const logout = () => async dispatch => dispatch({ type: LOGOUT });
 
 // Clear Errors
-export const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+export const clearErrors = () => async dispatch => dispatch({ type: CLEAR_ERRORS });
+
+// Set loading to True
+export const setLoading = () => {
+  return {
+    type: SET_LOADING
+  };
+}
