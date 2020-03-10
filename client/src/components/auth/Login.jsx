@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+
 
 const Login = props => {
   const [user, setUser] = useState({
@@ -53,4 +55,8 @@ const styles = {
   }
 };
 
-export default Login;
+const mapStateToProps = state => ({
+  log: state.log
+});
+
+export default connect(mapStateToProps, {})(Login);
