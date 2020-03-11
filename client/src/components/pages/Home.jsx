@@ -2,13 +2,18 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
 
-const Home = ({ user, isAuthenticated }) => {
+const Home = ({ user, isAuthenticated, loadUser }) => {
+  useEffect(() => {
+    if(isAuthenticated) {
+      loadUser()
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated]);
+  
   return (
-    isAuthenticated && user && (
     <div>
-      <h1>Hello {user.firstName} {user.lastName}</h1>
+      <h1>Home Page</h1>
     </div>
-    )
   )
 }
 

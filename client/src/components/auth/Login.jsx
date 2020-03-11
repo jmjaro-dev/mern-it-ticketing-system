@@ -4,17 +4,15 @@ import { setAlert } from '../../actions/alertActions';
 import { loadUser, login, clearErrors } from '../../actions/authActions';
 import PropTypes from 'prop-types';
 
-const Login =  ({ isAuthenticated, error, loadUser, login, clearErrors, setAlert, ...props})  => {
+const Login =  ({ isAuthenticated, error, alerts, loadUser, login, clearErrors, setAlert, ...props})  => {
   // Check if user is authenticated
   useEffect(() => {
     if(isAuthenticated) {
-      loadUser();
       props.history.push('/');
     }
 
-    if(error === 'Invalid Crendentials') {
-      setAlert(error, 'danger');
-      clearErrors();
+    if(error) {
+      setAlert(error.msg, 'danger');
     }
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
@@ -76,7 +74,7 @@ const styles = {
 
 login.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  error: PropTypes.bool.isRequired
+  error: PropTypes.object
 };
 
 const mapStateToProps = state => ({

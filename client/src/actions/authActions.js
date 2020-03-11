@@ -74,17 +74,24 @@ export const login = formData => async (dispatch) => {
   
   try {
     const res = await axios.post('/api/auth', formData, config);
+    const data = res.json();
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data
+      payload: data
     });
     loadUser();
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,
-      payload: err.response.statusText
+      payload: err.response.data
     });
+    
+    setTimeout(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    }, 4000);
   }
 };
 

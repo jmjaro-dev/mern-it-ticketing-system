@@ -1,14 +1,17 @@
 import React, { Fragment } from 'react';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../../actions/authActions';
+import PropTypes from 'prop-types';
 
-const Navbar = props => {
+const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
+
+  const onLogout = () => {
+    logout();
+  }
 
   const guestLinks = (
     <Fragment>
-      <li>
-        <Link to='/'>Home</Link>
-      </li>
       <li>
         <Link to='/login'>Login</Link>
       </li>
@@ -18,19 +21,51 @@ const Navbar = props => {
     </Fragment>
   )
 
+  const authLinks = (
+    <Fragment>
+      <li>
+        Hello { user && user.firstName }
+      </li>
+      <li>
+        <Link to='/'>Home</Link>
+      </li>
+      <li>
+        <a href='#!' onClick={onLogout}>
+          <i className="fas fa-sign-out-alt"/>
+        </a>
+      </li>
+    </Fragment>
+  )
+
   return (
     <nav className="blue darken-2">
       <div className="nav-wrapper container">
-        <ul id="nav-mobile" className="right hide-on-med-and-down">
-          {guestLinks}
+        <Link to="/">
+          <i className={icon} /> {title}
+        </Link>
+        <ul id="nav-mobile" className="right">
+          {isAuthenticated ? authLinks : guestLinks}
         </ul>
       </div>
     </nav>
   )
 }
 
-// Navbar.propTypes = {
+Navbar.propTypes = {
+  title: PropTypes.string.isRequired,
+  icon: PropTypes.string,
+  isAuthenticated: PropTypes.bool,
+  user: PropTypes.object
+}
 
-// }
+Navbar.defaultProps = {
+  title: 'IT Ticket Tracker',
+  icon: 'fas fa-id-card-alt'
+}
 
-export default Navbar;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps, { logout })(Navbar);

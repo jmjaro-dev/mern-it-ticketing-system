@@ -4,9 +4,9 @@ import {
 } from '../actions/types';
 
 
-const alerts = [];
+const initialState = [];
 
-export default (state = alerts, action) => {
+export default (state = initialState, action) => {
   switch(action.type) {
     case SET_ALERT:
       return [...state, action.payload];

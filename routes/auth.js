@@ -43,7 +43,7 @@ router.post('/', [
 
     // Check if user exists
     if(!user) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+      return res.status(400).json({ msg: 'User doesn\'t exists' });
     }
 
     // If user exists then compare password
@@ -51,7 +51,7 @@ router.post('/', [
 
     // If passwords doesn't match then return status 400
     if(!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+      return res.status(400).json({ msg: 'Incorrect password' });
     }
 
     // User Payload

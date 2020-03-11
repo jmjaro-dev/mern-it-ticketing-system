@@ -7,5 +7,5 @@ import userReducer from './userReducer';
 export default combineReducers({
   user: userReducer,
   auth: authReducer,
-  alerts: alertReducer
+  alert: alertReducer
 });

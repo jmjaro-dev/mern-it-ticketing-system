@@ -5,13 +5,14 @@ const Alerts = ({ alerts }) => {
   return (
     alerts.length > 0 && alerts.map(alert => (
       <div key={alert.id} className={`alert alert-${alert.type}`}>
-        <i className="fas fa-info-circle">{alert.msg}</i>
+        <i className="fas fa-exclamation-circle" />  {alert.msg}
       </div>
     ))
   )
 }
 
 const mapPropsToState = state => ({
-  alerts: state.alerts
+  alerts: state.alert
 });
+
 export default connect(mapPropsToState, null)(Alerts);
