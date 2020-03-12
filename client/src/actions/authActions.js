@@ -53,12 +53,17 @@ export const register = formData => async dispatch => {
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-    loadUser();
   } catch (err) {
     dispatch({
       type: REGISTER_FAIL,
-      payload: err.response.statusText
+      payload: err.response.data
     });
+
+    setTimeout(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    }, 4000);
   }
 };
 
@@ -74,13 +79,11 @@ export const login = formData => async (dispatch) => {
   
   try {
     const res = await axios.post('/api/auth', formData, config);
-    const data = res.json();
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: data
+      payload: res.data
     });
-    loadUser();
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,

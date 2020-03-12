@@ -23,15 +23,15 @@ router.get('/', auth, async (req,res) => {
 });
 
 // @route   POST api/users
-// @desc    Add user
-// @access  Private
-router.post('/', [ auth, [  
+// @desc    Register a user
+// @access  Public
+router.post('/', [  
   check('firstName', 'Please enter first name').not().isEmpty(),
   check('lastName', 'Please enter last name').not().isEmpty(),
   check('email', 'Please enter a valid email').isEmail(),
   check('password', 'Password must be > 6 characters.').isLength({ min: 6 }),
   check('userType', 'Please select user type').not().isEmpty()
-  ] ], async (req,res) => {
+  ] , async (req,res) => {
   const errors = validationResult(req);
 
   // If there are errors in validation
