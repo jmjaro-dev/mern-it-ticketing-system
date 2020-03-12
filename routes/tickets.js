@@ -24,9 +24,10 @@ router.get('/', auth, async (req,res) => {
 // @desc    Add ticket
 // @access  Private
 router.post('/', [ auth, [
-  check('title', 'Please enter first name').not().isEmpty(),
-  check('description', 'Please enter last name').not().isEmpty(),
-  check('priorityLevel', 'Please enter a valid email').not().isEmpty()
+  check('title', 'Title is required').not().isEmpty(),
+  check('description', 'Please enter a description for the ticket').not().isEmpty(),
+  check('priorityLevel', 'Please select priority level').not().isEmpty()
+
   ] ], async (req,res) => {
   const errors = validationResult(req);
 

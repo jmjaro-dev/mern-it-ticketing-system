@@ -15,15 +15,19 @@ import {
 
 // Load User
 export const loadUser = () => async dispatch => {
-  setLoading();
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
 
+  // Set global header token
   if(localStorage.token) {
     setAuthToken(localStorage.token);
   }
 
   try {
     const res = await axios.get('/api/auth');
-  
+    
     dispatch({
       type: USER_LOADED,
       payload: res.data
@@ -38,7 +42,10 @@ export const loadUser = () => async dispatch => {
 
 // Register User
 export const register = formData => async dispatch => {
-  setLoading();
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
 
   const config = {
     headers: {
@@ -69,7 +76,10 @@ export const register = formData => async dispatch => {
 
 // Login User
 export const login = formData => async (dispatch) => {
-  setLoading();
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
 
   const config = {
     headers: {
@@ -100,13 +110,3 @@ export const login = formData => async (dispatch) => {
 
 // Logout
 export const logout = () => async dispatch => dispatch({ type: LOGOUT });
-
-// Clear Errors
-export const clearErrors = () => async dispatch => dispatch({ type: CLEAR_ERRORS });
-
-// Set loading to True
-export const setLoading = () => {
-  return {
-    type: SET_LOADING
-  };
-}
