@@ -9,6 +9,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import Alerts from './components/layout/Alerts'; 
 // Redux
 import { Provider } from 'react-redux';
+// import { PersistGate } from 'redux-persist/integration/react';
 import store from './store';
 // Utils
 import setAuthToken from './utils/setAuthToken';
@@ -19,7 +20,7 @@ import './App.css';
 
 if(localStorage.token) {
   setAuthToken(localStorage.token);
-} 
+}
 
 const App = () => {
   useEffect(() => {

@@ -5,11 +5,13 @@ import PreLoader from '../layout/PreLoader';
 import { getTickets } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ tickets, filtered, loading, getTickets }) => {
+const Tickets = ({ user, tickets, filtered, loading, getTickets }) => {
   useEffect(() => {
-    getTickets();
+    if(user) {
+      getTickets();
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   if(tickets !== null && tickets.length === 0 && !loading) {
     return <h4>There are no tickets yet. Create one.</h4>
@@ -49,13 +51,15 @@ Tickets.propTypes = {
   tickets: PropTypes.array,
   filtered: PropTypes.array,
   loading: PropTypes.object.isRequired,
-  getTickets: PropTypes.func.isRequired
+  getTickets: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   filtered: state.ticket.filtered,
   loading: state.ticket.loading,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, { getTickets })(Tickets);
