@@ -1,25 +1,19 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
+import Tickets from '../tickets/Tickets';
 
-const Home = ({ user, isAuthenticated, loadUser }) => {
+const Home = ({ loadUser }) => {
   useEffect(() => {
-    if(isAuthenticated) {
-      loadUser()
-    }
+    loadUser();
     // eslint-disable-next-line
-  }, [isAuthenticated]);
+  }, []);
   
   return (
     <div>
-      <h1>Home Page</h1>
+      <Tickets />
     </div>
   )
 }
 
-const mapStateToProps = state  => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
-});
-
-export default connect(mapStateToProps, { loadUser })(Home);
+export default connect(null, { loadUser })(Home);

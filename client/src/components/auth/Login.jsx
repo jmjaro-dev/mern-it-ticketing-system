@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
-import { loadUser, login } from '../../actions/authActions';
+import { login } from '../../actions/authActions';
 import PropTypes from 'prop-types';
 
-const Login =  ({ isAuthenticated, error, loadUser, login, setAlert, ...props })  => {
+const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
   // Check if user is authenticated
   useEffect(() => {
     if(isAuthenticated) {
@@ -82,4 +82,4 @@ const mapStateToProps = state => ({
   error: state.auth.error
 });
 
-export default connect(mapStateToProps, { loadUser, login, setAlert })(Login);
+export default connect(mapStateToProps, { login, setAlert })(Login);

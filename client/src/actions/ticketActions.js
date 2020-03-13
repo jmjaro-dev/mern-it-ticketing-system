@@ -9,7 +9,8 @@ import {
   FILTER_TICKETS,
   CLEAR_TICKETS,
   CLEAR_FILTER,
-  TICKET_ERROR
+  TICKET_ERROR,
+  SET_LOADING
 } from './types';
 
 // Get Tickets
