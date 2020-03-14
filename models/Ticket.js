@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-auto-increment');
+autoIncrement.initialize(mongoose.connection);
 
 const TicketSchema = mongoose.Schema({
+  ticket_id: {
+    type: Number,
+    ref: 'ticket'
+  },
   title: {
     type: String,
     required: true
@@ -9,13 +15,9 @@ const TicketSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  priorityLevel: {
+  priority: {
     type: String,
     required: true
-  },
-  dateIssued: {
-    type: Date,
-    default: Date.now
   },
   dateClosed: {
     type: Date
@@ -25,9 +27,13 @@ const TicketSchema = mongoose.Schema({
     default: 'open'
   },
   issuedBy: {
-    type: String,
+    type: Object,
     required: true
   }
+},
+{
+  timestamps : true
 });
 
+TicketSchema.plugin(autoIncrement.plugin, 'ticket');
 module.exports = mongoose.model('ticket', TicketSchema);

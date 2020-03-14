@@ -14,7 +14,7 @@ const User = require('../models/User');
 router.get('/', auth, async (req,res) => {
   try {
     // Gets all users and sort by date
-    const users = await User.find().sort({ date: -1 });
+    const users = await User.find().sort({ _id: '-1' });
     res.json(users);
   } catch (err) {
     console.error(err.message);

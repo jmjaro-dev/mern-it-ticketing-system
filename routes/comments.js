@@ -11,7 +11,7 @@ const Comment = require('../models/Comment');
 router.get('/:id', auth, async (req,res) => {
   try {
     // Gets all comments for the ticket and sort by latest in ascending manner
-    const comments = await Comment.find({ ticketId: req.params.id }).sort({ date: -1 });
+    const comments = await Comment.find({ ticket_id: req.params.id }).sort({ _id: -1 });
     res.json(comments);
   } catch (err) {
     console.error(err.message);
@@ -32,14 +32,14 @@ router.post('/', [ auth, [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { ticketId, message, userId } = req.body;
+  const { ticket_id, message, user } = req.body;
     
   try {
     // Create comment object 
     comment = new Comment({
-      ticketId,
+      ticket_id,
       message,
-      userId
+      user
     });
 
     // Save comment to database
@@ -70,10 +70,10 @@ router.put('/:id', [ auth, [
   if(!comment) return res.status(404).json({ msg: 'Comment not found' });
   
   // Destructure
-  const { message, userId } = req.body;
+  const { message, user } = req.body;
 
   // Make sure user owns the comment
-  if(userId !== comment.userId) return res.status(401).json({ msg: 'Not authorized.'});
+  if(user.id !== comment.user.id) return res.status(401).json({ msg: 'Not authorized.'});
 
   // If user owns the comment THEN
   // Build updated comment object 

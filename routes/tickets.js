@@ -9,10 +9,10 @@ const User = require('../models/User');
 // @route   GET api/tickets
 // @desc    Get all tickets
 // @access  Private
-router.get('/', auth, async (req,res) => {
+router.get('/', async (req,res) => {
   try {
     // Gets all tickets and sort by latest tickets
-    const tickets = await Ticket.find().sort({ dateIssued: -1 });
+    const tickets = await Ticket.find().sort({ _id: 'desc' });
     res.json(tickets);
   } catch (err) {
     console.error(err.message);
@@ -26,8 +26,7 @@ router.get('/', auth, async (req,res) => {
 router.post('/', [ auth, [
   check('title', 'Title is required').not().isEmpty(),
   check('description', 'Please enter a description for the ticket').not().isEmpty(),
-  check('priorityLevel', 'Please select priority level').not().isEmpty()
-
+  check('priority', 'Please select priority level').not().isEmpty()
   ] ], async (req,res) => {
   const errors = validationResult(req);
 
@@ -36,14 +35,15 @@ router.post('/', [ auth, [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { title, description, priorityLevel, issuedBy } = req.body;
+  const { ticket_id, title, description, priority, issuedBy } = req.body;
     
   try {
     // Create ticket object 
     ticket = new Ticket({
+      ticket_id,
       title,
       description,
-      priorityLevel,
+      priority,
       issuedBy
     });
 
@@ -59,10 +59,10 @@ router.post('/', [ auth, [
 // @route   PUT api/tickets
 // @desc    Update ticket
 // @access  Private
-router.put('/:id', [ auth, [
+router.put('/:id', [ auth , [
   check('title', 'Title is required').not().isEmpty(),
   check('description', 'Please enter a description for the ticket').not().isEmpty(),
-  check('priorityLevel', 'Please select priority level').not().isEmpty()
+  check('priority', 'Please select priority level').not().isEmpty()
   ] ], async (req,res) => {
   const errors = validationResult(req);
 
@@ -76,17 +76,17 @@ router.put('/:id', [ auth, [
   if(!ticket) return res.status(404).json({ msg: 'Ticket not found' });
   
   // Destructure
-  const { _id, title, description, priorityLevel } = req.body;
+  const { userId, title, description, priority } = req.body;
 
   // Make sure user owns the ticket
-  if(_id !== ticket.issuedBy) return res.status(401).json({ msg: 'Not authorized.'});
+  if(userId !== ticket.issuedBy.id) return res.status(401).json({ msg: 'Not authorized.'});
 
   // If user owns the ticket THEN
   // Build updated ticket object 
   const ticketFields = {};
   if(title) ticketFields.title = title;
   if(description) ticketFields.description = description;
-  if(priorityLevel) ticketFields.priorityLevel = priorityLevel;
+  if(priority) ticketFields.priority = priority;
 
   try {
     // Update ticket with new information

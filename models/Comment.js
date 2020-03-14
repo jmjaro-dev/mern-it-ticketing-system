@@ -1,22 +1,21 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = mongoose.Schema({
-  ticketId: {
-    type: String,
+  ticket_id: {
+    type: Number,
     required: true
   },
-  userId: {
-    type: String,
+  user: {
+    type: Object,
     required: true
   },
   message: {
     type: String,
     required: true
-  },
-  date: {
-    type: Date,
-    default: Date.now
   }
+},
+{
+  timestamps: true
 });
 
 module.exports = mongoose.model('comment', CommentSchema);
