@@ -60,7 +60,7 @@ export default (state = initialState, action) => {
     case CLEAR_CURRENT:
       return {
         ...state,
-        current: null
+        current: {}
       };
     case FILTER_TICKETS:
       return {

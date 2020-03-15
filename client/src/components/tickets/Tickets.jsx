@@ -1,14 +1,18 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import TicketItem from './TicketItem';
-import PreLoader from '../layout/PreLoader';
-import { getTickets } from '../../actions/ticketActions';
+import { getTickets, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, tickets, filtered, loading, getTickets }) => {
+const Tickets = ({ user, current, tickets, filtered, loading, getTickets }) => {
   useEffect(() => {
     if(user) {
       getTickets();
+    }
+
+    if(current) {
+      clearCurrent();
+      console.log('called clearCurrent');
     }
     // eslint-disable-next-line
   }, [user]);
@@ -21,26 +25,27 @@ const Tickets = ({ user, tickets, filtered, loading, getTickets }) => {
       <table>
         <thead>
           <tr>
-              <th># ID</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>Title</th>
-              <th>Requested By</th>
-              <th>Date Issued</th>
-              <th>Actions</th>
+              <th className="center"># ID</th>
+              <th className="center">Alert</th>
+              <th className="center">Status</th>
+              <th className="center">Subject</th>
+              <th className="center">Requested By</th>
+              <th className="center">Priority</th>
+              <th className="center">Date Issued</th>
+              <th className="center">Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          {tickets !== null && !loading ? (
+          {tickets !== null && !loading && (
             <Fragment>
               {filtered !== null ? filtered.map(ticket => (
-                <TicketItem ticket={ticket} />
+                <TicketItem key={ticket._id} ticket={ticket} />
               )) : tickets.map(ticket => (
-                <TicketItem ticket={ticket} />
+                <TicketItem key={ticket._id} ticket={ticket} />
               ))}
             </Fragment>
-          ) : <PreLoader /> }
+          )}
         </tbody>
       </table>
     </Fragment>
@@ -49,17 +54,20 @@ const Tickets = ({ user, tickets, filtered, loading, getTickets }) => {
 
 Tickets.propTypes = {
   tickets: PropTypes.array,
+  current: PropTypes.object,
   filtered: PropTypes.array,
-  loading: PropTypes.object.isRequired,
+  loading: PropTypes.bool,
+  user: PropTypes.object.isRequired,
   getTickets: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  clearCurrent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
+  current: state.ticket.current,
   filtered: state.ticket.filtered,
   loading: state.ticket.loading,
-  user: state.auth.user
+  user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { getTickets })(Tickets);
+export default connect(mapStateToProps, { getTickets, clearCurrent })(Tickets);

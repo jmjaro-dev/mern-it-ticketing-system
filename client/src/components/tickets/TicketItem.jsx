@@ -1,37 +1,67 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { deleteTicket, setCurrent, clearCurrent } from '../../actions/ticketActions';
+import { deleteTicket, setCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
-import M from 'materialize-css/dist/js/materialize.min.js';
 
-const TicketItem = ({ ticket, deleteTicket, setCurrent, clearCurrent }) => {
+const TicketItem = ({ ticket, setCurrent, deleteTicket }) => {
 
-  const { _id, priorityLevel, status, title, issuedBy, dateIssued } = ticket;
+  const { _id, priority, status, title, issuedBy, createdAt } = ticket;
+
+  const onSetCurrent = () => {
+    setCurrent(ticket);
+  }
   
   return (
-    <Fragment>
-      <tr>
-        <td>{_id}</td>
-        <td>{priorityLevel}</td>
-        <td>{status}</td>
-        <td>{title}</td>
-        <td>{issuedBy}</td>
-        <td>
-          <Moment format="MMMM do YYYY, h:mm:ss a">
-            {dateIssued}
-          </Moment>
-        </td>
-        <td>
-          <a href="#!">
-            <i className="material-icons">delete</i>
-          </a>
-          <a href="#!">
-            <i className="material-icons">edit</i>
-          </a>   
-        </td>
-      </tr>
-    </Fragment>
+    <tr>
+      <td className="center">{_id}</td>
+      <td className="center">
+        {(priority === 'low') && (
+          <span className="alert-badge grey"></span>
+        )}
+        {(priority === 'normal') && (
+          <span className="alert-badge green"></span>
+        )}
+        {(priority === 'high') && (
+          <span className="alert-badge red"></span>
+        )}  
+      </td>
+      <td className="center">
+        <span>{status}</span>
+      </td>
+      <td>
+        <Link to={`/tickets/${_id}`} className="blue-text text-darken-2" onClick={onSetCurrent}>
+          <strong>{title}</strong>
+        </Link>
+      </td>
+      <td className="center">{issuedBy.firstName} {' '} {issuedBy.lastName}</td>
+      <td className="center">
+        {(priority === 'low') && (
+          <span className="priority-badge grey-text text-darken-2">{priority}</span>
+        )}
+        {(priority === 'normal') && (
+          <span className="priority-badge green-text text-darken-2">{priority}</span>
+        )}
+        {(priority === 'high') && (
+          <span className="priority-badge red-text text-darken-2">{priority}</span>
+        )}
+      </td>
+      <td className="center">
+        <Moment format="MM-DD-YYYY, h:mm:ss A">
+          {createdAt}
+        </Moment>
+      </td>
+      <td className="center">
+        <a href="#!">
+          <i className="far fa-trash-alt red-text text-darken-2"></i>
+        </a>
+        {' '}
+        <a href="#!">
+          <i className="far fa-edit green-text text-darken-2"></i>
+        </a>   
+      </td>
+    </tr>
   )
 }
 
@@ -40,4 +70,4 @@ TicketItem.propTypes = {
 };
 
 
-export default connect(null, { deleteTicket, setCurrent, clearCurrent })(TicketItem);
+export default connect(null, { deleteTicket, setCurrent })(TicketItem);

@@ -74,7 +74,7 @@ const styles = {
 
 Login.propTypes = {
   isAuthenticated: PropTypes.bool,
-  error: PropTypes.object
+  error: PropTypes.string
 };
 
 const mapStateToProps = state => ({

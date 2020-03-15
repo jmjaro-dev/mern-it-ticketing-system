@@ -116,7 +116,7 @@ export const updateTicket = ticket => async dispatch => {
 // Clear Tickets
 export const clearTicket = () => async dispatch => dispatch({ type: CLEAR_TICKETS });
 
-// Set Ticket
+// Set Curent Ticket
 export const setCurrent = ticket => async dispatch => dispatch({ type: SET_CURRENT, payload: ticket });
 
 // Clear Current Ticket

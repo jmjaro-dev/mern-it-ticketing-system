@@ -20,6 +20,20 @@ router.get('/', async (req,res) => {
   }
 });
 
+// // @route   GET api/tickets
+// // @desc    Get Ticket by id
+// // @access  Private
+// router.get('/', async (req,res) => {
+//   try {
+//     // Gets all tickets and sort by latest tickets
+//     const ticket = await Ticket.findById(_id);
+//     res.json(ticket);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send('Server Error');
+//   }
+// });
+
 // @route   POST api/tickets
 // @desc    Add ticket
 // @access  Private

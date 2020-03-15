@@ -6,6 +6,7 @@ import Home from './components/pages/Home';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
+import Ticket from './components/tickets/Ticket';
 import Alerts from './components/layout/Alerts'; 
 // Redux
 import { Provider } from 'react-redux';
@@ -37,6 +38,7 @@ const App = () => {
               <Alerts />
               <Switch>
                 <PrivateRoute exact path='/' component={Home} />
+                <PrivateRoute exact path='/tickets/:id' component={Ticket} />
                 <Route exact path ='/login' component={Login} />
                 <Route exact path ='/register' component={Register} />
               </Switch>
