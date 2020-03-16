@@ -1,4 +1,5 @@
 import {
+  GET_TICKET,
   GET_TICKETS,
   ADD_TICKET,
   DELETE_TICKET,
@@ -15,11 +16,18 @@ const initialState = {
   tickets: null,
   current: null,
   filtered: null,
-  error: null
+  error: null,
+  loading: false
 };
 
 export default (state = initialState, action) => {
   switch(action.type) {
+    case GET_TICKET:
+      return {
+        ...state,
+        current: action.payload,
+        loading: false
+      };
     case GET_TICKETS:
       return {
         ...state,
@@ -60,7 +68,7 @@ export default (state = initialState, action) => {
     case CLEAR_CURRENT:
       return {
         ...state,
-        current: {}
+        current: null
       };
     case FILTER_TICKETS:
       return {

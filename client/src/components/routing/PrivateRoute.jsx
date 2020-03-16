@@ -3,8 +3,9 @@ import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
 import PreLoader from '../layout/PreLoader';
+import { setCurrent, getTicket } from '../../actions/ticketActions';
 
-const PrivateRoute = ({ component:  Component, isAuthenticated, loading, user, loadUser, ...rest }) => {
+const PrivateRoute = ({ component:  Component, match, isAuthenticated, loading, user, current, setCurrent, getTicket, loadUser, ...rest }) => {
   useEffect(() => {
     if(localStorage.token) {
       loadUser();
@@ -30,7 +31,8 @@ const PrivateRoute = ({ component:  Component, isAuthenticated, loading, user, l
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   loading: state.auth.loading,
-  user: state.auth.user
+  user: state.auth.user,
+  current: state.ticket.current
 });
 
-export default connect(mapStateToProps, { loadUser })(PrivateRoute);
+export default connect(mapStateToProps, { setCurrent, getTicket, loadUser })(PrivateRoute);

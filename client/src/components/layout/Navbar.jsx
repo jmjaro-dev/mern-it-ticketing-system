@@ -24,14 +24,15 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
   const authLinks = (
     <Fragment>
       <li>
-        Hello { user && user.firstName }
+        <Link to="/">
+          <i className="fas fa-user" style={{ fontSize: "1em", marginRight: "0.8em" }}></i>
+          { user && user.firstName }
+        </Link>
       </li>
-      <li>
-        <Link to='/'>Home</Link>
-      </li>
+
       <li>
         <a href='#!' onClick={onLogout}>
-          <i className="fas fa-sign-out-alt"/>
+          Logout
         </a>
       </li>
     </Fragment>
@@ -41,7 +42,7 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
     <nav className="blue darken-2">
       <div className="nav-wrapper container">
         <Link to="/">
-          <i className={icon} /> {title}
+          <i className={icon} />{' '} {title}
         </Link>
         <ul id="nav-mobile" className="right">
           {isAuthenticated ? authLinks : guestLinks}

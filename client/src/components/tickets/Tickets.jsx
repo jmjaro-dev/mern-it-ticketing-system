@@ -4,25 +4,25 @@ import TicketItem from './TicketItem';
 import { getTickets, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, current, tickets, filtered, loading, getTickets }) => {
+const Tickets = ({ user, current, tickets, filtered, loading, getTickets, clearCurrent }) => {
   useEffect(() => {
+    if(current !== null) {
+      clearCurrent();
+      console.log('Cleared Current');
+    }
+
     if(user) {
       getTickets();
     }
-
-    if(current) {
-      clearCurrent();
-      console.log('called clearCurrent');
-    }
     // eslint-disable-next-line
-  }, [user]);
+  }, []);
 
   if(tickets !== null && tickets.length === 0 && !loading) {
     return <h4>There are no tickets yet. Create one.</h4>
   }
   return (
     <Fragment>
-      <table>
+      <table className="striped">
         <thead>
           <tr>
               <th className="center"># ID</th>

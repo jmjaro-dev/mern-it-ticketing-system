@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  GET_TICKET,
   GET_TICKETS,
   ADD_TICKET,
   DELETE_TICKET,
@@ -12,6 +13,28 @@ import {
   TICKET_ERROR,
   SET_LOADING
 } from './types';
+
+// Get Ticket by Id
+export const getTicket = id => async dispatch => {
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
+
+  try {
+    const res = await axios.get(`/api/tickets/${id}`);
+
+    dispatch({
+      type: GET_TICKET,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: TICKET_ERROR,
+      payload: err.response.msg
+    });
+  }
+};
 
 // Get Tickets
 export const getTickets = () => async dispatch => {
