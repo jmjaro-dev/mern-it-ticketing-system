@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment,useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
 import Tickets from '../tickets/Tickets';
@@ -10,13 +10,15 @@ const Home = ({ user, isAuthenticated, loading, loadUser }) => {
     // eslint-disable-next-line
   }, []);
   return (
-    <div>
-      {!loading && !isAuthenticated ? (
-        <PreLoader />
-      ) : (
-        <Tickets />
-      )}
-    </div>
+    <Fragment>
+      <div className="card-panel">
+        {!loading && !isAuthenticated ? (
+          <PreLoader />
+        ) : (
+          <Tickets />
+        )}
+      </div>
+    </Fragment>
   )
 }
 

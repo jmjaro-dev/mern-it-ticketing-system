@@ -51,7 +51,7 @@ const Register = ({ isAuthenticated, error, loadUser, register, setAlert, ...pro
   }
 
   return (
-    <div className="form-container" id="register-form" style={styles.registerForm}>
+    <div className="form-container card-panel" id="register-form" style={styles.registerForm}>
       <h4 className="center">
         Account <span className="blue-text text-darken-2">Register</span>
       </h4>

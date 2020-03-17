@@ -40,7 +40,7 @@ const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
   }
 
   return (
-    <div className="form-container" id="login-form" style={styles.loginForm}>
+    <div className="form-container card-panel" id="login-form" style={styles.loginForm}>
       <h4 className="center">
         Account <span className="blue-text text-darken-2">Login</span>
       </h4>
