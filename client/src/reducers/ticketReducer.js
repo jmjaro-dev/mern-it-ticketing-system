@@ -9,7 +9,8 @@ import {
   FILTER_TICKETS,
   CLEAR_TICKETS,
   CLEAR_FILTER,
-  TICKET_ERROR
+  TICKET_ERROR,
+  SET_LOADING
 } from '../actions/types';
 
 const initialState = {
@@ -88,6 +89,11 @@ export default (state = initialState, action) => {
         ...state,
         error: action.payload
       };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true
+      }
     default:
       return state;
   }

@@ -11,7 +11,7 @@ const Comment = require('../models/Comment');
 router.get('/:id', auth, async (req,res) => {
   try {
     // Gets all comments for the ticket and sort by latest in ascending manner
-    const comments = await Comment.find({ ticket_id: req.params.id }).sort({ _id: -1 });
+    const comments = await Comment.find({ ticket_id: req.params.id }).sort({ _id: 1 });
     res.json(comments);
   } catch (err) {
     console.error(err.message);
@@ -19,10 +19,10 @@ router.get('/:id', auth, async (req,res) => {
   }
 });
 
-// @route   POST api/comments
+// @route   POST api/comments/:ticket_id
 // @desc    Add comment
 // @access  Private
-router.post('/', [ auth, [
+router.post('/:id', [ auth, [
   check('message', 'Please enter a message').not().isEmpty()
   ] ], async (req,res) => {
   const errors = validationResult(req);
@@ -32,27 +32,28 @@ router.post('/', [ auth, [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { ticket_id, message, user } = req.body;
-    
+  const { message, userInfo } = req.body;
+  const ticket_id = req.params.id;
+  
   try {
     // Create comment object 
     comment = new Comment({
       ticket_id,
       message,
-      user
+      user: userInfo
     });
 
     // Save comment to database
-    await comment.save();
+    data = await comment.save();
 
-    res.json({ msg: 'Comment added.' });
+    res.json(data);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
-// @route   PUT api/comments
+// @route   PUT api/comments/:comment_id
 // @desc    Update comment message
 // @access  Private
 router.put('/:id', [ auth, [ 

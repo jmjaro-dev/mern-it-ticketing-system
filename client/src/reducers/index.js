@@ -3,10 +3,12 @@ import authReducer from './authReducer';
 import alertReducer from './alertReducer';
 import userReducer from './userReducer';
 import ticketReducer from './ticketReducer';
+import commentReducer from './commentReducer';
 
 export default combineReducers({
-  user: userReducer,
   auth: authReducer,
+  user: userReducer,
   alert: alertReducer,
-  ticket: ticketReducer
+  ticket: ticketReducer,
+  comment: commentReducer
 });

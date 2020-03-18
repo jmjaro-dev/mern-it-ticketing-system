@@ -12,8 +12,12 @@
   font-weight: bold;
   margin-left: 1em;
 }
+/* UTILS */
+.materialize-textarea {
+  font-size: 0.9em !important;
+}
 
-/* TICKET */
+/* TICKET STYLES */
 #ticketContainer {
   padding: 0;
   margin: 0;
@@ -25,16 +29,17 @@
   text-transform: uppercase;
 }
 
-.ticket-label {
-  font-size: 0.8em;
+.ticket-label,
+.section-label {
+  font-size: 0.75em;
   color: gray;
 }
 
-.ticket-details {
-  font-size: 0.85em;
-  font-weight: bold;
+.section-label {
+  font-weight: 500;
 }
 
+.ticket-details,
 .ticket-desc {
   font-size: 0.85em;
   font-weight: bold;
@@ -61,6 +66,47 @@
   width: 25%;
   padding: 1em;
 }
+/* END OF TICKET STYLES /*
+
+/* COMMENTS STYLES */
+.comment-container {
+  border: none;
+}
+
+.comment-add-container {
+  border: none;
+  border-radius: 2em;
+}
+
+.comment-message {
+  font-size: 0.9em;
+}
+
+.comment-user {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.comment-label {
+  font-size: 0.8em;
+}
+
+.comment-time,
+.comment-user-type {
+  font-size: 0.75em;
+}
+
+.comment-user-type {
+  padding: 0.2em 1em;
+  border-radius: 1em;
+}
+
+.comment-submit {
+  font-size: 2em;
+}
+
+
+/* END OF COMMENTS STYLES */
 
 
 .alert {

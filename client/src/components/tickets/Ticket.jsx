@@ -1,22 +1,25 @@
 import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { getTicket, setCurrent } from '../../actions/ticketActions';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getTicket } from '../../actions/ticketActions';
+import { getComments } from '../../actions/commentActions';
+import Comments from '../comments/Comments';
+import AddComment from '../comments/AddComment';
 import PreLoader from '../layout/PreLoader';
+import PropTypes from 'prop-types';
 // import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Ticket = ({ match, user, ticket, loading, getTicket, setCurrent }) => {
+const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments }) => {
   useEffect(() => {
     if(user) {
       getTicket(match.params.id);
+      getComments(match.params.id);
     }
     // eslint-disable-next-line
   }, []);
 
   return (
-    
     <Fragment>
       {ticket && !loading ? (
         <div id="ticketContainer">
@@ -40,6 +43,9 @@ const Ticket = ({ match, user, ticket, loading, getTicket, setCurrent }) => {
             {/* Left Panel */}
             <div className="row">
               {/* Ticket Info */}
+              <p className="center section-label"> 
+                  Ticket Information
+              </p>  
               <div className="col s9" id="ticket-left-panel">
                 {/* Ticket info Section */}
                 <div className="card-panel">
@@ -67,10 +73,10 @@ const Ticket = ({ match, user, ticket, loading, getTicket, setCurrent }) => {
 
                   <div className="col s6">
                   <span className="ticket-label">[ Date Created ]</span> {' '}
-                  <Moment format="MM-DD-YYYY " className="ticket-details">
+                  <Moment format="MM-DD-YYYY, " className="ticket-details">
                   {ticket.createdAt} 
                   </Moment>
-                  <span className="ticket-details"> at </span>
+                  <span className="ticket-details"> @ </span>
                   <Moment format="h:mm A" className="ticket-details">
                   {ticket.createdAt} 
                   </Moment>
@@ -86,31 +92,41 @@ const Ticket = ({ match, user, ticket, loading, getTicket, setCurrent }) => {
                     </span> <span className="ticket-desc">{ticket.description}</span>
                   </p>
                 </div>
-                <div className="divider"></div>
                 {/* Comments Section */}
-                <p className="center ticket-label"> 
+                <p className="center section-label"> 
                     Comments
                 </p>   
-                <div className="card-panel">
+                <div>
+                  {ticket ? ( 
+                    <Comments ticket_id={ticket._id} current_user={user._id}/>
+                    ) : (
+                    <PreLoader />
+                  )}
                   
                 </div>
+                {/* Comments Section */}
+                <div className="divider"></div>
+                <p className="center section-label"> 
+                    Write a Comment
+                </p>
+                <div>
+                  {comments && (
+                    <AddComment user={user} ticket_id={ticket._id}/>
+                  )}
+                </div>  
               </div>
               
               {/* Right Panel */}
               <div className="col s3 card-panel" id="ticket-right-panel">
                 <div className="center"><b>Ticket Details</b></div>
                 <p>
-                  <span className="ticket-label">Last Update <i className="fas fa-chevron-right"></i> </span>
-                  <Moment format="MM/DD/YY " className="ticket-details">
-                  {ticket.updatedAt} 
-                  </Moment>
-                  <span className="ticket-details"> at </span>
-                  <Moment format="h:mm A" className="ticket-details">
+                  <span className="ticket-label">Latest Update <i className="fas fa-chevron-right"></i> </span>
+                  <Moment fromNow className="ticket-details">
                   {ticket.updatedAt} 
                   </Moment>
                   <br/>
                   <span className="ticket-label">Status <i className="fas fa-chevron-right"></i> </span> <span className="ticket-details">{ticket.status}</span> <br/>
-                  <span className="ticket-label">Priority <i className="fas fa-chevron-right"></i> </span>
+                  <span className="ticket-label">Priority Level <i className="fas fa-chevron-right"></i> </span>
                   {(ticket.priority === 'low') && (
                     <span className="priority-badge ticket-details grey-text text-darken-2">{ticket.priority}</span>
                   )}
@@ -135,13 +151,17 @@ const Ticket = ({ match, user, ticket, loading, getTicket, setCurrent }) => {
 Ticket.propTypes = {
   user: PropTypes.object.isRequired,
   ticket: PropTypes.object,
-  loading: PropTypes.bool
+  comments: PropTypes.array,
+  loading: PropTypes.bool,
+  getTicket: PropTypes.func.isRequired,
+  getComments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user,
   ticket: state.ticket.current,
-  loading: state.ticket.loading
+  loading: state.ticket.loading,
+  comments: state.comment.comments
 });
 
-export default connect(mapStateToProps, { getTicket, setCurrent })(Ticket);
+export default connect(mapStateToProps, { getTicket, getComments })(Ticket);
