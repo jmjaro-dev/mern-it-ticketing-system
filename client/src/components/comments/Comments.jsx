@@ -13,7 +13,9 @@ const Comments = ({ comments, current_user, loading }) => {
     <Fragment>
       {comments !== null && !loading && (
         <Fragment>
-          {comments.map(comment => (<CommentItem key={comment._id} comment={comment} current_user={current_user} />))}
+          {comments.map(comment => (
+            <CommentItem key={comment._id} comment={comment} current_user={current_user} />
+          ))}
         </Fragment>
       )}   
     </Fragment>

@@ -4,13 +4,16 @@ import {
   DELETE_COMMENT,
   UPDATE_COMMENT,
   COMMENT_ERROR,
-  SET_LOADING
+  SET_CURRENT_COMMENT,
+  SET_EDIT_MODE,
+  CLEAR_CURRENT_COMMENT
 } from '../actions/types';
 
 const initialState = {
   comments: null,
-  error: null,
-  loading: false
+  current_comment: null,
+  edit_mode: false,
+  error: null
 };
 
 export default (state = initialState, action) => {
@@ -44,11 +47,21 @@ export default (state = initialState, action) => {
         ...state,
         error: action.payload
       };
-    case SET_LOADING:
+    case SET_CURRENT_COMMENT:
       return {
         ...state,
-        loading: true
-      }
+        current_comment: action.payload
+      };
+    case SET_EDIT_MODE:
+      return {
+        ...state,
+        edit_mode: !state.edit_mode
+      };
+    case CLEAR_CURRENT_COMMENT:
+      return {
+        ...state,
+        current_comment: null
+      };
     default:
       return state;
   }

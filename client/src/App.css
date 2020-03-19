@@ -29,6 +29,11 @@
   text-transform: uppercase;
 }
 
+.ticket-links {
+  padding: 1em;
+  margin: 0;
+}
+
 .ticket-label,
 .section-label {
   font-size: 0.75em;
@@ -98,7 +103,6 @@
 
 .comment-user-type {
   padding: 0.2em 1em;
-  border-radius: 1em;
 }
 
 .comment-submit {

@@ -7,7 +7,8 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Ticket from './components/tickets/Ticket';
-import Alerts from './components/layout/Alerts'; 
+import DeleteCommentModal from './components/comments/DeleteCommentModal';
+import Alerts from './components/layout/Alerts';
 // Redux
 import { Provider } from 'react-redux';
 // import { PersistGate } from 'redux-persist/integration/react';
@@ -36,6 +37,7 @@ const App = () => {
           <Navbar />
             <div className="container">
               <Alerts />
+              <DeleteCommentModal />
               <Switch>
                 <PrivateRoute exact path='/' component={Home} />
                 <PrivateRoute exact path='/tickets/:id' component={Ticket}/>

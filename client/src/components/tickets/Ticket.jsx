@@ -8,7 +8,6 @@ import Comments from '../comments/Comments';
 import AddComment from '../comments/AddComment';
 import PreLoader from '../layout/PreLoader';
 import PropTypes from 'prop-types';
-// import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments }) => {
   useEffect(() => {
@@ -24,17 +23,19 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
       {ticket && !loading ? (
         <div id="ticketContainer">
           {/* Navigation & actions*/}
-          <div className="row card-panel" >
+          <div className="row ticket-links" >
             <div className="col s12 m9 l10">
               <Link to="/" className="grey-text text-darken-2">
                 <i className="fas fa-chevron-left"></i><span className="btn-label"> Back to Tickets</span>
               </Link>
             </div>
             <div className="col s12 m3 l2 center">
-              <a href="#!">
-                <i className="far fa-trash-alt red-text text-darken-2"></i>
-                <span className="btn-label grey-text text-darken-2"> Delete Ticket</span>
-              </a>   
+              {ticket.issuedBy.id === user._id && (
+                <a href="#!">
+                  <i className="far fa-trash-alt red-text text-darken-2"></i>
+                  <span className="btn-label grey-text text-darken-2"> Delete Ticket</span>
+                </a>
+              )}   
             </div>
           </div>
 

@@ -5,7 +5,10 @@ import {
   DELETE_COMMENT,
   UPDATE_COMMENT,
   COMMENT_ERROR,
-  SET_LOADING
+  SET_LOADING,
+  SET_CURRENT_COMMENT,
+  SET_EDIT_MODE,
+  CLEAR_CURRENT_COMMENT
 } from './types';
 
 // Get Comments by Ticket Id
@@ -31,12 +34,7 @@ export const getComments = ticket_id => async dispatch => {
 };
 
 // Add Comment depending on ticket_id 
-export const addComment = (ticket_id, message, userInfo) => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-  
+export const addComment = (ticket_id, message, userInfo) => async dispatch => {  
   try {
     const config = {
       headers: {
@@ -63,12 +61,7 @@ export const addComment = (ticket_id, message, userInfo) => async dispatch => {
 };
 
 // Delete Comment
-export const deleteTicket = id => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-
+export const deleteComment = id => async dispatch => {
   try {
     await axios.delete(`/api/comments/${id}`);
 
@@ -85,12 +78,7 @@ export const deleteTicket = id => async dispatch => {
 };
 
 // Update Comment
-export const updateComment = comment => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-
+export const updateComment = (comment_id, newCommentInfo) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -98,7 +86,7 @@ export const updateComment = comment => async dispatch => {
       }
     }
 
-    const res = await axios.put(`/api/comments/${comment._id}`, comment, config);
+    const res = await axios.put(`/api/comments/${comment_id}`, newCommentInfo, config);
 
     dispatch({
       type: UPDATE_COMMENT,
@@ -111,3 +99,12 @@ export const updateComment = comment => async dispatch => {
     });
   }
 };
+
+// Set Curent Comment
+export const setCurrent = comment => async dispatch => dispatch({ type: SET_CURRENT_COMMENT, payload: comment });
+
+// Set Edit Mode 
+export const setEditMode = () => async dispatch => dispatch({ type: SET_EDIT_MODE });
+
+// Clear Current Comment
+export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRENT_COMMENT });
