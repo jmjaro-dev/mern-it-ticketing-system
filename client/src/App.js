@@ -7,6 +7,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Ticket from './components/tickets/Ticket';
+// import AddBtn from './components/layout/AddBtn';
 import DeleteCommentModal from './components/comments/DeleteCommentModal';
 import Alerts from './components/layout/Alerts';
 // Redux
@@ -37,6 +38,7 @@ const App = () => {
           <Navbar />
             <div className="container">
               <Alerts />
+              {/* <AddBtn /> */}
               <DeleteCommentModal />
               <Switch>
                 <PrivateRoute exact path='/' component={Home} />

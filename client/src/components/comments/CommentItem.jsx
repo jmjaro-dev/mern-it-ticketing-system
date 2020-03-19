@@ -61,9 +61,9 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
   }
 
   return (
-    <div>
-      <ul className="collection card-panel comment-container">
-        <li className="collection-item avatar">
+    <Fragment>
+        
+        <div className={user.id === current_user ? "collection-item collection-item-with-actions avatar" : "collection-item avatar" }>
           <i className="fas fa-user circle blue-text text-darken-2 grey lighten-2 z-depth-2"></i>  
           <div>
             {/* User Type */}
@@ -126,17 +126,23 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
                       cancel
                     </a>
                     <span className="grey-text"> | </span>
-                    <a href="#!" className="blue-text comment-label" onClick={onSave}>
-                      save
-                    </a>
+                    {message !== newMessage ? (
+                      <a href="#!" className="blue-text comment-label" onClick={onSave}>
+                        save
+                      </a>
+                    ) : (
+                      <span href="#1" className="grey-text text-lighten-1 comment-label">
+                        save
+                      </span>
+                    )}
+                    
                   </div>
                 )}
               </Fragment>
             )}
           </div>          
-        </li>
-      </ul>
-    </div>
+        </div>
+    </Fragment>
   )
 }
 

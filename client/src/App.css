@@ -17,6 +17,10 @@
   font-size: 0.9em !important;
 }
 
+.collection-item-with-actions {
+  height: 7em !important;
+}
+
 /* TICKET STYLES */
 #ticketContainer {
   padding: 0;
@@ -76,11 +80,12 @@
 /* COMMENTS STYLES */
 .comment-container {
   border: none;
+  border-radius: 0.5em;
 }
 
 .comment-add-container {
   border: none;
-  border-radius: 2em;
+  border-radius: 0.5em;
 }
 
 .comment-message {

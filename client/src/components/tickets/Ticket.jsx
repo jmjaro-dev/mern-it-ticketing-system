@@ -99,13 +99,14 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                 </p>   
                 <div>
                   {ticket ? ( 
-                    <Comments ticket_id={ticket._id} current_user={user._id}/>
+                    <div className="collection card-panel comment-container">
+                      <Comments ticket_id={ticket._id} current_user={user._id}/>
+                    </div>
                     ) : (
                     <PreLoader />
                   )}
-                  
                 </div>
-                {/* Comments Section */}
+                {/* Add Comment Section */}
                 <div className="divider"></div>
                 <p className="center section-label"> 
                     Write a Comment
@@ -119,7 +120,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
               
               {/* Right Panel */}
               <div className="col s3 card-panel" id="ticket-right-panel">
-                <div className="center"><b>Ticket Details</b></div>
+                <div className="center ticket-details"><b>Ticket Details</b></div>
                 <p>
                   <span className="ticket-label">Latest Update <i className="fas fa-chevron-right"></i> </span>
                   <Moment fromNow className="ticket-details">
