@@ -13,10 +13,10 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
   const guestLinks = (
     <Fragment>
       <li>
-        <Link to='/login'>Login</Link>
+        <Link to='/login' className="nav-links">Login</Link>
       </li>
       <li>
-        <Link to='/register'>Register</Link>
+        <Link to='/register' className="nav-links">Register</Link>
       </li>
     </Fragment>
   )
@@ -24,14 +24,14 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
   const authLinks = (
     <Fragment>
       <li>
-        <Link to="/">
+        <Link to="/" className="nav-links">
           <i className="fas fa-user" style={{ fontSize: "1em", marginRight: "0.8em" }}></i>
           { user && user.firstName }
         </Link>
       </li>
 
       <li>
-        <a href='#!' onClick={onLogout}>
+        <a href='#!' className="nav-links" onClick={onLogout}>
           Logout
         </a>
       </li>

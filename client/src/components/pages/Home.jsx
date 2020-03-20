@@ -1,21 +1,26 @@
 import React, { Fragment,useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
+import Search from '../tickets/Search';
 import Tickets from '../tickets/Tickets';
 import PreLoader from '../layout/PreLoader';
 
-const Home = ({ user, isAuthenticated, loading, loadUser }) => {
+const Home = ({ isAuthenticated, loading, loadUser }) => {
   useEffect(() => {
     loadUser();
     // eslint-disable-next-line
   }, []);
   return (
     <Fragment>
-      <div className="card-panel">
+      <div>
         {!loading && !isAuthenticated ? (
           <PreLoader />
         ) : (
-          <Tickets />
+          <Fragment>
+            <Search />
+            <p className="ticket-label center">Tickets</p>
+            <Tickets />
+          </Fragment>
         )}
       </div>
     </Fragment>
@@ -24,8 +29,7 @@ const Home = ({ user, isAuthenticated, loading, loadUser }) => {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  loading: state.auth.loading,
-  user: state.auth.user
+  loading: state.auth.loading
 });
 
 export default connect(mapStateToProps, { loadUser })(Home);

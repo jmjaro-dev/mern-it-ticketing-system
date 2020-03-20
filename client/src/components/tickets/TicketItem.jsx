@@ -15,8 +15,8 @@ const TicketItem = ({ ticket, setCurrent, deleteTicket }) => {
   
   return (
     <tr>
-      <td className="center">{_id}</td>
-      <td className="center">
+      <td className="ticket-info center">{_id}</td>
+      <td className="ticket-info center">
         {(priority === 'low') && (
           <span className="alert-badge grey"></span>
         )}
@@ -27,16 +27,16 @@ const TicketItem = ({ ticket, setCurrent, deleteTicket }) => {
           <span className="alert-badge red"></span>
         )}  
       </td>
-      <td className="center">
+      <td className="ticket-info center">
         <span>{status}</span>
       </td>
       <td>
-        <Link to={`/tickets/${_id}`} className="blue-text text-darken-2" onClick={onSetCurrent}>
-          <strong>{title}</strong>
+        <Link to={`/tickets/${_id}`} className="ticket-details blue-text text-darken-2" onClick={onSetCurrent}>
+          {title}
         </Link>
       </td>
-      <td className="center">{issuedBy.firstName} {' '} {issuedBy.lastName}</td>
-      <td className="center">
+      <td className="ticket-info">{issuedBy.firstName} {' '} {issuedBy.lastName}</td>
+      <td className="ticket-info center">
         {(priority === 'low') && (
           <span className="priority-badge grey-text text-darken-2">{priority}</span>
         )}
@@ -47,9 +47,13 @@ const TicketItem = ({ ticket, setCurrent, deleteTicket }) => {
           <span className="priority-badge red-text text-darken-2">{priority}</span>
         )}
       </td>
-      <td className="center">
-        <Moment format="MM-DD-YYYY, h:mm:ss A">
-          {createdAt}
+      <td className="ticket-info center">
+        <Moment format="MM-DD-YYYY, ">
+        {createdAt} 
+        </Moment>
+        <span> @ </span>
+        <Moment format="hh:mm A">
+        {createdAt} 
         </Moment>
       </td>
       <td className="center">

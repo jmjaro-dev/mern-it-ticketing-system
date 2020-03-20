@@ -22,32 +22,34 @@ const Tickets = ({ user, current, tickets, filtered, loading, getTickets, clearC
   }
   return (
     <Fragment>
-      <table className="striped">
-        <thead>
-          <tr>
-              <th className="center"># ID</th>
-              <th className="center">Alert</th>
-              <th className="center">Status</th>
-              <th className="center">Subject</th>
-              <th className="center">Requested By</th>
-              <th className="center">Priority</th>
-              <th className="center">Date Issued</th>
-              <th className="center">Actions</th>
-          </tr>
-        </thead>
+      <div id="tickets" className="card-panel">
+        <table className="striped">
+          <thead>
+            <tr>
+                <th className="ticket-info center"># ID</th>
+                <th className="ticket-info center">Alert</th>
+                <th className="ticket-info center">Status</th>
+                <th className="ticket-info center">Subject</th>
+                <th className="ticket-info center">Requested By</th>
+                <th className="ticket-info center">Priority</th>
+                <th className="ticket-info center">Date Issued</th>
+                <th className="ticket-info center">Actions</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {tickets !== null && !loading && (
-            <Fragment>
-              {filtered !== null ? filtered.map(ticket => (
-                <TicketItem key={ticket._id} ticket={ticket} />
-              )) : tickets.map(ticket => (
-                <TicketItem key={ticket._id} ticket={ticket} />
-              ))}
-            </Fragment>
-          )}
-        </tbody>
-      </table>
+          <tbody>
+            {tickets !== null && !loading && (
+              <Fragment>
+                {filtered !== null ? filtered.map(ticket => (
+                  <TicketItem key={ticket._id} ticket={ticket} />
+                )) : tickets.map(ticket => (
+                  <TicketItem key={ticket._id} ticket={ticket} />
+                ))}
+              </Fragment>
+            )}
+          </tbody>
+        </table>
+      </div>
     </Fragment>
   )
 }

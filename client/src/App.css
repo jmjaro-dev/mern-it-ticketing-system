@@ -13,12 +13,30 @@
   margin-left: 1em;
 }
 /* UTILS */
+.nav-links {
+  font-size: 0.9em;
+}
+
+.nav-links.btn-small {
+  text-transform: capitalize;
+}
+
+input[type=text] {
+  font-size: 0.9em !important;
+}
 .materialize-textarea {
   font-size: 0.9em !important;
 }
 
 .collection-item-with-actions {
   height: 7em !important;
+}
+
+
+/* MENU STYLES */
+#sub-menu {
+  padding-top: 1em;
+  margin-bottom: 0.5em;
 }
 
 /* TICKET STYLES */
@@ -52,6 +70,10 @@
 .ticket-desc {
   font-size: 0.85em;
   font-weight: bold;
+}
+
+.ticket-info {
+  font-size: 0.9em;
 }
 
 #ticket-id {
