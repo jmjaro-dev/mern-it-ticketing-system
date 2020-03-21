@@ -61,9 +61,9 @@ router.post('/', [ auth, [
       issuedBy
     });
 
-    await ticket.save();
+    const data = await ticket.save();
 
-    res.json({ msg: 'Ticket added.' });
+    res.json(data);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -93,7 +93,7 @@ router.put('/:id', [ auth , [
   const { userId, title, description, priority } = req.body;
 
   // Make sure user owns the ticket
-  if(userId !== ticket.issuedBy.id) return res.status(401).json({ msg: 'Not authorized.'});
+  if(userId !== ticket.issuedBy._id) return res.status(401).json({ msg: 'Not authorized.'});
 
   // If user owns the ticket THEN
   // Build updated ticket object 

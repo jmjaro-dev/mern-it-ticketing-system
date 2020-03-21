@@ -14,9 +14,7 @@ const Register = ({ isAuthenticated, error, loadUser, register, setAlert, ...pro
       error.errors.forEach(err => {
         setAlert(err.msg, 'danger');
       })
-      
     }
-  
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
   

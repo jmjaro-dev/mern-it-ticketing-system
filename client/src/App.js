@@ -7,7 +7,9 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Ticket from './components/tickets/Ticket';
-// import AddBtn from './components/layout/AddBtn';
+import CreateTicketModal from './components/tickets/CreateTicketModal';
+import UpdateTicketModal from './components/tickets/UpdateTicketModal';
+import DeleteTicketModal from './components/tickets/DeleteTicketModal';
 import DeleteCommentModal from './components/comments/DeleteCommentModal';
 import Alerts from './components/layout/Alerts';
 // Redux
@@ -39,7 +41,11 @@ const App = () => {
             <div className="container">
               <Alerts />
               {/* <AddBtn /> */}
+              <CreateTicketModal />
+              <DeleteTicketModal />
+              <UpdateTicketModal />
               <DeleteCommentModal />
+              
               <Switch>
                 <PrivateRoute exact path='/' component={Home} />
                 <PrivateRoute exact path='/tickets/:id' component={Ticket}/>

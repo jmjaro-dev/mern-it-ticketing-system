@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import TicketItem from './TicketItem';
+import PreLoader from '../layout/PreLoader';
 import { getTickets, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
@@ -8,7 +9,6 @@ const Tickets = ({ user, current, tickets, filtered, loading, getTickets, clearC
   useEffect(() => {
     if(current !== null) {
       clearCurrent();
-      console.log('Cleared Current');
     }
 
     if(user) {
@@ -38,7 +38,7 @@ const Tickets = ({ user, current, tickets, filtered, loading, getTickets, clearC
           </thead>
 
           <tbody>
-            {tickets !== null && !loading && (
+            {tickets !== null && !loading ? (
               <Fragment>
                 {filtered !== null ? filtered.map(ticket => (
                   <TicketItem key={ticket._id} ticket={ticket} />
@@ -46,6 +46,12 @@ const Tickets = ({ user, current, tickets, filtered, loading, getTickets, clearC
                   <TicketItem key={ticket._id} ticket={ticket} />
                 ))}
               </Fragment>
+            ) : (
+              <tr>
+                <td>
+                  <PreLoader key='loader'/>
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

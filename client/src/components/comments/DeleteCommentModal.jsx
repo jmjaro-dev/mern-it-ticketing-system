@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { deleteComment, clearCurrent } from '../../actions/commentActions';
-// import M from 'materialize-css/dist/js/materialize.min.js';
 import PropTypes from 'prop-types';
 
 
@@ -9,11 +8,6 @@ const DeleteCommentModal = ({ current, deleteComment, clearCurrent }) => {
   const onConfirm = () => {
     deleteComment(current);
     clearCurrent();
-
-    // M.toast({ 
-    //   html: 'Comment deleted',
-    //   classes: 'red darken-2 white-text'
-    // });
   }
 
   return (

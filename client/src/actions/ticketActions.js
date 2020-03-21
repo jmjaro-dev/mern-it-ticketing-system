@@ -59,12 +59,7 @@ export const getTickets = () => async dispatch => {
 };
 
 // Add Ticket
-export const addTicket = formData => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-
+export const addTicket = ticket => async dispatch => {
   try {
     const config = {
       headers: {
@@ -72,7 +67,7 @@ export const addTicket = formData => async dispatch => {
       }
     }
 
-    const res = await axios.post('/api/tickets', formData, config);
+    const res = await axios.post('/api/tickets', ticket, config);
 
     dispatch({
       type: ADD_TICKET,
@@ -110,11 +105,6 @@ export const deleteTicket = id => async dispatch => {
 
 // Update Ticket
 export const updateTicket = ticket => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-
   try {
     const config = {
       headers: {
