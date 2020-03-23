@@ -19,6 +19,7 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
     setNewMessage(message)
     setCurrent(comment._id);
     setEditMode();
+    console.log(comment._id);
   }
 
   const onCancel = async e => {
@@ -62,55 +63,67 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
 
   return (
     <Fragment>
-        
-        <div className={user.id === current_user ? "collection-item collection-item-with-actions avatar" : "collection-item avatar" }>
-          <i className="fas fa-user circle blue-text text-darken-2 grey lighten-2 z-depth-2"></i>  
-          <div>
-            {/* User Type */}
-            {user.userType === 'employee' ? (
-              <span className="comment-user-type cyan darken-1 white-text z-depth-1">Employee</span>
-            ) : (
-              <span className="comment-user-type indigo darken-2 white-text z-depth-1">Tech</span>
-            )}
-            
-            {/* Comment Recency */}
-            <span className="right grey-text text-darken-1">
-              <Moment fromNow className="comment-time">
-                {createdAt !== updatedAt ? updatedAt : createdAt}
-              </Moment>
-            </span>
-          </div>
-          <div>
-            {/* Check if user owns the comment */}
-            {user.id === current_user ? (
-              <span className="comment-user blue-text text-darken-1">{user.firstName} {user.lastName}</span>
-            ) : (
-              <span className="comment-user">{user.firstName} {user.lastName}</span>
-            )}
-            
-            {/* Edit Mode */}
-            {edit_mode === false && current_comment !== comment._id ? (
-              <p className="comment-message">
-                {message}
-              </p>
-            ) : (
-              <Fragment>
-                {current_comment === comment._id && edit_mode ? (
-                  <div>
-                    <textarea name="message" className="materialize-textarea" onChange={onChange} defaultValue={newMessage}></textarea>
-                  </div>
-                ) : (
-                  <p className="comment-message">
-                    {message}
-                  </p>
-                )}
-              </Fragment>
-            )}
-            
-            {/* User Action buttons */}
-            {user.id === current_user && (
-              <Fragment>
-                {edit_mode === false ? (
+      <div className="collection-item avatar">
+        <i className="fas fa-user circle blue-text text-darken-2 grey lighten-2 z-depth-2"></i>  
+        <div>
+          {/* User Type */}
+          {user.userType === 'employee' ? (
+            <span className="comment-user-type cyan darken-1 white-text z-depth-1">Employee</span>
+          ) : (
+            <span className="comment-user-type indigo darken-2 white-text z-depth-1">Tech</span>
+          )}
+          
+          {/* Comment Recency */}
+          <span className="right grey-text text-darken-1">
+            <Moment fromNow className="comment-time">
+              {createdAt !== updatedAt ? updatedAt : createdAt}
+            </Moment>
+          </span>
+        </div>
+        <div>
+          {/* Check if user owns the comment */}
+          {user.id === current_user ? (
+            <span className="comment-user blue-text text-darken-1">{user.firstName} {user.lastName}</span>
+          ) : (
+            <span className="comment-user">{user.firstName} {user.lastName}</span>
+          )}
+          
+          {/* Edit Mode */}
+          {!edit_mode && current_comment !== comment._id ? (
+            <p className="comment-message">
+              {message}
+            </p>
+          ) : (
+            <Fragment>
+              {current_comment === comment._id && edit_mode ? (
+                <div>
+                  <textarea name="message" className="materialize-textarea" onChange={onChange} defaultValue={newMessage}></textarea>
+                </div>
+              ) : (
+                <p className="comment-message">
+                  {message}
+                </p>
+              )}
+            </Fragment>
+          )}
+        </div>
+        <div>
+          {/* User Action buttons */}
+          {user.id === current_user && (
+            <Fragment>
+              {!edit_mode ? (
+                <div className="right">
+                  <a href="#!" className="blue-text comment-label" onClick={onEdit}>
+                    edit
+                  </a>
+                  <span className="grey-text"> | </span>
+                  <a href="#!" className="red-text comment-label" onClick={onDelete}>
+                    delete
+                  </a>
+                </div>
+              ) : (
+                <Fragment>
+                {current_comment !== comment._id ? (
                   <div className="right">
                     <a href="#!" className="blue-text comment-label" onClick={onEdit}>
                       edit
@@ -135,13 +148,14 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
                         save
                       </span>
                     )}
-                    
                   </div>
                 )}
-              </Fragment>
-            )}
-          </div>          
-        </div>
+                </Fragment>
+              )}
+            </Fragment>
+          )}
+        </div>          
+      </div>
     </Fragment>
   )
 }

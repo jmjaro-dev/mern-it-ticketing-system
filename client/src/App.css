@@ -21,6 +21,9 @@
   text-transform: capitalize;
 }
 
+/* END OF UTILS */
+
+/* OVER WRITE MATERIALIZE CSS */
 input[type=text] {
   font-size: 0.9em !important;
 }
@@ -28,10 +31,11 @@ input[type=text] {
   font-size: 0.9em !important;
 }
 
-.collection-item-with-actions {
-  height: 7em !important;
+.collection-item {
+  padding-bottom: 2em !important; 
 }
 
+/* END OF OVER WRITE */
 
 /* MENU STYLES */
 #sub-menu {
@@ -56,6 +60,19 @@ input[type=text] {
   margin: 0;
 }
 
+.ticket-actions-container {
+  padding: 0.5em 0 0 0;
+}
+
+.ticket-actions-header {
+  padding-top: 0.5em;
+}
+
+.ticket-actions-label {
+  font-size: 0.8em;
+  margin-left: 0.5em;
+}
+
 .ticket-label,
 .section-label {
   font-size: 0.75em;
@@ -66,6 +83,7 @@ input[type=text] {
   font-weight: 500;
 }
 
+.ticket-actions-header,
 .ticket-details,
 .ticket-desc {
   font-size: 0.85em;
@@ -97,6 +115,7 @@ input[type=text] {
   width: 25%;
   padding: 1em;
 }
+
 /* END OF TICKET STYLES /*
 
 /* COMMENTS STYLES */
@@ -138,7 +157,6 @@ input[type=text] {
 
 
 /* END OF COMMENTS STYLES */
-
 
 .alert {
   padding: 0.7rem;

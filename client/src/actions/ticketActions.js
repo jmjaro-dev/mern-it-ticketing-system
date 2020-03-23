@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   GET_TICKET,
   GET_TICKETS,
+  SORT_TICKETS,
   ADD_TICKET,
   DELETE_TICKET,
   SET_CURRENT,
@@ -48,6 +49,35 @@ export const getTickets = () => async dispatch => {
   
     dispatch({
       type: GET_TICKETS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: TICKET_ERROR,
+      payload: err.response.msg
+    });
+  }
+};
+
+// Sort Tickets
+export const sortTickets = (field, order) => async dispatch => {
+
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const sortBy = {
+      field,
+      order
+    }
+
+    const res = await axios.post('/api/tickets/sort', sortBy, config);
+  
+    dispatch({
+      type: SORT_TICKETS,
       payload: res.data
     });
   } catch (err) {

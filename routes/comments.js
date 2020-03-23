@@ -10,7 +10,7 @@ const Comment = require('../models/Comment');
 // @access  Private
 router.get('/:id', auth, async (req,res) => {
   try {
-    // Gets all comments for the ticket and sort by latest in ascending manner
+    // Gets all comments for the ticket and sort by ascending manner
     const comments = await Comment.find({ ticket_id: req.params.id }).sort({ _id: 1 });
     res.json(comments);
   } catch (err) {

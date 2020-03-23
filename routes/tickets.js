@@ -34,6 +34,57 @@ router.get('/:id', auth, async (req,res) => {
   }
 });
 
+// @route   POST api/tickets/sort
+// @desc    Sort Ticket by field and order
+// @access  Private
+router.post('/sort/', auth, async (req,res) => {
+  try {
+    const { field, order } = req.body;
+    
+    let tickets;
+
+    switch(field) {
+      case '_id':
+        if(order === 'desc') {
+          tickets = await Ticket.find().sort({ _id: 'desc' });
+        } else {
+          tickets = await Ticket.find().sort({ _id: 'asc' });
+        }
+        break;
+      case 'title':
+        if(order === 'desc') {
+          tickets = await Ticket.find().sort({ title: -1 });
+        } else {
+          tickets = await Ticket.find().sort({ title: 1 });
+        }
+        break;
+      case 'issuedBy':
+        if(order === 'desc') {
+          tickets = await Ticket.find().sort({ firstName: -1 });
+        } else {
+          tickets = await Ticket.find().sort({ firstName: 1 });
+        }
+      break;
+      case 'dateIssued':
+        if(order === 'desc') {
+          tickets = await Ticket.find().sort({ createdAt: -1 });
+        } else {
+          tickets = await Ticket.find().sort({ createdAt: 1 });
+        }
+        break;
+      default:
+        tickets = await Ticket.find().sort({ _id: -1 });
+        break;
+    }
+    
+    res.json(tickets);
+    console.log(field, order);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   POST api/tickets
 // @desc    Add ticket
 // @access  Private

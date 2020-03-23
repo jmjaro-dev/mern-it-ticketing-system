@@ -1,6 +1,7 @@
 import {
   GET_TICKET,
   GET_TICKETS,
+  SORT_TICKETS,
   ADD_TICKET,
   DELETE_TICKET,
   SET_CURRENT,
@@ -16,6 +17,7 @@ import {
 const initialState = {
   tickets: null,
   current: null,
+  sorted: null,
   filtered: null,
   error: null,
   loading: false
@@ -35,6 +37,12 @@ export default (state = initialState, action) => {
         tickets: action.payload,
         loading: false
       };
+    case SORT_TICKETS:
+      return {
+        ...state,
+        sorted: action.payload,
+        loading: false
+      }
     case ADD_TICKET:
       return {
         ...state,
@@ -76,7 +84,7 @@ export default (state = initialState, action) => {
         ...state,
         filtered: state.tickets.filter(ticket => {
           const regex = new RegExp(`${action.payload}`, 'gi');
-          return ticket.title.match(regex) || ticket.issuedBy.match(regex) || ticket.description.match(regex);
+          return ticket.title.match(regex) || ticket.description.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex);
         })
       };
     case CLEAR_FILTER:

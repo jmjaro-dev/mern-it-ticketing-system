@@ -4,13 +4,16 @@ import { setAlert } from '../../actions/alertActions';
 import { deleteTicket, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-
 const DeleteTicketModal = ({ current, deleteTicket, setAlert, clearCurrent }) => {
+  const onConfirm = async e => {
+    e.preventDefault();
 
-  const onConfirm = async () => {
     deleteTicket(current._id);
     clearCurrent();
     setAlert('Ticket deleted successfully!', 'success');
+    // if(history.location.pathname === `/tickets/${current._id}`) {
+    //   history.push('/');
+    // }
   }
 
   return (

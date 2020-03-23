@@ -2,14 +2,16 @@ import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { getTicket } from '../../actions/ticketActions';
+import { getTicket, setCurrent } from '../../actions/ticketActions';
 import { getComments } from '../../actions/commentActions';
 import Comments from '../comments/Comments';
 import AddComment from '../comments/AddComment';
 import PreLoader from '../layout/PreLoader';
 import PropTypes from 'prop-types';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments }) => {
+
+const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments, setCurrent }) => {
   useEffect(() => {
     if(user) {
       getTicket(match.params.id);
@@ -18,24 +20,36 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
     // eslint-disable-next-line
   }, []);
 
+  // const onTest = e => {
+  //   e.preventDefault();
+  //   console.log(history.location.pathname);
+  // }
+
+  const onUpdate = async e => {
+    e.preventDefault();
+    setCurrent(ticket);
+    let instance = M.Modal.getInstance(document.getElementById("update-ticket-modal"));
+    instance.open();
+  }
+  const onDelete = async e => {
+    e.preventDefault();
+    setCurrent(ticket);
+    let instance = M.Modal.getInstance(document.getElementById("delete-ticket-modal"));
+    instance.open();
+  }
+
   return (
     <Fragment>
       {ticket && !loading ? (
         <div id="ticketContainer">
           {/* Navigation & actions*/}
           <div className="row ticket-links" >
-            <div className="col s12 m9 l10">
+            <div className="col s12">
               <Link to="/" className="grey-text text-darken-2">
                 <i className="fas fa-chevron-left"></i><span className="btn-label"> Back to Tickets</span>
               </Link>
-            </div>
-            <div className="col s12 m3 l2 center">
-              {ticket.issuedBy.id === user._id && (
-                <a href="#!">
-                  <i className="far fa-trash-alt red-text text-darken-2"></i>
-                  <span className="btn-label grey-text text-darken-2"> Delete Ticket</span>
-                </a>
-              )}   
+              {' '}
+              {/* <a href="#!" onClick={onTest}>location</a> */}
             </div>
           </div>
 
@@ -120,7 +134,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
               
               {/* Right Panel */}
               <div className="col s3 card-panel" id="ticket-right-panel">
-                <div className="center ticket-details"><b>Ticket Details</b></div>
+                <div className="center ticket-details">Ticket Details</div>
                 <p>
                   <span className="ticket-label">Latest Update <i className="fas fa-chevron-right"></i> </span>
                   <Moment fromNow className="ticket-details">
@@ -139,6 +153,27 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                     <span className="priority-badge ticket-details red-text text-darken-2">{ticket.priority}</span>
                   )}
                 </p>  
+
+                <div className="divider"></div>
+                <div className="center ticket-actions-header">Ticket Actions</div>
+                <div className="ticket-actions-container row">
+                  {ticket.issuedBy._id === user._id && (
+                    <Fragment>
+                      <div className="col s12 m6 center">
+                        <a href="#!" onClick={onDelete}>
+                          <i className="far fa-trash-alt red-text text-darken-2"></i>
+                          <span className="ticket-actions-label grey-text text-darken-2"> delete</span>
+                        </a>
+                      </div>
+                      <div className="col s12 m6 center">
+                        <a href="#!" onClick={onUpdate}>
+                          <i className="far fa-edit green-text text-darken-2"></i>
+                          <span className="ticket-actions-label grey-text text-darken-2">update</span>
+                        </a>
+                      </div>
+                    </Fragment>
+                  )}  
+                </div>
               </div>
             </div>
           </div>
@@ -156,7 +191,8 @@ Ticket.propTypes = {
   comments: PropTypes.array,
   loading: PropTypes.bool,
   getTicket: PropTypes.func.isRequired,
-  getComments: PropTypes.func.isRequired
+  getComments: PropTypes.func.isRequired,
+  setCurrent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -166,4 +202,4 @@ const mapStateToProps = state => ({
   comments: state.comment.comments
 });
 
-export default connect(mapStateToProps, { getTicket, getComments })(Ticket);
+export default connect(mapStateToProps, { getTicket, getComments, setCurrent })(Ticket);

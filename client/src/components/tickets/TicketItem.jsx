@@ -28,7 +28,7 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
   }
   
   return (
-    <tr>
+    <tr className="hoverable">
       <td className="ticket-info center">{_id}</td>
       <td className="ticket-info center">
         {(priority === 'low') && (
