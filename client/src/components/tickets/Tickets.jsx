@@ -5,7 +5,7 @@ import PreLoader from '../layout/PreLoader';
 import { getTickets, sortTickets, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets, sortTickets, clearCurrent }) => {
+const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, getTickets,  sortTickets, clearCurrent }) => {
   useEffect(() => {
     if(current !== null) {
       clearCurrent();
@@ -29,7 +29,7 @@ const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets
   const onSetField = async e => {
     e.preventDefault();
     sortBy = document.getElementById(e.target.id).getAttribute("data_sort");
-    await setSort({ isSorted: true, column: sortBy, order: 'desc'});
+    setSort({ isSorted: true, column: sortBy, order: 'asc'});
     onSort(sortBy);
   }
 
@@ -41,14 +41,14 @@ const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets
           column: sortBy,
           order: 'desc'
         })
-        sortTickets(column, order);
+        sortTickets(column);
       } else {
         setSort({ 
           ...sort,
           column: sortBy,
           order: 'asc'
         })
-        sortTickets(column, order);
+        sortTickets(column);
       }
     } else {
       setSort({ 
@@ -56,7 +56,7 @@ const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets
         column: sortBy,
         order: 'desc'
       })
-      sortTickets(column, order);
+      sortTickets(column);
     }
   }
 
@@ -72,43 +72,114 @@ const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets
                 <th className="ticket-info center">
                   <a href="#!" id="sortById" data_sort="_id" onClick={onSetField}>
                     # ID {' '}
-                    {!isSorted && column === sortBy ? (
-                      <i className="fas fa-sort"></i>
-                    ) : (
-                      <Fragment>
-                        {isSorted && order === 'desc' ? (
-                          <i className="fas fa-sort-up" data_sort="_id"></i>
-                        ) : (
-                          <i className="fas fa-sort-down" data_sort="_id"></i>
-                        )}
-                      </Fragment>
-                    )}
                   </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
                 </th>
-                <th className="ticket-info center">Alert</th>
-                <th className="ticket-info center">Status</th>
                 <th className="ticket-info center">
-                  Subject
+                  <a href="#!" id="sortByAlertLevel" data_sort="alertLevel" onClick={onSetField}>
+                    Alert {' '}
+                  </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
                 </th>
                 <th className="ticket-info center">
-                  Issued By
+                  <a href="#!" id="sortByStatus" data_sort="status" onClick={onSetField}>
+                    Status {' '}
+                  </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
                 </th>
-                <th className="ticket-info center">Priority</th>
+                <th className="ticket-info center">
+                  <a href="#!" id="sortByTitle" data_sort="title" onClick={onSetField}>
+                    Subject {' '}
+                  </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
+                </th>
+                <th className="ticket-info center">
+                  <a href="#!" id="sortByIssuedBy" data_sort="issuedBy" onClick={onSetField}>
+                    IssuedBy {' '}
+                  </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
+                </th>
+                <th className="ticket-info center">
+                  <a href="#!" id="sortByPriorityLevel" data_sort="priorityLevel" onClick={onSetField}>
+                    Priority {' '}
+                  </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
+                </th>
                 <th className="ticket-info center">
                   <a href="#!" id="sortByDate" data_sort="dateIssued" onClick={onSetField}>
                     Date Issued {' '}
-                    {!isSorted && column === sortBy ? (
-                      <i className="fas fa-sort"></i>
-                    ) : (
-                      <Fragment>
-                        {isSorted && order === 'desc' ? (
-                          <i className="fas fa-sort-up" data_sort="dateIssued"></i>
-                        ) : (
-                          <i className="fas fa-sort-down" data_sort="dateIssued"></i>
-                        )}
-                      </Fragment>
-                    )}
                   </a>
+                  {!isSorted && column === sortBy ? (
+                    <i className="fas fa-sort"></i>
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <i className="fas fa-sort-up"></i>
+                      ) : (
+                        <i className="fas fa-sort-down"></i>
+                      )}
+                    </Fragment>
+                  )}
                 </th>
                 <th className="ticket-info center">Actions</th>
             </tr>
@@ -122,14 +193,12 @@ const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets
                 (
                   // If filtered not null
                   <Fragment>
-                  {filtered !== null && sorted === null ? 
-                    filtered.map(ticket => (
+                  {sorted !== null && filtered !== null ? (mapped.map(ticket => (
                       <TicketItem key={ticket._id} ticket={ticket} />
                     ))
-                    :
-                    sorted.map(ticket => (
-                      <TicketItem key={ticket._id} ticket={ticket} />
-                    ))
+                    ) : (mapped.map(ticket => (
+                        <TicketItem key={ticket._id} ticket={ticket} />
+                    )))
                   }
                   </Fragment>
                 ) 
@@ -154,6 +223,7 @@ const Tickets = ({ user, current, tickets, sorted, filtered, loading, getTickets
 Tickets.propTypes = {
   tickets: PropTypes.array,
   current: PropTypes.object,
+  mapped: PropTypes.array,
   sorted: PropTypes.array,
   filtered: PropTypes.array,
   loading: PropTypes.bool,
@@ -166,6 +236,7 @@ Tickets.propTypes = {
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   current: state.ticket.current,
+  mapped: state.ticket.mapped,
   sorted: state.ticket.sorted,
   filtered: state.ticket.filtered,
   loading: state.ticket.loading,

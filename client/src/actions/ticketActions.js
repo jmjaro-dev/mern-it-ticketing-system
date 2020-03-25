@@ -9,6 +9,11 @@ import {
   CLEAR_CURRENT,
   UPDATE_TICKET,
   FILTER_TICKETS,
+  SET_ALL,
+  OWNED_TICKETS,
+  OPEN_TICKETS,
+  RESOLVED_TICKETS,
+  CLOSED_TICKETS,
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
@@ -59,34 +64,43 @@ export const getTickets = () => async dispatch => {
   }
 };
 
-// Sort Tickets
-export const sortTickets = (field, order) => async dispatch => {
+// Sort Tickets v2
+export const sortTickets = field => async dispatch => {
 
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    const sortBy = {
-      field,
-      order
-    }
-
-    const res = await axios.post('/api/tickets/sort', sortBy, config);
-  
-    dispatch({
-      type: SORT_TICKETS,
-      payload: res.data
-    });
-  } catch (err) {
-    dispatch({
-      type: TICKET_ERROR,
-      payload: err.response.msg
-    });
-  }
+  dispatch({ 
+    type: SORT_TICKETS, 
+    payload: field 
+  });
 };
+
+// // Sort Tickets
+// export const sortTickets = (field, order) => async dispatch => {
+
+//   try {
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     }
+
+//     const sortBy = {
+//       field,
+//       order
+//     }
+
+//     const res = await axios.post('/api/tickets/sort', sortBy, config);
+  
+//     dispatch({
+//       type: SORT_TICKETS,
+//       payload: res.data
+//     });
+//   } catch (err) {
+//     dispatch({
+//       type: TICKET_ERROR,
+//       payload: err.response.msg
+//     });
+//   }
+// };
 
 // Add Ticket
 export const addTicket = ticket => async dispatch => {
@@ -167,6 +181,30 @@ export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRE
 
 // Filter Tickets
 export const filterTickets = text => async dispatch => dispatch({ type: FILTER_TICKETS, payload: text });
+
+// See All Tickets
+export const setAll = tickets => async dispatch => {
+  dispatch({ type: SET_ALL, payload: tickets });
+};
+
+// Owned Tickets
+export const ownedTickets = tickets => async dispatch => {
+  dispatch({ type: OWNED_TICKETS, payload: tickets });
+};
+
+// Open Tickets
+export const openTickets = tickets => async dispatch => {
+  dispatch({ type: OPEN_TICKETS, payload: tickets });
+}
+// Resolved Tickets
+export const resolvedTickets = tickets => async dispatch => {
+  dispatch({ type: RESOLVED_TICKETS, payload: tickets });
+};
+
+// Closed Tickets
+export const closedTickets = tickets => async dispatch => {
+  dispatch({ type: CLOSED_TICKETS, payload: tickets });
+};
 
 // Clear Filter
 export const clearFilter = () => async dispatch => dispatch({ type: CLEAR_FILTER });
