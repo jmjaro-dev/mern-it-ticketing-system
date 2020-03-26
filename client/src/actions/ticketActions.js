@@ -64,7 +64,7 @@ export const getTickets = () => async dispatch => {
   }
 };
 
-// Sort Tickets v2
+// Sort Tickets
 export const sortTickets = field => async dispatch => {
 
   dispatch({ 
@@ -72,35 +72,6 @@ export const sortTickets = field => async dispatch => {
     payload: field 
   });
 };
-
-// // Sort Tickets
-// export const sortTickets = (field, order) => async dispatch => {
-
-//   try {
-//     const config = {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//     }
-
-//     const sortBy = {
-//       field,
-//       order
-//     }
-
-//     const res = await axios.post('/api/tickets/sort', sortBy, config);
-  
-//     dispatch({
-//       type: SORT_TICKETS,
-//       payload: res.data
-//     });
-//   } catch (err) {
-//     dispatch({
-//       type: TICKET_ERROR,
-//       payload: err.response.msg
-//     });
-//   }
-// };
 
 // Add Ticket
 export const addTicket = ticket => async dispatch => {

@@ -11,9 +11,6 @@ const DeleteTicketModal = ({ current, deleteTicket, setAlert, clearCurrent }) =>
     deleteTicket(current._id);
     clearCurrent();
     setAlert('Ticket deleted successfully!', 'success');
-    // if(history.location.pathname === `/tickets/${current._id}`) {
-    //   history.push('/');
-    // }
   }
 
   return (

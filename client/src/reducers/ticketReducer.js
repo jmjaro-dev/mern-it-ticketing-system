@@ -76,11 +76,11 @@ export default (state = initialState, action) => {
                 let statusA, statusB;
 
                 if(a.status ==='open') { statusA = 1 };
-                if(a.status ==='resolved') { statusA = 2 };
+                if(a.status ==='pending') { statusA = 2 };
                 if(a.status ==='closed') { statusA = 3 };
                 
                 if(b.status ==='open') { statusB = 1 };
-                if(b.status ==='resolved') { statusB = 2 };
+                if(b.status ==='pending') { statusB = 2 };
                 if(b.status ==='closed') { statusB = 3 };
 
                 return statusA - statusB; 
@@ -96,11 +96,11 @@ export default (state = initialState, action) => {
                 let statusA, statusB;
 
                 if(a.status ==='open') { statusA = 1 };
-                if(a.status ==='resolved') { statusA = 2 };
+                if(a.status ==='pending') { statusA = 2 };
                 if(a.status ==='closed') { statusA = 3 };
                 
                 if(b.status ==='open') { statusB = 1 };
-                if(b.status ==='resolved') { statusB = 2 };
+                if(b.status ==='pending') { statusB = 2 };
                 if(b.status ==='closed') { statusB = 3 };
 
                 return statusB - statusA; 

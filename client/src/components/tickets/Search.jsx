@@ -61,10 +61,10 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
     <div>
     {tickets && !loading && (
       <div className="row card" id="sub-menu">
-        <div className="col s7">
+        <div className="col s6">
           <div className="ticket-details">
             <a href="#!" className="chip" onClick={onSetAll}>
-              All {' '}
+              All Tickets {' '}
             </a>
             <a href="#!" className="chip" onClick={setOwned}>
               My Tickets {' '}
@@ -73,14 +73,14 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
               Open
             </a>
             <a href="#!" className="chip" onClick={setResolved}>
-              Resolved
+              Pending
             </a>
             <a href="#!" className="chip" onClick={setClosed}>
               Closed
             </a>
           </div>
         </div>
-        <div className="col s2">
+        <div className="col s3">
           <a href="#create-ticket-modal" className="nav-links btn-small right green" onClick={onCreate}>
             + New ticket
           </a>

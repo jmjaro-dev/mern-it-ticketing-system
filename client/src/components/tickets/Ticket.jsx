@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { getTicket, setCurrent } from '../../actions/ticketActions';
@@ -20,11 +20,6 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
     // eslint-disable-next-line
   }, []);
 
-  // const onTest = e => {
-  //   e.preventDefault();
-  //   console.log(history.location.pathname);
-  // }
-
   const onUpdate = async e => {
     e.preventDefault();
     setCurrent(ticket);
@@ -42,30 +37,24 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
     <Fragment>
       {ticket && !loading ? (
         <div id="ticketContainer">
-          {/* Navigation & actions*/}
-          <div className="row ticket-links" >
-            <div className="col s12">
-              <Link to="/" className="grey-text text-darken-2">
-                <i className="fas fa-chevron-left"></i><span className="btn-label"> Back to Tickets</span>
-              </Link>
-              {' '}
-              {/* <a href="#!" onClick={onTest}>location</a> */}
-            </div>
-          </div>
-
           {/* Ticket Details */}
-          <div className="row">
+          <div>
             {/* Left Panel */}
             <div className="row">
               {/* Ticket Info */}
-              <p className="center section-label"> 
-                  Ticket Information
-              </p>  
+              {/* Navigation & actions*/}
+              <div className="row">
+                <span className="left ticket-links">
+                  <Link to="/" className="grey-text text-darken-2">
+                    <i className="fas fa-chevron-left"></i><span className="btn-label"> Back to Tickets</span>
+                  </Link>
+                </span>  
+              </div>
               <div className="col s9" id="ticket-left-panel">
                 {/* Ticket info Section */}
                 <div className="card-panel">
                   {/* Ticket Title, Alert Level, IssuedBy */}
-                  <p className="center">
+                  <p className="row">
                     <span className="ticket-label">[ ID ]</span> <span id="ticket-id" className="ticket-details black-text">{ticket._id} </span>
                   
                     <span id="ticket-title" className="blue-text text-darken-2">{ticket.title}</span>
@@ -108,6 +97,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                   </p>
                 </div>
                 {/* Comments Section */}
+                <div className="divider"></div>
                 <p className="center section-label"> 
                     Comments
                 </p>   
@@ -179,7 +169,13 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
           </div>
         </div>
       ) : (
-        <PreLoader/>
+        <Fragment>
+          {!loading ? (
+            <Redirect to="/" />
+          ) : (
+            <PreLoader/>
+          )}
+        </Fragment>
       )}
     </Fragment>
   )

@@ -76,7 +76,8 @@ router.post('/', [ auth, [
 router.put('/:id', [ auth , [
   check('title', 'Title is required').not().isEmpty(),
   check('description', 'Please enter a description for the ticket').not().isEmpty(),
-  check('priority', 'Please select priority level').not().isEmpty()
+  check('priority', 'Please select priority level').not().isEmpty(),
+  check('status', 'Please select ticket status').not().isEmpty(),
   ] ], async (req,res) => {
   const errors = validationResult(req);
 
@@ -90,10 +91,7 @@ router.put('/:id', [ auth , [
   if(!ticket) return res.status(404).json({ msg: 'Ticket not found' });
   
   // Destructure
-  const { userId, title, description, priority } = req.body;
-
-  // Make sure user owns the ticket
-  if(userId !== ticket.issuedBy._id) return res.status(401).json({ msg: 'Not authorized.'});
+  const { userId, title, description, priority, status } = req.body;
 
   // If user owns the ticket THEN
   // Build updated ticket object 
@@ -101,6 +99,7 @@ router.put('/:id', [ auth , [
   if(title) ticketFields.title = title;
   if(description) ticketFields.description = description;
   if(priority) ticketFields.priority = priority;
+  if(status) ticketFields.status = status;
 
   try {
     // Update ticket with new information
