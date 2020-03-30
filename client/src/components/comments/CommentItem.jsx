@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { updateComment, setCurrent, clearCurrent, setEditMode } from '../../actions/commentActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Moment from 'react-moment';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import PropTypes from 'prop-types';
@@ -64,13 +65,15 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
   return (
     <Fragment>
       <div className="collection-item avatar">
-        <i className="fas fa-user circle blue-text text-darken-2 grey lighten-2 z-depth-2"></i>  
+        <i className="circle grey lighten-2 z-depth-2">
+          <FontAwesomeIcon icon="user" className="blue-text text-darken-2 "/>
+        </i>  
         <div>
           {/* User Type */}
           {user.userType === 'employee' ? (
             <span className="comment-user-type cyan darken-1 white-text z-depth-1">Employee</span>
           ) : (
-            <span className="comment-user-type indigo darken-2 white-text z-depth-1">Tech</span>
+            <span className="comment-user-type indigo darken-2 white-text z-depth-1">Technician</span>
           )}
           
           {/* Comment Recency */}

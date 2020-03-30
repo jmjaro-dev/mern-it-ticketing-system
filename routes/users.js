@@ -22,6 +22,20 @@ router.get('/', auth, async (req,res) => {
   }
 });
 
+// @route   GET api/users/techs
+// @desc    Get all technician users
+// @access  Private
+router.get('/techs', auth, async (req,res) => {
+  try {
+    // Gets all techs and sort by id
+    const techs = await User.find({ userType: 'technician'}).select('-isActive -password -email -createdAt -updatedAt -userType').sort({ _id: '-1' });
+    res.json(techs);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   POST api/users
 // @desc    Register a user
 // @access  Public

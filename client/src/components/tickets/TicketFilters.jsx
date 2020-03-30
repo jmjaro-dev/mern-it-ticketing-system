@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAll, ownedTickets, openTickets, resolvedTickets, closedTickets, filterTickets, clearFilter } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resolvedTickets, closedTickets, filtered, loading, filterTickets, clearFilter }) => {
+const TicketFilters = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resolvedTickets, closedTickets, filtered, loading, filterTickets, clearFilter }) => {
   const [text, setText] = useState('');
+
+  const { userType } = user;
 
   const onSetAll = e => {
     e.preventDefault();
@@ -18,6 +21,22 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
       return user._id === ticket.issuedBy._id;
     })
     ownedTickets(arr);
+  }
+
+  const setAssigned = e => {
+    e.preventDefault();
+    let arr = tickets.filter(ticket => {
+      return user._id === ticket.assignedTo._id;
+    })
+    ownedTickets(arr);
+  }
+
+  const setUnassigned = e => {
+    e.preventDefault();
+    let arr = tickets.filter(ticket => {
+      return ticket.assignedTo.to === 'Unassigned';
+    })
+    openTickets(arr);
   }
 
   const setOpen = e => {
@@ -46,8 +65,7 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
 
   const onChange = e => {
     setText(e.target.value);
-    filterTickets(text);
-    
+    filterTickets(text);   
     if(e.target.value === '') clearFilter();
   }
   
@@ -58,16 +76,28 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
   }
 
   return (
-    <div>
+    <div className="row card">
     {tickets && !loading && (
-      <div className="row card" id="sub-menu">
-        <div className="col s6">
+      <div id="sub-menu">
+        <div className="col s7">
           <div className="ticket-details">
             <a href="#!" className="chip" onClick={onSetAll}>
               All Tickets {' '}
             </a>
-            <a href="#!" className="chip" onClick={setOwned}>
-              My Tickets {' '}
+            <a href="#!" className="chip" onClick={userType !== 'employee' ? setAssigned : setOwned }>
+              {userType !== 'employee' ? (
+                <Fragment>
+                  Assigned To Me
+                </Fragment> 
+              ) : (
+                <Fragment>
+                  My Tickets
+                </Fragment> 
+              )}
+              {' '}
+            </a>
+            <a href="#!" className="chip" onClick={setUnassigned}>
+              Unassigned
             </a>
             <a href="#!" className="chip" onClick={setOpen}>
               Open
@@ -80,14 +110,25 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
             </a>
           </div>
         </div>
-        <div className="col s3">
-          <a href="#create-ticket-modal" className="nav-links btn-small right green" onClick={onCreate}>
-            + New ticket
-          </a>
+        <div className="col s2 right-align">
+          {userType !== 'employee' ? (
+            <Fragment>
+              {' '}
+            </Fragment>
+          ) : (
+            <a href="#create-ticket-modal" className="nav-links btn-small right green" onClick={onCreate}>
+              + New ticket
+            </a>
+          )}
+          
         </div>
         <div className="col s3 valign-wrapper">
-          <i className="prefix fas fa-search blue-text"></i>
-          <input className="col s10" name="text" type="text" placeholder="Search a Ticket..." onChange={onChange} value={text}/>
+          <div className="col s1">
+            <FontAwesomeIcon icon="search" className="blue-text" />  
+          </div>
+          <div className="col s11">
+            <input name="text" type="text" placeholder="Search a Ticket..." onChange={onChange} value={text}/>
+          </div>
         </div>
       </div>
     )}
@@ -95,7 +136,7 @@ const Search = ({ user, tickets, owned, setAll, ownedTickets, openTickets, resol
   )
 }
 
-Search.propTypes = {
+TicketFilters.propTypes = {
   user: PropTypes.object,
   tickets: PropTypes.array,
   loading: PropTypes.bool,
@@ -111,4 +152,4 @@ const mapStateToProps = state => ({
   filtered: state.ticket.filtered
 });
 
-export default connect(mapStateToProps, { setAll, ownedTickets, openTickets, resolvedTickets, closedTickets, filterTickets, clearFilter })(Search);
+export default connect(mapStateToProps, { setAll, ownedTickets, openTickets, resolvedTickets, closedTickets, filterTickets, clearFilter })(TicketFilters);

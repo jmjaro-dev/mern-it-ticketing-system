@@ -22,6 +22,26 @@ import setAuthToken from './utils/setAuthToken';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import './App.css';
+// Font Awesome
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { 
+  faUser, 
+  faIdCardAlt,
+  faExclamationCircle,
+  faSearch,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faEye, 
+  faEdit,
+  faChevronLeft,
+  faChevronRight,
+  faPaperPlane
+} from '@fortawesome/free-solid-svg-icons';
+// font library init
+library.add(faUser, faIdCardAlt, faExclamationCircle, faSearch, faSort, faSortUp, faSortDown, faEye, faEdit, faTrashAlt, faChevronLeft, faChevronRight, faPaperPlane);
+
 
 if(localStorage.token) {
   setAuthToken(localStorage.token);
@@ -38,7 +58,7 @@ const App = () => {
       <Router>
         <Fragment>
           <Navbar />
-            <div className="container">
+            <div className="main-container">
               <Alerts />
               {/* <AddBtn /> */}
               <CreateTicketModal />

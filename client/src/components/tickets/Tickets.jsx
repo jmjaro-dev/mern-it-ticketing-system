@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import TicketItem from './TicketItem';
 import PreLoader from '../layout/PreLoader';
 import { getTickets, sortTickets, clearCurrent } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, getTickets,  sortTickets, clearCurrent }) => {
@@ -66,7 +67,7 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
   return (
     <Fragment>
       <div id="tickets" className="card-panel">
-        <table className="striped">
+        <table className="responsive-table striped">
           <thead>
             <tr>
                 <th className="ticket-info center">
@@ -74,13 +75,13 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     # ID {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}
@@ -90,13 +91,13 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     Alert {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}
@@ -106,13 +107,13 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     Status {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}
@@ -122,13 +123,13 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     Subject {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}
@@ -138,13 +139,13 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     IssuedBy {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}
@@ -154,13 +155,13 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     Priority {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}
@@ -170,13 +171,29 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                     Date Issued {' '}
                   </a>
                   {!isSorted && column === sortBy ? (
-                    <i className="fas fa-sort"></i>
+                    <FontAwesomeIcon icon="sort" />
                   ) : (
                     <Fragment>
                       {isSorted && order === 'desc' ? (
-                        <i className="fas fa-sort-up"></i>
+                        <FontAwesomeIcon icon="sort-up" />
                       ) : (
-                        <i className="fas fa-sort-down"></i>
+                        <FontAwesomeIcon icon="sort-down" />
+                      )}
+                    </Fragment>
+                  )}
+                </th>
+                <th className="ticket-info center">
+                  <a href="#!" id="sortByAssigned" data_sort="assignedTo" onClick={onSetField}>
+                    Assigned To {' '}
+                  </a>
+                  {!isSorted && column === sortBy ? (
+                    <FontAwesomeIcon icon="sort" />
+                  ) : (
+                    <Fragment>
+                      {isSorted && order === 'desc' ? (
+                        <FontAwesomeIcon icon="sort-up" />
+                      ) : (
+                        <FontAwesomeIcon icon="sort-down" />
                       )}
                     </Fragment>
                   )}

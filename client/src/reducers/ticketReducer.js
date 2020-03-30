@@ -304,6 +304,49 @@ export default (state = initialState, action) => {
             }
           }
           break;
+        case 'assignedTo':
+          if(!state.isAscending) {
+            return {
+              ...state,
+              sorted: state.mapped.sort((a, b) => {
+                const assignedToA = a.assignedTo.firstName.toLowerCase();
+                const assignedToB = b.assignedTo.firstName.toLowerCase();
+
+                if( assignedToA < assignedToB) {
+                  return -1;
+                }
+
+                if( assignedToA > assignedToB) {
+                  return 1;
+                }
+
+                return 0; 
+              }),
+              isAscending: !state.isAscending
+            }
+          }
+          
+          if(state.isAscending) {
+            return {
+              ...state,
+              sorted: state.mapped.sort((a, b) => {
+                const assignedToA = a.assignedTo.firstName.toLowerCase();
+                const assignedToB = b.assignedTo.firstName.toLowerCase();
+
+                if( assignedToA > assignedToB) {
+                  return -1;
+                }
+
+                if( assignedToA < assignedToB) {
+                  return 1;
+                }
+
+                return 0; 
+              }),
+              isAscending: !state.isAscending
+            }
+          }
+          break;
         default: 
           return state;
       }
@@ -312,6 +355,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         tickets: [action.payload, ...state.tickets],
+        mapped:  [action.payload, ...state.tickets],
+        filtered:  [action.payload, ...state.tickets],
         loading: false
       };
     case UPDATE_TICKET:

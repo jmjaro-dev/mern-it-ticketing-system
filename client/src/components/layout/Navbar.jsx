@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
@@ -25,7 +26,7 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
     <Fragment>
       <li>
         <Link to="/" className="nav-links">
-          <i className="fas fa-user" style={{ fontSize: "1em", marginRight: "0.8em" }}></i>
+          <FontAwesomeIcon icon={["fas", "user"]} style={{ marginRight: "0.5em" }}/>
           { user && user.firstName }
         </Link>
       </li>
@@ -42,7 +43,8 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
     <nav className="blue darken-2">
       <div className="nav-wrapper container">
         <Link to="/">
-          <i className={icon} />{' '} {title}
+          <FontAwesomeIcon icon={icon} size="lg" style={{ marginRight: "0.5em" }} />
+          {' '} {title}
         </Link>
         <ul id="nav-mobile" className="right">
           {isAuthenticated ? authLinks : guestLinks}
@@ -61,7 +63,7 @@ Navbar.propTypes = {
 
 Navbar.defaultProps = {
   title: 'IT Ticket Tracker',
-  icon: 'fas fa-id-card-alt'
+  icon: 'id-card-alt'
 }
 
 const mapStateToProps = state => ({

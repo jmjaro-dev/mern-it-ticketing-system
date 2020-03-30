@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #003699;
+  --primary-color: #2864d4;
   --dark-color: #333333;
   --light-color: #f4f4f4;
   --danger-color: #f75353;
@@ -13,6 +13,10 @@
   margin-left: 1em;
 }
 /* UTILS */
+.main-container {
+  width: 90%;
+  margin: 0 auto;
+}
 .nav-links {
   font-size: 0.9em;
 }
@@ -24,6 +28,10 @@
 /* END OF UTILS */
 
 /* OVER WRITE MATERIALIZE CSS */
+a:focus {
+  background-color: var(--primary-color) !important;
+}
+
 input[type=text] {
   font-size: 0.9em !important;
 }
@@ -115,7 +123,6 @@ input[type=text] {
   width: 25%;
   padding: 1em;
 }
-
 /* END OF TICKET STYLES /*
 
 /* COMMENTS STYLES */

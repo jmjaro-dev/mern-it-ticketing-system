@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import { setCurrent } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 const TicketItem = ({ ticket, user, setCurrent }) => {
-  const { _id, priority, status, title, issuedBy, createdAt } = ticket;
+  const { _id, priority, status, title, issuedBy, createdAt, assignedTo } = ticket;
 
   const onSetCurrent = () => {
     setCurrent(ticket);
@@ -57,7 +58,7 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
       {/* Ticket Title */}
       <td>
         <Link to={`/tickets/${_id}`} className="ticket-details blue-text text-darken-2" onClick={onSetCurrent}>
-          {title}
+          <span className="truncate">{title}</span>
         </Link>
       </td>
       {/* Issued By */}
@@ -84,20 +85,42 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
         {createdAt} 
         </Moment>
       </td>
+      {/* Assigned To */}
+      <td className="ticket-info">
+        {assignedTo.to !== 'Unassigned' ? (
+          <Fragment>
+            {assignedTo.firstName} {' '} {assignedTo.lastName}
+          </Fragment>
+        ) : (
+          <Fragment>
+            {assignedTo.to}
+          </Fragment>
+        )}
+        
+      </td>
       {/* Actions */}
       <td className="center">
-        <Link to={`/tickets/${_id}`}>
-          <i className="fas fa-eye blue-text text-darken-2"></i>
+        <Link to={`/tickets/${_id}`} onClick={onSetCurrent}>
+          <FontAwesomeIcon icon="eye" className="blue-text text-darken-2" />
         </Link>
         {' '}
-        <a href="#!" onClick={onUpdate}>
-          <i className="far fa-edit green-text text-darken-2"></i>
-        </a>
+        {/* Update Link for Ticket Owner and Assigned Technician */}
+        {(issuedBy._id === user._id || (user.userType === 'technician' && ticket.assignedTo._id === user._id)) && (
+          <a href="#!" onClick={onUpdate}>
+            <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
+          </a>
+        )}
+        {/* Update Link for Technicians for unassigned tickets */}
+        {user.userType === 'technician' && ticket.assignedTo.to === 'Unassigned' && (
+          <a href="#!" onClick={onUpdate}>
+            <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
+          </a>
+        )}
         {issuedBy._id === user._id && (
           <Fragment>
             {' '}
             <a href="#!" onClick={onDelete}>
-              <i className="far fa-trash-alt red-text text-darken-2"></i>
+              <FontAwesomeIcon icon={[ "far", "trash-alt" ]} className="red-text text-darken-2" />
             </a>
           </Fragment>
         )}

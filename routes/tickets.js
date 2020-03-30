@@ -49,7 +49,7 @@ router.post('/', [ auth, [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { ticket_id, title, description, priority, issuedBy } = req.body;
+  const { ticket_id, title, description, priority, issuedBy, assignedTo } = req.body;
     
   try {
     // Create ticket object 
@@ -58,7 +58,8 @@ router.post('/', [ auth, [
       title,
       description,
       priority,
-      issuedBy
+      issuedBy,
+      assignedTo
     });
 
     const data = await ticket.save();
@@ -91,7 +92,7 @@ router.put('/:id', [ auth , [
   if(!ticket) return res.status(404).json({ msg: 'Ticket not found' });
   
   // Destructure
-  const { userId, title, description, priority, status } = req.body;
+  const { userId, title, description, priority, status, assignedTo } = req.body;
 
   // If user owns the ticket THEN
   // Build updated ticket object 
@@ -100,6 +101,7 @@ router.put('/:id', [ auth , [
   if(description) ticketFields.description = description;
   if(priority) ticketFields.priority = priority;
   if(status) ticketFields.status = status;
+  if(assignedTo) ticketFields.assignedTo = assignedTo;
 
   try {
     // Update ticket with new information

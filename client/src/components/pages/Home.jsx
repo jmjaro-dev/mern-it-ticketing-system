@@ -1,7 +1,7 @@
 import React, { Fragment,useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
-import Search from '../tickets/Search';
+import TicketFilters from '../tickets/TicketFilters';
 import Tickets from '../tickets/Tickets';
 import PreLoader from '../layout/PreLoader';
 
@@ -17,7 +17,7 @@ const Home = ({ isAuthenticated, loading, loadUser }) => {
           <PreLoader />
         ) : (
           <Fragment>
-            <Search />
+            <TicketFilters />
             <p className="ticket-label center">Tickets</p>
             <Tickets />
           </Fragment>

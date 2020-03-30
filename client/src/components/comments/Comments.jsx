@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const Comments = ({ comments, current_user, loading }) => {
 
   if(comments !== null && comments.length === 0 && !loading) {
-    return <h4>There are no comments yet.</h4>
+    return <p>There are no comments yet.</p>
   }
 
   return (

@@ -1,18 +1,25 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { addTicket } from '../../actions/ticketActions';
+import { getTechs } from '../../actions/userActions';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const CreateTicketModal = ({ user, addTicket, setAlert }) => {
+const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
   const [ticket, setTicket] = useState({
     title: '',
     description: '',
-    priority: ''
+    priority: '',
+    assignedTo: ''
   });
 
-  const { title, description, priority } = ticket;
+  useEffect(() => {
+    getTechs();
+    // eslint-disable-next-line
+  }, []);
+
+  const { title, description, priority, assignedTo } = ticket;
 
   const onChange = e => setTicket({ ...ticket, [e.target.name]: e.target.value });
 
@@ -21,7 +28,8 @@ const CreateTicketModal = ({ user, addTicket, setAlert }) => {
     setTicket({
       title: '',
       description: '',
-      priority: ''
+      priority: '',
+      assignedTo: ''
     })
   }
 
@@ -29,6 +37,14 @@ const CreateTicketModal = ({ user, addTicket, setAlert }) => {
     e.preventDefault();
 
     if(title !== '' || description !== '' || priority !== '') {
+      let assignedTO;
+      
+      if(assignedTo !== 'Unassigned') {
+        assignedTO = techs.find(tech => assignedTo === tech._id);
+      } else {
+        assignedTO = 'Unassigned'
+      }
+      
       const newTicket = {
         title,
         description,
@@ -37,7 +53,8 @@ const CreateTicketModal = ({ user, addTicket, setAlert }) => {
           _id: user._id,
           firstName: user.firstName,
           lastName: user.lastName
-        }
+        },
+        assignedTo: assignedTO
       }
   
       await addTicket(newTicket);
@@ -45,7 +62,8 @@ const CreateTicketModal = ({ user, addTicket, setAlert }) => {
       setTicket({
         title: '',
         description: '',
-        priority: ''
+        priority: '',
+        assignedTo: ''
       });
   
       setAlert('Ticked created!', 'success');
@@ -82,6 +100,18 @@ const CreateTicketModal = ({ user, addTicket, setAlert }) => {
                 <option value="high">High</option>
               </select>
             </div>
+            {user && user.userType === 'employee' && (
+              <div className="form-group">
+                <label>Assign To</label>
+                <select name="assignedTo" className="browser-default" value={assignedTo} onChange={onChange} required>
+                  <option value="" disabled>- Assign Ticket To -</option>
+                  <option value="Unassigned">- Unassigned -</option>
+                  {techs && techs.map(tech => (
+                    <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </form>
         </div>
 
@@ -113,12 +143,15 @@ const modalStyles = {
 CreateTicketModal.propTypes = {
   isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
+  techs: PropTypes.array,
   setAlert: PropTypes.func.isRequired,
-  addTicket: PropTypes.func.isRequired
+  addTicket: PropTypes.func.isRequired,
+  getTechs: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  user: state.auth.user,
+  techs: state.user.techs
 });
 
-export default connect(mapStateToProps, { addTicket, setAlert } )(CreateTicketModal);
+export default connect(mapStateToProps, { getTechs, addTicket, setAlert } )(CreateTicketModal);

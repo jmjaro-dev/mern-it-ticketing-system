@@ -29,6 +29,12 @@ const TicketSchema = mongoose.Schema({
   issuedBy: {
     type: Object,
     required: true
+  },
+  assignedTo: {
+    type: Object,
+    default: {
+      to: 'Unassigned'
+    }
   }
 },
 {

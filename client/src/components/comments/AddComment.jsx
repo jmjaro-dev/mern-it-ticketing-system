@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { addComment } from '../../actions/commentActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-// import M from 'materialize-css/dist/js/materialize.min.js';
 
 const AddComment = ({ ticket_id, user, addComment }) => {
   const [message, setMessage] = useState('');
@@ -22,10 +22,6 @@ const AddComment = ({ ticket_id, user, addComment }) => {
     };
 
     await addComment(ticket_id, message.message, userInfo);
-    // M.toast({ 
-    //   html: 'Comment added',
-    //   classes: 'green white-text'
-    // });
 
     setMessage('');
     document.getElementsByName("comment-message").value = '';
@@ -35,7 +31,9 @@ const AddComment = ({ ticket_id, user, addComment }) => {
     <div>
       <ul className="collection card-panel comment-add-container">
         <li className="collection-item avatar">
-          <i className="fas fa-user circle blue-text text-darken-2 grey lighten-2 z-depth-2"></i>  
+          <i className="circle grey lighten-2 z-depth-2">
+            <FontAwesomeIcon icon="user" className="blue-text text-darken-2 "/>
+          </i>
           <div className="form-group">    
             <div className="col s11">
               <label htmlFor="message">Message</label>
@@ -45,11 +43,11 @@ const AddComment = ({ ticket_id, user, addComment }) => {
               <br/>
               {message !== '' ? (
                 <a href="#!" className="center blue-text text-darken-1" onClick={onSubmit}>
-                  <i className="fas fa-paper-plane"></i>
+                  <FontAwesomeIcon icon="paper-plane" />
                 </a>
               ) : (
                 <span className="center grey-text text-darken-1">
-                  <i className="fas fa-paper-plane"></i>
+                  <FontAwesomeIcon icon="paper-plane" />
                 </span>
               )}
             </div>
