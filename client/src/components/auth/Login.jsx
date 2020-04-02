@@ -64,7 +64,7 @@ const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
 const styles = {
   loginForm : {
     width: "400px",
-    margin: "30px auto"
+    margin: "10px auto"
   },
   loginBtn: {
     display: "block",
@@ -74,7 +74,9 @@ const styles = {
 
 Login.propTypes = {
   isAuthenticated: PropTypes.bool,
-  error: PropTypes.string
+  error: PropTypes.string,
+  login: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

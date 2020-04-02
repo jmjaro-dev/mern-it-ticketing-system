@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { deleteComment, clearCurrent } from '../../actions/commentActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 
@@ -11,32 +12,42 @@ const DeleteCommentModal = ({ current, deleteComment, clearCurrent }) => {
   }
 
   return (
-    <div id="delete-comment-modal" className="modal" style={modalStyle}>
+    <div id="delete-comment-modal" className="modal" style={styles.modal}>
       <div className="modal-content">
         <h5 className="center grey-text text-darken-2">
-          <i className="fas fa-exclamation-circle red-text text-darken-2" /> Please Confirm
+          <FontAwesomeIcon icon="exclamation-circle" size="lg" className="yellow-text text-darken-2" />
+          {' '} Are you sure?
         </h5>
         <br/>
-        <p>Are you sure you want to <span className="red-text text-darken-2">delete</span> your comment?</p>
+        <p className="center">Click <span className="blue darken-2 white-text z-depth-1" style={styles.confirm_text}>CONFIRM</span> to <span className="red-text text-darken-2">delete</span> your comment.</p>
       </div>
 
       <div className="modal-footer">
-        <a href="#!" className="modal-close btn-flat">Cancel</a>
+        <a href="#!" className="modal-close btn-small btn-flat">Cancel</a>
         {' '}
-        <a href="#!" onClick={onConfirm} className="modal-close waves-effect btn blue darken-2">Confirm</a>
+        <a href="#!" onClick={onConfirm} className="modal-close waves-effect btn-small blue darken-2">Confirm</a>
       </div>
     </div>
   )
 }
 
 DeleteCommentModal.propTypes = {
-  comment_id: PropTypes.string,
+  current: PropTypes.string,
   deleteComment: PropTypes.func.isRequired,
   clearCurrent: PropTypes.func.isRequired
 }
 
-const modalStyle = {
-  width: '500px'
+const styles = {
+  modal: {
+    padding: '0 0.5em 0.5em 0.5em',
+    width: '450px',
+    borderRadius: '1em'
+  },
+  confirm_text: {
+    padding: "0.5em 1em",
+    borderRadius: "0.1em",
+    fontSize: "0.9em",
+  }
 };
 
 const mapStateToProps = state => ({

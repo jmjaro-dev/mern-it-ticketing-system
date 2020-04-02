@@ -26,6 +26,7 @@ import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { 
+  faSpinner,
   faUser, 
   faIdCardAlt,
   faExclamationCircle,
@@ -40,7 +41,7 @@ import {
   faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 // font library init
-library.add(faUser, faIdCardAlt, faExclamationCircle, faSearch, faSort, faSortUp, faSortDown, faEye, faEdit, faTrashAlt, faChevronLeft, faChevronRight, faPaperPlane);
+library.add(faSpinner, faUser, faIdCardAlt, faExclamationCircle, faSearch, faSort, faSortUp, faSortDown, faEye, faEdit, faTrashAlt, faChevronLeft, faChevronRight, faPaperPlane);
 
 
 if(localStorage.token) {

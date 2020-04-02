@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { addTicket } from '../../actions/ticketActions';
 import { getTechs } from '../../actions/userActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
@@ -75,53 +76,67 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
 
   return (
     <Fragment>
-      <div id="create-ticket-modal" className="modal">
+      <div id="create-ticket-modal" className="modal" style={styles.modal}>
         <div className="modal-content">
-          <h5 className="center">
-            Create <span className="blue-text text-darken-2">Ticket</span> Form
-          </h5>
-          <form onSubmit={onSubmit} styles={modalStyles.ticketForm}>
-            <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input type="text" name="title" value={title} onChange={onChange} required/>
+          <p className="center" style={styles.ticket_header}>
+            <FontAwesomeIcon icon="id-card-alt" size="lg" className="blue-text text-darken-2"/> {' '}
+            Create Ticket
+          </p>
+          <form onSubmit={onSubmit}>
+            {/* Title */}
+            <div className="row">
+              <div className="form-group col s12">
+                <label htmlFor="title">Title</label>
+                <input type="text" name="title" value={title} onChange={onChange} required/>
+              </div>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea name="description" className="materialize-textarea" placeholder="Write a description here..." value={description} onChange={onChange} required></textarea>
+            
+            {/* Description */}
+            <div className="row">
+              <div className="form-group col s12">
+                <label htmlFor="description">Description</label>
+                <textarea name="description" className="materialize-textarea" placeholder="Write a description here..." value={description} onChange={onChange} required></textarea>
+              </div>
             </div>
-
-            <div className="form-group">
-              <label>Priority Level</label>
-              <select name="priority" className="browser-default" value={priority} onChange={onChange} required>
-                <option value="" disabled>- Priority Level -</option>
-                <option value="low">Low</option>
-                <option value="normal">Normal</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-            {user && user.userType === 'employee' && (
-              <div className="form-group">
-                <label>Assign To</label>
-                <select name="assignedTo" className="browser-default" value={assignedTo} onChange={onChange} required>
-                  <option value="" disabled>- Assign Ticket To -</option>
-                  <option value="Unassigned">- Unassigned -</option>
-                  {techs && techs.map(tech => (
-                    <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
-                  ))}
+            {/* Priority Level & Assign Ticket To*/}
+            <div className="row">
+              {/* Priority Level */}
+              <div className="form-group col s12 m6">
+                <label>Priority Level</label>
+                <select name="priority" className="browser-default" value={priority} onChange={onChange} required>
+                  <option value="" disabled>- Priority Level -</option>
+                  <option value="low">Low</option>
+                  <option value="normal">Normal</option>
+                  <option value="high">High</option>
                 </select>
               </div>
-            )}
+              {/* Assign Ticket To  */}
+              {user && user.userType === 'employee' && (
+                <div className="form-group col s12 m6">
+                  <label>Assign Ticket To</label>
+                  <select name="assignedTo" className="browser-default" value={assignedTo} onChange={onChange} required>
+                    <option value="" disabled>- Assign Ticket To -</option>
+                    <option value="Unassigned">- Unassigned -</option>
+                    {techs && techs.map(tech => (
+                      <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+            
           </form>
         </div>
-
+        {/* Modal Footer - Buttons */}
         <div className="modal-footer">
+          {/* Cancel Btn */}
           <button onClick={onCancel} className="modal-close btn-small white black-text">Cancel</button>
           {' '}
+          {/* Create Button */}
           {title !== '' && description !== '' && priority !== '' ? (
-            <button onClick={onSubmit} className="waves-effect btn-small blue darken-2">Submit</button>
+            <button onClick={onSubmit} className="waves-effect btn-small blue darken-2">Create</button>
           ) : (
-            <button className="btn-small" disabled>Submit</button>
+            <button className="btn-small" disabled>Create</button>
           )}
         </div>
       </div>
@@ -129,24 +144,24 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
   )
 }
 
-const modalStyles = {
-  ticketForm : {
-    width: "400px",
-    margin: "30px auto"
+const styles = {
+  modal : {
+    padding: '0 0.5em 0 0.5em',
+    width: '500px',
+    borderRadius: '0.5em'
   },
-  ticketBtn: {
-    display: "block",
-    margin: "0 auto"
+  ticket_header: {
+    fontSize: "1.5em",
+    fontWeight: "bold"
   }
-};
+}
 
 CreateTicketModal.propTypes = {
-  isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
   techs: PropTypes.array,
-  setAlert: PropTypes.func.isRequired,
   addTicket: PropTypes.func.isRequired,
-  getTechs: PropTypes.func.isRequired
+  getTechs: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { updateTicket, clearCurrent } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
@@ -30,8 +31,14 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
 
   const onChange = e => setTicket({ ...ticket, [e.target.name]: e.target.value });
 
+  const onCloseModal = () => {
+    let instance = M.Modal.getInstance(document.getElementById("update-ticket-modal"));
+    instance.close();
+  }
+
   const onCancel = async e => {
     e.preventDefault();
+    onCloseModal();
   }
 
   const onSubmit = async e => {
@@ -68,8 +75,7 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
         assignedTo: ''
       })
 
-      let instance = M.Modal.getInstance(document.getElementById("update-ticket-modal"));
-      instance.close();
+      onCloseModal();
       
       setAlert('Ticket updated successfully!', 'success');
     }
@@ -77,99 +83,115 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
 
   return (
     <Fragment>
-      <div id="update-ticket-modal" className="modal">
+      <div id="update-ticket-modal" className="modal" style={styles.modal}>
         {user && current !== null &&  (
           <Fragment>
             <div className="modal-content">
-              <h5 className="center">
-                Update <span className="blue-text text-darken-2">Ticket</span> Form
-              </h5>
-              
-              <form onSubmit={onSubmit} styles={modalStyles.ticketForm}>
+              {/* Header */}
+              <div className="row">
+                <div className="col s12">
+                  <p className="center" style={styles.ticket_header}>
+                    <FontAwesomeIcon icon="edit" size="lg" className="blue-text text-darken-2"/> {' '}
+                    Update Ticket
+                  </p>    
+                </div>  
+              </div>
+              {/* Form STARTS */}
+              <form onSubmit={onSubmit} styles={styles.modal}>
                 {/* Title */}
-                <div className="form-group">
-                  <label htmlFor="title">Title</label>
-                  {user._id !== current.issuedBy._id ? (
-                    <input type="text" name="title" defaultValue={current.title} onChange={onChange} disabled/>
-                  ): (
-                    <input type="text" name="title" defaultValue={current.title} onChange={onChange} required/>
-                  )}
-                  
+                <div className="row">
+                  <div className="form-group col s12">
+                    <label htmlFor="title">Title</label>
+                    {user._id !== current.issuedBy._id ? (
+                      <input type="text" name="title" defaultValue={current.title} onChange={onChange} disabled/>
+                    ): (
+                      <input type="text" name="title" defaultValue={current.title} onChange={onChange} required/>
+                    )}
+                    
+                  </div>
                 </div>
                 {/* Description */}
-                <div className="form-group">
-                  <label htmlFor="description">Description</label>
-                  {user._id !== current.issuedBy._id ? (
-                    <textarea name="description" className="materialize-textarea" placeholder="Write a description here..." defaultValue={current.description} onChange={onChange} disabled></textarea>
-                  ) : (
-                    <textarea name="description" className="materialize-textarea" placeholder="Write a description here..." defaultValue={current.description} onChange={onChange} required></textarea>
-                  )}
+                <div className="row">
+                  <div className="form-group col s12">
+                    <label htmlFor="description">Description</label>
+                    {user._id !== current.issuedBy._id ? (
+                      <textarea name="description" className="materialize-textarea" placeholder="Write a description here..." defaultValue={current.description} onChange={onChange} disabled></textarea>
+                    ) : (
+                      <textarea name="description" className="materialize-textarea" placeholder="Write a description here..." defaultValue={current.description} onChange={onChange} required></textarea>
+                    )}
+                  </div>
                 </div>
-                {/* Priority Level */}
-                <div className="form-group">
-                  <label>Priority Level</label>
-                  {user._id !== current.issuedBy._id ? (
-                    <select name="priority" className="browser-default" defaultValue={current.priority}  onChange={onChange} disabled>
-                      <option value="" disabled>- Priority Level -</option>
-                      <option value="low">Low</option>
-                      <option value="normal">Normal</option>
-                      <option value="high">High</option>
-                    </select>
-                  ) : (
-                    <select name="priority" className="browser-default" defaultValue={current.priority}  onChange={onChange} required>
-                      <option value="" disabled>- Priority Level -</option>
-                      <option value="low">Low</option>
-                      <option value="normal">Normal</option>
-                      <option value="high">High</option>
-                    </select>
-                  )}
-                </div>
-                {/* Status */}
-                <div className="form-group">
-                  <label>Status</label>
-                  {user._id !== current.issuedBy._id && user.userType !== 'technician' ? (
-                    <select name="status" className="browser-default" defaultValue={current.status}  onChange={onChange} disabled>
-                      <option value="" disabled>- Status -</option>
-                      <option value="open">open</option>
-                      <option value="pending">pending</option>
-                      <option value="closed">closed</option>
-                    </select>
-                  ) : (
-                    <select name="status" className="browser-default" defaultValue={current.status}  onChange={onChange} required>
-                      <option value="" disabled>- Status -</option>
-                      <option value="open">open</option>
-                      <option value="pending">pending</option>
-                      <option value="closed">closed</option>
-                    </select>
-                  )}
+                {/* Priority Level & Status */}
+                <div className="row">
+                  {/* Priority Level */}
+                  <div className="form-group col s12 m6">
+                    <label>Priority Level</label>
+                    {user._id !== current.issuedBy._id ? (
+                      <select name="priority" className="browser-default" defaultValue={current.priority}  onChange={onChange} disabled>
+                        <option value="" disabled>- Priority Level -</option>
+                        <option value="low">Low</option>
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                      </select>
+                    ) : (
+                      <select name="priority" className="browser-default" defaultValue={current.priority}  onChange={onChange} required>
+                        <option value="" disabled>- Priority Level -</option>
+                        <option value="low">Low</option>
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                      </select>
+                    )}
+                  </div>
+                  {/* Status */}
+                  <div className="form-group col s12 m6">
+                    <label>Status</label>
+                    {user._id !== current.issuedBy._id && user.userType !== 'technician' ? (
+                      <select name="status" className="browser-default" defaultValue={current.status}  onChange={onChange} disabled>
+                        <option value="" disabled>- Status -</option>
+                        <option value="open">open</option>
+                        <option value="pending">pending</option>
+                        <option value="closed">closed</option>
+                      </select>
+                    ) : (
+                      <select name="status" className="browser-default" defaultValue={current.status}  onChange={onChange} required>
+                        <option value="" disabled>- Status -</option>
+                        <option value="open">open</option>
+                        <option value="pending">pending</option>
+                        <option value="closed">closed</option>
+                      </select>
+                    )}
+                  </div>
                 </div>
                 {/* Assigned */}
-                {/* If user is an employee and owns the ticket show Assign field*/}
-                {user && user.userType === 'employee' && user._id === current.issuedBy._id && (
-                  <div className="form-group">
-                    <label>Assign To</label>
-                    <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
-                      <option value="" disabled>- Assign Ticket To -</option>
-                      <option value="Unassigned">- Unassigned -</option>
-                      {techs && techs.map(tech => (
-                        <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                {/* If Ticket is Unassigned show Assign field*/}
-                {user && user.userType === 'technician' && ticket.assignedTo.to === 'Unassigned' && (
-                  <div className="form-group">
-                    <label>Assign To</label>
-                    <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
-                      <option value="" disabled>- Assign Ticket To -</option>
-                      <option value="Unassigned">- Unassigned -</option>
-                      {techs && techs.map(tech => (
-                        <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+                <div className="row">
+                  {/* If user = employee and owns the ticket : show Assign field*/}
+                  {user && user.userType === 'employee' && user._id === current.issuedBy._id && (
+                    <div className="form-group col s12">
+                      <label>Assign To</label>
+                      <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
+                        <option value="" disabled>- Assign Ticket To -</option>
+                        <option value="Unassigned">- Unassigned -</option>
+                        {techs && techs.map(tech => (
+                          <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {/* If Ticket = Unassigned & user = technician : show Assign field*/}
+                  {user && user.userType === 'technician' && ticket.assignedTo.to === 'Unassigned' && (
+                    <div className="form-group col s12">
+                      <label>Assign To</label>
+                      <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
+                        <option value="" disabled>- Assign Ticket To -</option>
+                        <option value="Unassigned">- Unassigned -</option>
+                        {techs && techs.map(tech => (
+                          <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+                {/* Form ENDS */}
               </form>
             </div>
 
@@ -196,16 +218,17 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
   )
 }
 
-const modalStyles = {
-  ticketForm : {
-    width: "400px",
-    margin: "30px auto"
+const styles = {
+  modal : {
+    padding: '0 0.5em 0 0.5em',
+    width: '500px',
+    borderRadius: '0.5em'
   },
-  ticketBtn: {
-    display: "block",
-    margin: "0 auto"
+  ticket_header: {
+    fontSize: "1.5em",
+    fontWeight: "bold"
   }
-};
+}
 
 UpdateTicketModal.propTypes = {
   current: PropTypes.object,
@@ -222,4 +245,4 @@ const mapStateToProps = state => ({
   techs: state.user.techs
 });
 
-export default connect(mapStateToProps, { updateTicket, setAlert, clearCurrent } )(UpdateTicketModal);
+export default connect(mapStateToProps, { updateTicket, setAlert, clearCurrent })(UpdateTicketModal);

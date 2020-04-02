@@ -4,6 +4,7 @@ import { loadUser } from '../../actions/authActions';
 import TicketFilters from '../tickets/TicketFilters';
 import Tickets from '../tickets/Tickets';
 import PreLoader from '../layout/PreLoader';
+import PropTypes from 'prop-types'
 
 const Home = ({ isAuthenticated, loading, loadUser }) => {
   useEffect(() => {
@@ -25,6 +26,12 @@ const Home = ({ isAuthenticated, loading, loadUser }) => {
       </div>
     </Fragment>
   )
+}
+
+Home.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
+  loadUser: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

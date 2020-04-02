@@ -10,21 +10,26 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 const TicketItem = ({ ticket, user, setCurrent }) => {
   const { _id, priority, status, title, issuedBy, createdAt, assignedTo } = ticket;
 
+  // Set Current Ticket
   const onSetCurrent = () => {
     setCurrent(ticket);
   }
-
-  const onUpdate = async e => {
-    e.preventDefault();
-    setCurrent(ticket);
-    let instance = M.Modal.getInstance(document.getElementById("update-ticket-modal"));
+  // Opens a Modal
+  const openModal = name => {
+    let instance = M.Modal.getInstance(document.getElementById(name));
     instance.open();
   }
+  // Trigger UpdateTicketModal
+  const onUpdate = async e => {
+    e.preventDefault();
+    onSetCurrent();
+    openModal("update-ticket-modal");
+  }
+  // Trigger DeleteTicketModal
   const onDelete = async e => {
     e.preventDefault();
     onSetCurrent();
-    let instance = M.Modal.getInstance(document.getElementById("delete-ticket-modal"));
-    instance.open();
+    openModal("delete-ticket-modal");
   }
   
   return (
@@ -110,7 +115,7 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
             <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
           </a>
         )}
-        {/* Update Link for Technicians for unassigned tickets */}
+        {/* Update Link for Technicians on unassigned tickets */}
         {user.userType === 'technician' && ticket.assignedTo.to === 'Unassigned' && (
           <a href="#!" onClick={onUpdate}>
             <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
@@ -131,7 +136,8 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
 
 TicketItem.propTypes = {
   ticket: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  setCurrent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

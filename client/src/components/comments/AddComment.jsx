@@ -9,9 +9,9 @@ const AddComment = ({ ticket_id, user, addComment }) => {
 
   const { _id, firstName, lastName, userType } = user;
 
-  const onChange = e => setMessage({ [e.target.name]: e.target.value });
+  const onChange = e => setMessage(e.target.value);
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
 
     const userInfo =  {
@@ -21,7 +21,7 @@ const AddComment = ({ ticket_id, user, addComment }) => {
       userType
     };
 
-    await addComment(ticket_id, message.message, userInfo);
+    addComment(ticket_id, message, userInfo);
 
     setMessage('');
     document.getElementsByName("comment-message").value = '';
@@ -29,15 +29,15 @@ const AddComment = ({ ticket_id, user, addComment }) => {
 
   return (
     <div>
-      <ul className="collection card-panel comment-add-container">
-        <li className="collection-item avatar">
+      <div className="collection card-panel comment-add-container">
+        <div className="collection-item avatar">
           <i className="circle grey lighten-2 z-depth-2">
-            <FontAwesomeIcon icon="user" className="blue-text text-darken-2 "/>
+            <FontAwesomeIcon icon="user" className={user.userType !== "employee" ? "indigo-text text-darken-2" : "cyan-text text-darken-1"}/>
           </i>
           <div className="form-group">    
             <div className="col s11">
               <label htmlFor="message">Message</label>
-              <textarea name="message" id="comment-message" className="materialize-textarea" placeholder="Write a comment..." onChange={onChange} value={message.message}></textarea>
+              <textarea name="message" id="comment-message" className="materialize-textarea" placeholder="Write a comment..." onChange={onChange} value={message}></textarea>
             </div>
             <div className="col s1 comment-submit">
               <br/>
@@ -52,8 +52,8 @@ const AddComment = ({ ticket_id, user, addComment }) => {
               )}
             </div>
           </div>          
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   )
 }

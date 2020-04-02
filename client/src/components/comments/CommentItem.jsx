@@ -6,8 +6,7 @@ import Moment from 'react-moment';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import PropTypes from 'prop-types';
 
-const CommentItem = ({ comment, current_user, current_comment, edit_mode, updateComment, setCurrent, clearCurrent, setEditMode }) => {
-
+const CommentItem = ({ comment, comments_length, index, current_user, current_comment, edit_mode, updateComment, setCurrent, clearCurrent, setEditMode }) => {
   const { message, user, createdAt, updatedAt } = comment;
 
   const [newMessage, setNewMessage] = useState('');
@@ -20,7 +19,6 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
     setNewMessage(message)
     setCurrent(comment._id);
     setEditMode();
-    console.log(comment._id);
   }
 
   const onCancel = async e => {
@@ -63,10 +61,10 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
   }
 
   return (
-    <Fragment>
+    <div>
       <div className="collection-item avatar">
         <i className="circle grey lighten-2 z-depth-2">
-          <FontAwesomeIcon icon="user" className="blue-text text-darken-2 "/>
+          <FontAwesomeIcon icon="user" className={comment.user.userType !== "employee" ? "indigo-text text-darken-2" : "cyan-text text-darken-1"} />
         </i>  
         <div>
           {/* User Type */}
@@ -113,9 +111,9 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
         <div>
           {/* User Action buttons */}
           {user.id === current_user && (
-            <Fragment>
+            <div className="right">
               {!edit_mode ? (
-                <div className="right">
+                <Fragment>
                   <a href="#!" className="blue-text comment-label" onClick={onEdit}>
                     edit
                   </a>
@@ -123,11 +121,11 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
                   <a href="#!" className="red-text comment-label" onClick={onDelete}>
                     delete
                   </a>
-                </div>
+                </Fragment>
               ) : (
                 <Fragment>
                 {current_comment !== comment._id ? (
-                  <div className="right">
+                  <Fragment>
                     <a href="#!" className="blue-text comment-label" onClick={onEdit}>
                       edit
                     </a>
@@ -135,9 +133,9 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
                     <a href="#!" className="red-text comment-label" onClick={onDelete}>
                       delete
                     </a>
-                  </div>
+                  </Fragment>
                 ) : (
-                  <div className="right">
+                  <Fragment>
                     <a href="#!" className="grey-text text-darken-2 comment-label" onClick={onCancel}>
                       cancel
                     </a>
@@ -151,21 +149,27 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
                         save
                       </span>
                     )}
-                  </div>
+                  </Fragment>
                 )}
                 </Fragment>
               )}
-            </Fragment>
+            </div>
           )}
         </div>          
       </div>
-    </Fragment>
+      {index !== (comments_length-1) && (
+        <div className="divider"></div>
+      )}
+    </div>
   )
 }
 
 CommentItem.propTypes = {
   comment: PropTypes.object.isRequired,
+  comments_length: PropTypes.number,
+  index: PropTypes.number.isRequired,
   current_user: PropTypes.string.isRequired,
+  current_comment: PropTypes.string,
   edit_mode: PropTypes.bool,
   updateComment: PropTypes.func.isRequired,
   setCurrent: PropTypes.func.isRequired,
@@ -174,6 +178,7 @@ CommentItem.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  comments_length: state.comment.comments.length,
   current_comment: state.comment.current_comment,
   edit_mode: state.comment.edit_mode
 });

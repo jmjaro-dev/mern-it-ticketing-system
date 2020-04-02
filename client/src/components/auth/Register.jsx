@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { register } from '../../actions/authActions';
 import PropTypes from 'prop-types';
 
-const Register = ({ isAuthenticated, error, loadUser, register, setAlert, ...props }) => {
+const Register = ({ isAuthenticated, error, register, setAlert, ...props }) => {
   useEffect(() => {
     if(isAuthenticated) {
       props.history.push('/');
@@ -54,27 +54,46 @@ const Register = ({ isAuthenticated, error, loadUser, register, setAlert, ...pro
         Account <span className="blue-text text-darken-2">Register</span>
       </h4>
       <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
-          <input type="text" name="firstName" value={firstName} onChange={onChange} required/>
-        </div>
+        {/* firstName & lastName */}
+        <div className="row">
+          <div className="form-group col s12 m6">
+            <label htmlFor="firstName">First Name</label>
+            <input type="text" name="firstName" value={firstName} onChange={onChange} required/>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input type="text" name="lastName" value={lastName} onChange={onChange} required/>
+          <div className="form-group col s12 m6">
+            <label htmlFor="lastName">Last Name</label>
+            <input type="text" name="lastName" value={lastName} onChange={onChange} required/>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input type="email" name="email" value={email} onChange={onChange} required/>
+        {/* email */}
+        <div className="row">
+          <div className="form-group col s12">
+            <label htmlFor="email">Email</label>
+            <input type="email" name="email" value={email} onChange={onChange} required/>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" value={password} onChange={onChange} minLength="6" required/>
+        <div className="row">
+          <div className="form-group col s12 m6">
+            <label htmlFor="password">Password</label>
+            <input type="password" name="password" value={password} onChange={onChange} minLength="6" required/>
+          </div>
+          <div className="form-group col s12 m6">
+            <label htmlFor="password2">Confirm Password</label>
+            <input type="password" name="password2" value={password2} onChange={onChange} minLength="6" required/>
+          </div> 
         </div>
-        <div className="form-group">
-          <label htmlFor="password2">Confirm Password</label>
-          <input type="password" name="password2" value={password2} onChange={onChange} minLength="6" required/>
-        </div> 
+        <div className="row">
+          {password !== '' && password2 !== '' && (
+            <Fragment>
+              {password !== password2 ? (
+                <span className= 'col s12 center red-text text-darken-2' style={styles.pass_hint}>Password does not match</span>
+              ) : (
+                <span className= 'col s12 center green-text text-darken-2' style={styles.pass_hint}>Password match</span>
+              )}
+            </Fragment>
+          )}
+        </div>
         <br/>
         <div className="row">
           <div className="col s6 center"> 
@@ -109,18 +128,24 @@ const Register = ({ isAuthenticated, error, loadUser, register, setAlert, ...pro
 
 const styles = {
   registerForm : {
-    width: "400px",
-    margin: "30px auto"
+    width: "500px",
+    margin: "10px auto"
   },
   registerBtn: {
     display: "block",
     margin: "0 auto"
+  },
+  pass_hint: {
+    fontSize: "0.8em",
+    fontWeight: "bold"
   }
 };
 
 Register.propTypes = {
   isAuthenticated: PropTypes.bool,
-  error: PropTypes.object
+  error: PropTypes.object,
+  register: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

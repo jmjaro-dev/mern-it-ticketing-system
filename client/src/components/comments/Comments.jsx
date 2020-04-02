@@ -4,7 +4,6 @@ import CommentItem from './CommentItem';
 import PropTypes from 'prop-types';
 
 const Comments = ({ comments, current_user, loading }) => {
-
   if(comments !== null && comments.length === 0 && !loading) {
     return <p>There are no comments yet.</p>
   }
@@ -13,8 +12,10 @@ const Comments = ({ comments, current_user, loading }) => {
     <Fragment>
       {comments !== null && !loading && (
         <Fragment>
-          {comments.map(comment => (
-            <CommentItem key={comment._id} comment={comment} current_user={current_user} />
+          {comments.map((comment, index) => (
+            <Fragment>
+              <CommentItem key={comment._id} index={index} comment={comment} current_user={current_user} />
+            </Fragment>
           ))}
         </Fragment>
       )}   

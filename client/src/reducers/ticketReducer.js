@@ -8,11 +8,7 @@ import {
   CLEAR_CURRENT,
   UPDATE_TICKET,
   FILTER_TICKETS,
-  SET_ALL,
-  OWNED_TICKETS,
-  OPEN_TICKETS,
-  RESOLVED_TICKETS,
-  CLOSED_TICKETS,
+  SET_FILTER,
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
@@ -394,47 +390,19 @@ export default (state = initialState, action) => {
         ...state,
         filtered: state.tickets.filter(ticket => {
           const regex = new RegExp(`${action.payload}`, 'gi');
-          return ticket.title.match(regex) || ticket.description.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex);
+          return ticket._id.toString().match(regex) || ticket.title.match(regex) || ticket.description.match(regex) || ticket.priority.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex) || ticket.assignedTo.firstName.match(regex) || ticket.assignedTo.lastName.match(regex);
         }),
         mapped: state.tickets.filter(ticket => {
           const regex = new RegExp(`${action.payload}`, 'gi');
-          return ticket.title.match(regex) || ticket.description.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex);
+          return ticket._id.toString().match(regex) || ticket.title.match(regex) || ticket.description.match(regex) || ticket.priority.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex) || ticket.assignedTo.firstName.match(regex) || ticket.assignedTo.lastName.match(regex);
         }) 
       };
-    case SET_ALL:
+    case SET_FILTER:
       return {
         ...state,
         mapped: action.payload,
         filtered: action.payload,
     };
-    case OWNED_TICKETS:
-      return {
-        ...state,
-        owned: action.payload,
-        mapped: action.payload,
-        filtered: action.payload,
-    };
-    case OPEN_TICKETS:
-      return {
-        ...state,
-        owned: action.payload,
-        mapped: action.payload,
-        filtered: action.payload,
-      };
-    case RESOLVED_TICKETS:
-    return {
-      ...state,
-      owned: action.payload,
-      mapped: action.payload,
-      filtered: action.payload,
-    };
-    case CLOSED_TICKETS:
-      return {
-        ...state,
-        owned: action.payload,
-        mapped: action.payload,
-        filtered: action.payload,
-      };
     case CLEAR_FILTER:
       return {
         ...state,

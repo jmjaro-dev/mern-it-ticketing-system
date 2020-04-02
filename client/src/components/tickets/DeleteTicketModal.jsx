@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { deleteTicket, clearCurrent } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const DeleteTicketModal = ({ current, deleteTicket, setAlert, clearCurrent }) => {
@@ -14,12 +15,14 @@ const DeleteTicketModal = ({ current, deleteTicket, setAlert, clearCurrent }) =>
   }
 
   return (
-    <div id="delete-ticket-modal" className="modal" style={modalStyle.container}>
+    <div id="delete-ticket-modal" className="modal" style={styles.modal}>
       <div className="modal-content">
-        <p className="center grey-text text-darken-2" style={modalStyle.header}>
-          <i className="fas fa-exclamation-triangle yellow-text text-darken-2" /> Warning
-        </p>
-        <p className="center">Are you sure you want to <span className="red-text text-darken-2">delete</span> the ticket?</p>
+        <h5 className="center grey-text text-darken-2">
+        <FontAwesomeIcon icon="exclamation-circle" size="lg" className="yellow-text text-darken-2"/> {' '}
+        Are you sure?
+        </h5>
+        <br/>
+        <p className="center">Click <span className="blue darken-2 white-text z-depth-1" style={styles.confirm_text}>YES</span> to <span className="red-text text-darken-2">delete</span> your comment.</p>
       </div>
       <div className="modal-footer">
         <button className="modal-close btn-small white black-text">Cancel</button>
@@ -37,14 +40,16 @@ DeleteTicketModal.propTypes = {
   clearCurrent: PropTypes.func.isRequired
 }
 
-const modalStyle = {
-  container: {
+const styles = {
+  modal: {
     padding: '0 0.5em 0.5em 0.5em',
     width: '450px',
     borderRadius: '1em'
   },
-  header: {
-    fontSize: '1.5em'
+  confirm_text: {
+    padding: "0.5em 1em",
+    borderRadius: "0.1em",
+    fontSize: "0.9em",
   }
 };
 
