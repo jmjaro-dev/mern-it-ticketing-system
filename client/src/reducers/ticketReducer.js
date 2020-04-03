@@ -12,12 +12,14 @@ import {
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
+  SET_TICKET_EXISTS,
   SET_LOADING
 } from '../actions/types';
 
 const initialState = {
   tickets: null,
   current: null,
+  active_filter: 'All Tickets',
   mapped: null,
   sorted: null,
   filtered: null,
@@ -28,6 +30,7 @@ const initialState = {
   error: null,
   loading: false,
   isAscending: false,
+  ticket_exists: false
 };
 
 export default (state = initialState, action) => {
@@ -154,11 +157,11 @@ export default (state = initialState, action) => {
                 const titleA = a.title.toLowerCase();
                 const titleB = b.title.toLowerCase();
 
-                if( titleA < titleB) {
+                if(titleA < titleB) {
                   return -1;
                 }
 
-                if( titleA > titleB) {
+                if(titleA > titleB) {
                   return 1;
                 }
 
@@ -175,11 +178,11 @@ export default (state = initialState, action) => {
                 const titleA = a.title.toLowerCase();
                 const titleB = b.title.toLowerCase();
 
-                if( titleA > titleB) {
+                if(titleA > titleB) {
                   return -1;
                 }
 
-                if( titleA < titleB) {
+                if(titleA < titleB) {
                   return 1;
                 }
 
@@ -305,14 +308,25 @@ export default (state = initialState, action) => {
             return {
               ...state,
               sorted: state.mapped.sort((a, b) => {
-                const assignedToA = a.assignedTo.firstName.toLowerCase();
-                const assignedToB = b.assignedTo.firstName.toLowerCase();
+                let assignedToA, assignedToB;
 
-                if( assignedToA < assignedToB) {
+                if(!a.assignedTo.to) {
+                  assignedToA = a.assignedTo.firstName.toLowerCase();
+                } else {
+                  assignedToA = a.assignedTo.to
+                }
+
+                if(!b.assignedTo.to) {
+                  assignedToB = b.assignedTo.firstName.toLowerCase();
+                } else {
+                  assignedToB = b.assignedTo.to
+                }
+                                
+                if(assignedToA < assignedToB) {
                   return -1;
                 }
 
-                if( assignedToA > assignedToB) {
+                if(assignedToA > assignedToB) {
                   return 1;
                 }
 
@@ -326,14 +340,25 @@ export default (state = initialState, action) => {
             return {
               ...state,
               sorted: state.mapped.sort((a, b) => {
-                const assignedToA = a.assignedTo.firstName.toLowerCase();
-                const assignedToB = b.assignedTo.firstName.toLowerCase();
+                let assignedToA, assignedToB;
 
-                if( assignedToA > assignedToB) {
+                if(!a.assignedTo.to) {
+                  assignedToA = a.assignedTo.firstName.toLowerCase();
+                } else {
+                  assignedToA = a.assignedTo.to
+                }
+
+                if(!b.assignedTo.to) {
+                  assignedToB = b.assignedTo.firstName.toLowerCase();
+                } else {
+                  assignedToB = b.assignedTo.to
+                }
+                
+                if(assignedToA > assignedToB) {
                   return -1;
                 }
 
-                if( assignedToA < assignedToB) {
+                if(assignedToA < assignedToB) {
                   return 1;
                 }
 
@@ -359,12 +384,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         tickets: state.tickets.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
+        mapped:  state.mapped.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
+        filtered:  state.filtered.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
         loading: false 
       }
     case DELETE_TICKET:
       return {
         ...state,
         tickets: state.tickets.filter(ticket => ticket._id !== action.payload),
+        mapped:  state.tickets.filter(ticket => ticket._id !== action.payload),
+        filtered:  state.tickets.filter(ticket => ticket._id !== action.payload),
         loading: false
       };
     case CLEAR_TICKETS: 
@@ -400,8 +429,9 @@ export default (state = initialState, action) => {
     case SET_FILTER:
       return {
         ...state,
-        mapped: action.payload,
-        filtered: action.payload,
+        active_filter: action.payload.filter,
+        mapped: action.payload.tickets,
+        filtered: action.payload.tickets,
     };
     case CLEAR_FILTER:
       return {
@@ -413,6 +443,11 @@ export default (state = initialState, action) => {
         ...state,
         error: action.payload
       };
+    case SET_TICKET_EXISTS:
+      return {
+        ...state,
+        ticket_exists: action.payload
+      }
     case SET_LOADING:
       return {
         ...state,

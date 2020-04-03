@@ -1,17 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
-import { deleteTicket, clearCurrent } from '../../actions/ticketActions';
+import { deleteTicket, clearCurrent, setTicketExists } from '../../actions/ticketActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
-const DeleteTicketModal = ({ current, deleteTicket, setAlert, clearCurrent }) => {
+const DeleteTicketModal = ({ current, ticket_exists, deleteTicket, setAlert, setTicketExists, clearCurrent }) => {
   const onConfirm = async e => {
     e.preventDefault();
-
     deleteTicket(current._id);
+    if(ticket_exists) {
+      setTicketExists(false);
+    }
     clearCurrent();
-    setAlert('Ticket deleted successfully!', 'success');
+    setAlert('Ticket deleted successfully', 'success');
   }
 
   return (
@@ -35,8 +37,10 @@ const DeleteTicketModal = ({ current, deleteTicket, setAlert, clearCurrent }) =>
 
 DeleteTicketModal.propTypes = {
   current: PropTypes.object,
+  ticket_exists: PropTypes.bool,
   deleteTicket: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
+  setTicketExists: PropTypes.func.isRequired,
   clearCurrent: PropTypes.func.isRequired
 }
 
@@ -54,7 +58,8 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  current: state.ticket.current
+  current: state.ticket.current,
+  ticket_exists: state.ticket.ticket_exists
 });
 
-export default connect(mapStateToProps, { deleteTicket, setAlert, clearCurrent })(DeleteTicketModal);
+export default connect(mapStateToProps, { deleteTicket, setAlert, setTicketExists, clearCurrent })(DeleteTicketModal);

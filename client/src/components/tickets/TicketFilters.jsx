@@ -12,10 +12,11 @@ const TicketFilters = ({ user, tickets, setFilter, loading, filterTickets, clear
 
   const setActive = e => {
     e.preventDefault();
-
+    // Gets UL element children
     const links = e.target.parentElement.parentElement.children;
+    // Current clicked link
     const current = e.target.innerText;
-    console.log(links, current, typeof(links), links.length);
+    // Adding/Removing 'active' class from element
     for(let index=0; index < links.length; index++) {
       if(links[index].innerText !== current) {
         links[index].firstChild.classList.remove('active');
@@ -27,53 +28,54 @@ const TicketFilters = ({ user, tickets, setFilter, loading, filterTickets, clear
 
   const onSetFilter = (e, filter) => {
     e.preventDefault();
+    // Sets active link
     setActive(e);
+    // Assigns link's text to filter
     filter = e.target.innerText;
-    console.log(filter, typeof(filter));
     let arr = [];
-
+    // Set filter depending on 'filter' value
     switch(filter) {
       case "All Tickets":
-        setFilter(tickets);
+        setFilter(filter, tickets);
         break;
       case "My Tickets": 
         arr = tickets.filter(ticket => {
           return user._id === ticket.issuedBy._id;
         })
-        setFilter(arr);
+        setFilter(filter, arr);
         break;
       case "Assigned To Me":
         arr = tickets.filter(ticket => {
           return user._id === ticket.assignedTo._id;
         })
-        setFilter(arr);
+        setFilter(filter, arr);
         break;
       case "Unassigned":
         arr = tickets.filter(ticket => {
           return ticket.assignedTo.to === 'Unassigned';
         })
-        setFilter(arr);
+        setFilter(filter, arr);
         break;
       case "Open":
         arr = tickets.filter(ticket => {
           return ticket.status === filter.toLowerCase();
         })
-        setFilter(arr);
+        setFilter(filter, arr);
         break;
       case "Pending":
         arr = tickets.filter(ticket => {
           return ticket.status === filter.toLowerCase();
         })
-        setFilter(arr);
+        setFilter(filter, arr);
         break;
       case "Closed":
-      arr = tickets.filter(ticket => {
-        return ticket.status === filter.toLowerCase();
-      })
-      setFilter(arr);
-      break;
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr);
+        break;
       default:
-        arr = null;
+        setFilter(filter, tickets);
     }
   }
 
@@ -83,7 +85,7 @@ const TicketFilters = ({ user, tickets, setFilter, loading, filterTickets, clear
     if(e.target.value === '') clearFilter();
   }
   
-  const onCreate = async e => {
+  const onCreate = e => {
     e.preventDefault();
     let instance = M.Modal.getInstance(document.getElementById("create-ticket-modal"));
     instance.open();
@@ -101,7 +103,6 @@ const TicketFilters = ({ user, tickets, setFilter, loading, filterTickets, clear
                   All Tickets {' '}
                 </a>
               </li>
-              
               <li>
                 <a href="#!" className="chip" onClick={onSetFilter}>
                   {userType !== 'employee' ? (
@@ -116,13 +117,11 @@ const TicketFilters = ({ user, tickets, setFilter, loading, filterTickets, clear
                   {' '}
                 </a>
               </li>
-              
               <li>
                 <a href="#!" className="chip" onClick={onSetFilter}>
                   Unassigned
                 </a>  
               </li>
-
               <li>
                 <a href="#!" className="chip" onClick={onSetFilter}>
                   Open
@@ -133,7 +132,6 @@ const TicketFilters = ({ user, tickets, setFilter, loading, filterTickets, clear
                   Pending
                 </a>
               </li>
-              
               <li>
                 <a href="#!" className="chip" onClick={onSetFilter}>
                   Closed
@@ -173,7 +171,10 @@ TicketFilters.propTypes = {
   tickets: PropTypes.array,
   loading: PropTypes.bool,
   owned: PropTypes.array,
-  filtered: PropTypes.array
+  filtered: PropTypes.array,
+  setFilter: PropTypes.func.isRequired,
+  filterTickets: PropTypes.func.isRequired,
+  clearFilter: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

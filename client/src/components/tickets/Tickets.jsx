@@ -210,7 +210,7 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
                 (
                   // If filtered not null
                   <Fragment>
-                  {sorted !== null && filtered !== null ? (mapped.map(ticket => (
+                  {sorted !== null && filtered !== null ? (filtered.map(ticket => (
                       <TicketItem key={ticket._id} ticket={ticket} />
                     ))
                     ) : (mapped.map(ticket => (
@@ -226,7 +226,7 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, loading, ge
             ) : (
               <tr>
                 <td>
-                  <PreLoader key='loader'/>
+                  <PreLoader/>
                 </td>
               </tr>
             )}

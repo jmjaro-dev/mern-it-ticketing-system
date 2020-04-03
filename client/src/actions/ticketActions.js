@@ -13,6 +13,7 @@ import {
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
+  SET_TICKET_EXISTS,
   SET_LOADING
 } from './types';
 
@@ -143,6 +144,9 @@ export const clearTicket = () => async dispatch => dispatch({ type: CLEAR_TICKET
 // Set Curent Ticket
 export const setCurrent = ticket => async dispatch => dispatch({ type: SET_CURRENT, payload: ticket });
 
+// Set Ticket Exists
+export const setTicketExists = exist => async dispatch => dispatch({ type: SET_TICKET_EXISTS, payload: exist });
+
 // Clear Current Ticket
 export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRENT });
 
@@ -150,8 +154,8 @@ export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRE
 export const filterTickets = text => async dispatch => dispatch({ type: FILTER_TICKETS, payload: text });
 
 // Set Tickets by Filter
-export const setFilter = tickets => async dispatch => {
-  dispatch({ type: SET_FILTER, payload: tickets });
+export const setFilter = (filter, tickets) => async dispatch => {
+  dispatch({ type: SET_FILTER, payload: { filter, tickets } });
 };
 
 // Clear Filter

@@ -24,17 +24,17 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
 
   const onChange = e => setTicket({ ...ticket, [e.target.name]: e.target.value });
 
-  const onCancel = async e => {
+  const onCancel = e => {
     e.preventDefault();
     setTicket({
       title: '',
       description: '',
       priority: '',
       assignedTo: ''
-    })
+    });
   }
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
 
     if(title !== '' || description !== '' || priority !== '') {
@@ -45,7 +45,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
       } else {
         assignedTO = 'Unassigned'
       }
-      
+      // Create new ticket object
       const newTicket = {
         title,
         description,
@@ -57,18 +57,17 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
         },
         assignedTo: assignedTO
       }
-  
-      await addTicket(newTicket);
-  
+
+      addTicket(newTicket);
+
       setTicket({
         title: '',
         description: '',
         priority: '',
         assignedTo: ''
       });
-  
-      setAlert('Ticked created!', 'success');
-
+      setAlert('Ticked created successfully', 'success');
+      // Close Modal
       let instance = M.Modal.getInstance(document.getElementById("create-ticket-modal"));
       instance.close(); 
     }
@@ -82,6 +81,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
             <FontAwesomeIcon icon="id-card-alt" size="lg" className="blue-text text-darken-2"/> {' '}
             Create Ticket
           </p>
+          {/* Form Starts */}
           <form onSubmit={onSubmit}>
             {/* Title */}
             <div className="row">
@@ -90,7 +90,6 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
                 <input type="text" name="title" value={title} onChange={onChange} required/>
               </div>
             </div>
-            
             {/* Description */}
             <div className="row">
               <div className="form-group col s12">
@@ -124,8 +123,8 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
                 </div>
               )}
             </div>
-            
           </form>
+          {/* Form Ends */}
         </div>
         {/* Modal Footer - Buttons */}
         <div className="modal-footer">
@@ -169,4 +168,4 @@ const mapStateToProps = state => ({
   techs: state.user.techs
 });
 
-export default connect(mapStateToProps, { getTechs, addTicket, setAlert } )(CreateTicketModal);
+export default connect(mapStateToProps, { getTechs, addTicket, setAlert })(CreateTicketModal);

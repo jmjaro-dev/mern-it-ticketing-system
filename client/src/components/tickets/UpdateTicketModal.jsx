@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
-import { updateTicket, clearCurrent } from '../../actions/ticketActions';
+import { updateTicket, setFilter, clearCurrent } from '../../actions/ticketActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clearCurrent }) => {
+const UpdateTicketModal = ({ tickets, current, active_filter, ticket_exists, user, techs, updateTicket, setAlert, setFilter, clearCurrent }) => {
   const [ticket, setTicket] = useState({
     title: '',
     description: '',
@@ -31,19 +31,78 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
 
   const onChange = e => setTicket({ ...ticket, [e.target.name]: e.target.value });
 
-  const onCloseModal = () => {
+  const closeModal = () => {
     let instance = M.Modal.getInstance(document.getElementById("update-ticket-modal"));
     instance.close();
   }
 
-  const onCancel = async e => {
-    e.preventDefault();
-    onCloseModal();
+  const onSetFilter = filter => {
+    let arr = [];
+    // Set filter depending on 'filter' value
+    switch(filter) {
+      case "All Tickets":
+        setFilter(filter, tickets);
+        break;
+      case "My Tickets": 
+        arr = tickets.filter(ticket => {
+          return user._id === ticket.issuedBy._id;
+        })
+        setFilter(filter, arr);
+        break;
+      case "Assigned To Me":
+        arr = tickets.filter(ticket => {
+          return user._id === ticket.assignedTo._id;
+        })
+        setFilter(filter, arr);
+        break;
+      case "Unassigned":
+        arr = tickets.filter(ticket => {
+          return ticket.assignedTo.to === 'Unassigned';
+        })
+        setFilter(filter, arr);
+        break;
+      case "Open":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr);
+        console.log(filter, arr);
+        break;
+      case "Pending":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr);
+        console.log(filter, arr);
+        break;
+      case "Closed":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr);
+        break;
+      default:
+        setFilter(filter, tickets);
+    }
   }
 
-  const onSubmit = async e => {
+  const onCancel = e => {
     e.preventDefault();
+    setTicket({
+      title: '',
+      description: '',
+      priority: '',
+      status: '',
+      assignedTo: ''
+    });
+    if(!ticket_exists) {
+      clearCurrent();
+    }
+    closeModal();
+  }
 
+  const onSubmit = () => {
+    onSetFilter(active_filter);
     if(title !== '' || description !== '' || priority !== '' || status !== '' || assignedTo !== '') {
       let assignedTO;
       
@@ -63,21 +122,20 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
         userId: user._id
       }
   
-      await updateTicket(updatedTicket);
-  
-      clearCurrent();
-      
+      updateTicket(updatedTicket);
+
       setTicket({
         title: '',
         description: '',
         priority: '',
         status: '',
         assignedTo: ''
-      })
+      });
 
-      onCloseModal();
-      
+      closeModal();      
+      clearCurrent();
       setAlert('Ticket updated successfully!', 'success');
+      onSetFilter(active_filter);     
     }
   }
 
@@ -178,7 +236,7 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
                     </div>
                   )}
                   {/* If Ticket = Unassigned & user = technician : show Assign field*/}
-                  {user && user.userType === 'technician' && ticket.assignedTo.to === 'Unassigned' && (
+                  {user && user.userType === 'technician' && current.assignedTo.to === 'Unassigned' && (
                     <div className="form-group col s12">
                       <label>Assign To</label>
                       <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
@@ -196,7 +254,7 @@ const UpdateTicketModal = ({ current, user, techs, updateTicket, setAlert, clear
             </div>
 
             <div className="modal-footer">
-              <button onClick={onCancel} className="modal-close btn-small white black-text">Cancel</button>
+              <button onClick={onCancel} className="btn-small white black-text">Cancel</button>
               {' '}
               {current !== null && title !== '' && description !== '' && priority !== '' && priority !== '' && assignedTo !== '' ? (
                 <Fragment>
@@ -231,18 +289,25 @@ const styles = {
 }
 
 UpdateTicketModal.propTypes = {
+  tickets: PropTypes.array,
   current: PropTypes.object,
+  active_filter: PropTypes.string,
+  ticket_exists: PropTypes.bool,
   user: PropTypes.object,
   techs: PropTypes.array,
   updateTicket: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   clearCurrent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+  tickets: state.ticket.mapped,
   current: state.ticket.current,
+  active_filter: state.ticket.active_filter,
+  ticket_exists: state.ticket.ticket_exists,
   user: state.auth.user,
   techs: state.user.techs
 });
 
-export default connect(mapStateToProps, { updateTicket, setAlert, clearCurrent })(UpdateTicketModal);
+export default connect(mapStateToProps, { updateTicket, setAlert, setFilter, clearCurrent })(UpdateTicketModal);

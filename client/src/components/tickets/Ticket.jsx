@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { getTicket, setCurrent } from '../../actions/ticketActions';
+import { getTicket, setCurrent, clearCurrent, setTicketExists } from '../../actions/ticketActions';
 import { getComments } from '../../actions/commentActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Comments from '../comments/Comments';
@@ -12,31 +12,42 @@ import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 
-const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments, setCurrent }) => {
+const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTicket, getComments, setCurrent, clearCurrent, setTicketExists }) => {
   useEffect(() => {
     if(user) {
       getTicket(match.params.id);
       getComments(match.params.id);
+      setCurrent(ticket);    
+      setTicketExists(true);
     }
     // eslint-disable-next-line
   }, []);
 
-  const onUpdate = async e => {
-    e.preventDefault();
-    setCurrent(ticket);
-    let instance = M.Modal.getInstance(document.getElementById("update-ticket-modal"));
+  const onBack = () => {
+    clearCurrent();
+    setTicketExists(false);
+  }
+  
+  // Opens Modal
+  const openModal = name => {
+    let instance = M.Modal.getInstance(document.getElementById(name));
     instance.open();
   }
-  const onDelete = async e => {
+
+  const onUpdate = e => {
     e.preventDefault();
     setCurrent(ticket);
-    let instance = M.Modal.getInstance(document.getElementById("delete-ticket-modal"));
-    instance.open();
+    openModal("update-ticket-modal");
+  }
+  const onDelete = e => {
+    e.preventDefault();
+    setCurrent(ticket);
+    openModal("delete-ticket-modal");
   }
 
   return (
     <Fragment>
-      {ticket && !loading ? (
+      {ticket && ticket_exists && !loading ? (
         <div id="ticketContainer">
           {/* Ticket Details */}
           <div>
@@ -46,7 +57,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
               {/* Navigation & actions*/}
               <div className="row">
                 <span className="left ticket-links">
-                  <Link to="/" className="grey-text text-darken-2">
+                  <Link to="/" className="grey-text text-darken-2" onClick={onBack}>
                     <FontAwesomeIcon icon="chevron-left"/>
                     <span className="btn-label"> Back to Tickets</span>
                   </Link>
@@ -71,7 +82,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                     <div className="col s12">
                       <span className="ticket-label">
                         [ Issued By ] 
-                      </span> <span className="ticket-details">{ticket.issuedBy.lastName} {', '} {ticket.issuedBy.firstName} </span>
+                      </span> <span className="ticket-details">{ticket.issuedBy.firstName} {' '} {ticket.issuedBy.lastName} </span>
                     </div>
                     <div className="col s12">
                       <span className="ticket-label">[ Date Issued ]</span> {' '}
@@ -120,8 +131,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                     </div>
                   </Fragment>
                 )}
-              </div>
-              
+              </div> 
               {/* Right Panel */}
               <div className="col s3 card-panel" id="ticket-right-panel">
                 <div className="center ticket-details">Other Details</div>
@@ -182,7 +192,6 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                             {ticket.assignedTo.to}
                           </Fragment>
                         )}
-                        
                       </span>
                     </Fragment>
                   ) : (
@@ -193,8 +202,8 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                     </Fragment>
                   )}
                 </p> 
-                {/* Actions for Assigned Technician */}
-                {ticket.assignedTo._id === user._id && (
+                {/* Show update action for Technicians if Ticket is Unassigned */}
+                {ticket.assignedTo.to === 'Unassigned' && user.userType === 'technician' && (
                   <Fragment>
                     <div className="divider"></div>
                     <div className="center ticket-actions-header">Actions</div>
@@ -208,8 +217,8 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                     </div>
                   </Fragment>
                 )}  
-                {/* Actions for Ticket owner */}
-                {ticket.issuedBy._id === user._id && (
+                {/* Show Actions for Ticket owner && Assigned Technician */}
+                {(ticket.issuedBy._id === user._id || ticket.assignedTo._id === user._id) && (
                   <Fragment>
                     <div className="divider"></div>
                     <div className="center ticket-actions-header">Actions</div>
@@ -220,6 +229,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
                           <span className="ticket-actions-label grey-text text-darken-2">update</span>
                         </a>
                       </div>
+                      {/* Show delete action for ticket owner only */}
                       {ticket.issuedBy._id === user._id && (
                         <div className="col s12 m6 center">
                           <a href="#!" onClick={onDelete}>
@@ -238,7 +248,7 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
         </div>
       ) : (
         <Fragment>
-          {!loading ? (
+          {!ticket && !ticket_exists ? (
             <Redirect to="/" />
           ) : (
             <PreLoader/>
@@ -252,18 +262,22 @@ const Ticket = ({ match, user, ticket, comments, loading, getTicket, getComments
 Ticket.propTypes = {
   user: PropTypes.object.isRequired,
   ticket: PropTypes.object,
+  ticket_exists: PropTypes.bool,
   comments: PropTypes.array,
   loading: PropTypes.bool,
   getTicket: PropTypes.func.isRequired,
   getComments: PropTypes.func.isRequired,
-  setCurrent: PropTypes.func.isRequired
+  setCurrent: PropTypes.func.isRequired,
+  clearCurrent: PropTypes.func.isRequired,
+  setTicketExists: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user,
   ticket: state.ticket.current,
+  ticket_exists: state.ticket.ticket_exists,
   loading: state.ticket.loading,
   comments: state.comment.comments
 });
 
-export default connect(mapStateToProps, { getTicket, getComments, setCurrent })(Ticket);
+export default connect(mapStateToProps, { getTicket, getComments, setCurrent, clearCurrent, setTicketExists })(Ticket);

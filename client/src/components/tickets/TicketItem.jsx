@@ -14,7 +14,7 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
   const onSetCurrent = () => {
     setCurrent(ticket);
   }
-  // Opens a Modal
+  // Opens Modal
   const openModal = name => {
     let instance = M.Modal.getInstance(document.getElementById(name));
     instance.open();
@@ -105,7 +105,7 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
       </td>
       {/* Actions */}
       <td className="center">
-        <Link to={`/tickets/${_id}`} onClick={onSetCurrent}>
+        <Link to={`/tickets/${_id}`}>
           <FontAwesomeIcon icon="eye" className="blue-text text-darken-2" />
         </Link>
         {' '}

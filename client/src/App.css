@@ -1,3 +1,4 @@
+
 :root {
   --primary-color: #1e88e5;
   --dark-color: #333333;
@@ -144,7 +145,10 @@ textarea:focus {
 .ticket-actions-header,
 .ticket-details,
 .ticket-desc {
-  font-size: 0.85em;
+  font-size: 0.9em;
+}
+
+.ticket-actions-header {
   font-weight: bold;
 }
 
