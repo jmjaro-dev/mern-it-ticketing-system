@@ -10,6 +10,7 @@ import {
   UPDATE_TICKET,
   FILTER_TICKETS,
   SET_FILTER,
+  SET_SORTING,
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
@@ -157,6 +158,8 @@ export const filterTickets = text => async dispatch => dispatch({ type: FILTER_T
 export const setFilter = (filter, tickets) => async dispatch => {
   dispatch({ type: SET_FILTER, payload: { filter, tickets } });
 };
+// Set Sorting method
+export const setSort = sort_method => async dispatch => dispatch({ type: SET_SORTING, payload: sort_method });
 
 // Clear Filter
 export const clearFilter = () => async dispatch => dispatch({ type: CLEAR_FILTER });

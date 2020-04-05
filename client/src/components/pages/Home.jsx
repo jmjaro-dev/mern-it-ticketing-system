@@ -1,12 +1,12 @@
 import React, { Fragment,useEffect } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
-import TicketFilters from '../tickets/TicketFilters';
+import TicketFilters from '../filters/TicketFilters'
 import Tickets from '../tickets/Tickets';
 import PreLoader from '../layout/PreLoader';
 import PropTypes from 'prop-types'
 
-const Home = ({ isAuthenticated, loading, loadUser }) => {
+const Home = ({ tickets, isAuthenticated, loading, loadUser }) => {
   useEffect(() => {
     loadUser();
     // eslint-disable-next-line
@@ -14,12 +14,11 @@ const Home = ({ isAuthenticated, loading, loadUser }) => {
   return (
     <Fragment>
       <div>
-        {!loading && !isAuthenticated ? (
+        {!loading && !isAuthenticated && !tickets ? (
           <PreLoader />
         ) : (
           <Fragment>
             <TicketFilters />
-            <p className="ticket-label center">Tickets</p>
             <Tickets />
           </Fragment>
         )}
@@ -29,12 +28,14 @@ const Home = ({ isAuthenticated, loading, loadUser }) => {
 }
 
 Home.propTypes = {
+  tickets: PropTypes.array,
   isAuthenticated: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   loadUser: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
+  tickets: state.ticket.tickets,
   isAuthenticated: state.auth.isAuthenticated,
   loading: state.auth.loading
 });

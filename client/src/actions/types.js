@@ -21,6 +21,7 @@ export const CLEAR_CURRENT = 'CLEAR_CURRENT';
 export const UPDATE_TICKET = 'UPDATE_TICKET';
 export const FILTER_TICKETS = 'FILTER_TICKETS';
 export const SET_FILTER = 'SET_FILTER';
+export const SET_SORTING = 'SET_SORTING';
 export const CLEAR_TICKETS = 'CLEAR_TICKETS';
 export const SEARCH_TICKETS = 'SEARCH_TICKETS';
 export const SET_TICKET_EXISTS = 'SET_TICKET_EXISTS'; 

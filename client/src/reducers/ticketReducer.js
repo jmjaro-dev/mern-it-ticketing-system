@@ -9,6 +9,7 @@ import {
   UPDATE_TICKET,
   FILTER_TICKETS,
   SET_FILTER,
+  SET_SORTING,
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
@@ -22,6 +23,11 @@ const initialState = {
   active_filter: 'All Tickets',
   mapped: null,
   sorted: null,
+  sorting: {
+    isSorted: false,
+    field: null,
+    order: null
+  },
   filtered: null,
   owned: null,
   open: null,
@@ -433,6 +439,15 @@ export default (state = initialState, action) => {
         mapped: action.payload.tickets,
         filtered: action.payload.tickets,
     };
+    case SET_SORTING:
+      return {
+        ...state,
+        sorting: {
+          isSorted: action.payload.isSorted,
+          field: action.payload.field,
+          order: action.payload.order
+        }
+      }
     case CLEAR_FILTER:
       return {
         ...state,
