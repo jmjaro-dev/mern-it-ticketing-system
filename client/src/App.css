@@ -82,6 +82,22 @@ textarea:focus {
   font-size: 0.9em !important;
 }
 
+.tab a {
+  text-transform: capitalize !important;
+  color: #4e4e4e !important;
+  font-size: 0.85em !important;
+}
+
+.tab .active {
+  color: var(--primary-color) !important;
+  background-color: #e4f3ff !important;
+  font-weight: bold;
+}
+
+.tabs .indicator { 
+  background-color: var(--primary-color) !important;
+}
+
 .collection-item {
   padding-bottom: 2em !important; 
 }
@@ -143,12 +159,19 @@ textarea:focus {
 }
 
 .ticket-actions-header,
+.ticket-info-header,
+.ticket-details,
+.ticket-desc {
+  font-size: 0.95em;
+}
+
 .ticket-details,
 .ticket-desc {
   font-size: 0.9em;
 }
 
-.ticket-actions-header {
+.ticket-actions-header,
+.ticket-info-header {
   font-weight: bold;
 }
 
@@ -215,8 +238,6 @@ textarea:focus {
 .comment-submit {
   font-size: 2em;
 }
-
-
 /* END OF COMMENTS STYLES */
 
 .alert {

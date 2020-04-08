@@ -67,7 +67,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                 {/* Ticket info Section */}
                 <div className="card-panel">
                   {/* Ticket Title, Alert Level, IssuedBy, DateIssued*/}
-                  <div className="center ticket-details">Ticket Information</div>
+                  <div className="center ticket-info-header">Ticket Information</div>
                   <div className="row">
                     <div className="col s12">
                       {/* Ticket ID */}
@@ -134,7 +134,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
               </div> 
               {/* Right Panel */}
               <div className="col s3 card-panel" id="ticket-right-panel">
-                <div className="center ticket-details">Other Details</div>
+                <div className="center ticket-info-header">Other Details</div>
                 <p>
                   {/* Lastest Update */}
                   <span className="ticket-label">Latest Update <FontAwesomeIcon icon="chevron-right"/> </span>

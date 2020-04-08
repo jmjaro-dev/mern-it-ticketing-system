@@ -61,7 +61,7 @@ const CommentItem = ({ comment, comments_length, index, current_user, current_co
   }
 
   return (
-    <div>
+    <Fragment>
       <div className="collection-item avatar">
         <i className="circle grey lighten-2 z-depth-2">
           <FontAwesomeIcon icon="user" className={comment.user.userType !== "employee" ? "indigo-text text-darken-2" : "cyan-text text-darken-1"} />
@@ -157,10 +157,7 @@ const CommentItem = ({ comment, comments_length, index, current_user, current_co
           )}
         </div>          
       </div>
-      {index !== (comments_length-1) && (
-        <div className="divider"></div>
-      )}
-    </div>
+    </Fragment>
   )
 }
 

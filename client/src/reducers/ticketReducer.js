@@ -383,6 +383,7 @@ export default (state = initialState, action) => {
         ...state,
         tickets: [action.payload, ...state.tickets],
         mapped:  [action.payload, ...state.tickets],
+        sorted:  [action.payload, ...state.tickets],
         filtered:  [action.payload, ...state.tickets],
         loading: false
       };
@@ -391,6 +392,7 @@ export default (state = initialState, action) => {
         ...state,
         tickets: state.tickets.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
         mapped:  state.mapped.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
+        sorted:  state.sorted.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
         filtered:  state.filtered.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
         loading: false 
       }
@@ -399,6 +401,7 @@ export default (state = initialState, action) => {
         ...state,
         tickets: state.tickets.filter(ticket => ticket._id !== action.payload),
         mapped:  state.tickets.filter(ticket => ticket._id !== action.payload),
+        sorted:  state.tickets.filter(ticket => ticket._id !== action.payload),
         filtered:  state.tickets.filter(ticket => ticket._id !== action.payload),
         loading: false
       };
@@ -406,6 +409,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         tickets: null,
+        mapped: null,
+        sorted: null,
         filtered: null,
         error: null,
         current: null
@@ -437,6 +442,7 @@ export default (state = initialState, action) => {
         ...state,
         active_filter: action.payload.filter,
         mapped: action.payload.tickets,
+        sorted: action.payload.tickets,
         filtered: action.payload.tickets,
     };
     case SET_SORTING:
