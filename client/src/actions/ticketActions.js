@@ -5,6 +5,7 @@ import {
   SORT_TICKETS,
   ADD_TICKET,
   DELETE_TICKET,
+  SET_ASSIGNED_TICKETS,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_TICKET,
@@ -147,6 +148,9 @@ export const setCurrent = ticket => async dispatch => dispatch({ type: SET_CURRE
 
 // Set Ticket Exists
 export const setTicketExists = exist => async dispatch => dispatch({ type: SET_TICKET_EXISTS, payload: exist });
+
+// Set Assigned Tickets
+export const setAssignedTickets = id => async dispatch => dispatch({ type: SET_ASSIGNED_TICKETS, payload: id });
 
 // Clear Current Ticket
 export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRENT });

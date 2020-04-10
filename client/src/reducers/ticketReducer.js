@@ -4,6 +4,7 @@ import {
   SORT_TICKETS,
   ADD_TICKET,
   DELETE_TICKET,
+  SET_ASSIGNED_TICKETS,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_TICKET,
@@ -30,8 +31,9 @@ const initialState = {
   },
   filtered: null,
   owned: null,
+  assigned: null,
   open: null,
-  resolved: null,
+  pending: null,
   closed: null,
   error: null,
   loading: false,
@@ -414,6 +416,11 @@ export default (state = initialState, action) => {
         filtered: null,
         error: null,
         current: null
+      }
+    case SET_ASSIGNED_TICKETS: 
+      return {
+        ...state,
+        assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload)
       }
     case SET_CURRENT:
       return {

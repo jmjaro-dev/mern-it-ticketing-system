@@ -54,7 +54,7 @@ const TicketHeaders = ({ onSetField, onSort }) => {
       <thead>
         <tr>
           {headers.map((header) => (
-            <Fragment>
+            <Fragment key={header.label}>
             {header.label !== 'Actions' ? (
               <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
             ) : (

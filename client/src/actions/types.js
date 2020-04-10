@@ -16,6 +16,7 @@ export const GET_TICKETS = 'GET_TICKETS';
 export const SORT_TICKETS = 'SORT_TICKETS';
 export const ADD_TICKET = 'ADD_TICKET';
 export const DELETE_TICKET = 'DELETE_TICKET';
+export const SET_ASSIGNED_TICKETS = 'SET_ASSIGNED_TICKETS';
 export const SET_CURRENT = 'SET_CURRENT';
 export const CLEAR_CURRENT = 'CLEAR_CURRENT';
 export const UPDATE_TICKET = 'UPDATE_TICKET';

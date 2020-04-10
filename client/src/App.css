@@ -86,6 +86,7 @@ textarea:focus {
   text-transform: capitalize !important;
   color: #4e4e4e !important;
   font-size: 0.85em !important;
+  font-weight: bold;
 }
 
 .tab .active {
