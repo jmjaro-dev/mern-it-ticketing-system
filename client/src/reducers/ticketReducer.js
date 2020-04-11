@@ -2,8 +2,10 @@ import {
   GET_TICKET,
   GET_TICKETS,
   SORT_TICKETS,
+  SORT_TICKETS_PROFILE,
   ADD_TICKET,
   DELETE_TICKET,
+  SET_OWNED_TICKETS,
   SET_ASSIGNED_TICKETS,
   SET_CURRENT,
   CLEAR_CURRENT,
@@ -11,11 +13,13 @@ import {
   FILTER_TICKETS,
   SET_FILTER,
   SET_SORTING,
+  RESET_SORT,
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
   SET_TICKET_EXISTS,
-  SET_LOADING
+  SET_LOADING,
+  RESET_TICKET_STATE
 } from '../actions/types';
 
 const initialState = {
@@ -380,6 +384,640 @@ export default (state = initialState, action) => {
           return state;
       }
       break;
+    case SORT_TICKETS_PROFILE:
+      switch(action.payload.field) {
+        case '_id':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => a._id-b._id ),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => a._id-b._id ),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => b._id-a._id ),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => b._id-a._id ),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'status':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusA - statusB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusA - statusB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusB - statusA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusB - statusA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'alertLevel':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertA - alertB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertA - alertB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertB - alertA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertB - alertA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'title':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA < titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA > titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA < titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA > titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA > titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA < titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA > titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA < titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'issuedBy':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA < issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA > issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA < issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA > issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA > issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA < issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA > issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA < issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'priorityLevel':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityA - priorityB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityA - priorityB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityB - priorityA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityB - priorityA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'dateIssued':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateA - dateB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateA - dateB; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateB - dateA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateB - dateA; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        case 'assignedTo':
+          if(!state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                                  
+                  if(assignedToA < assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA > assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                                  
+                  if(assignedToA < assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA > assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          
+          if(state.isAscending) {
+            if(action.payload.userType !== 'employee') {
+              return {
+                ...state,
+                sorted: state.assigned.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                  
+                  if(assignedToA > assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA < assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            } else {
+              return {
+                ...state,
+                sorted: state.owned.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                  
+                  if(assignedToA > assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA < assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                isAscending: !state.isAscending
+              }
+            }
+          }
+          break;
+        default: 
+          return state;
+      }
+      break;
     case ADD_TICKET:
       return {
         ...state,
@@ -406,7 +1044,7 @@ export default (state = initialState, action) => {
         sorted:  state.tickets.filter(ticket => ticket._id !== action.payload),
         filtered:  state.tickets.filter(ticket => ticket._id !== action.payload),
         loading: false
-      };
+      };      
     case CLEAR_TICKETS: 
       return {
         ...state,
@@ -417,11 +1055,16 @@ export default (state = initialState, action) => {
         error: null,
         current: null
       }
-    case SET_ASSIGNED_TICKETS: 
+    case SET_OWNED_TICKETS: 
       return {
         ...state,
-        assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload)
+        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload)
       }
+    case SET_ASSIGNED_TICKETS: 
+    return {
+      ...state,
+      assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload)
+    }
     case SET_CURRENT:
       return {
         ...state,
@@ -461,6 +1104,16 @@ export default (state = initialState, action) => {
           order: action.payload.order
         }
       }
+    case RESET_SORT:
+      return {
+        ...state,
+        sorting:  {
+          isSorted: false,
+          field: null,
+          order: null
+        },
+        sorted: null
+      }
     case CLEAR_FILTER:
       return {
         ...state,
@@ -480,6 +1133,29 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: true
+      }
+    case RESET_TICKET_STATE:
+      return {
+        tickets: null,
+        current: null,
+        active_filter: 'All Tickets',
+        mapped: null,
+        sorted: null,
+        sorting: {
+          isSorted: false,
+          field: null,
+          order: null
+        },
+        filtered: null,
+        owned: null,
+        assigned: null,
+        open: null,
+        pending: null,
+        closed: null,
+        error: null,
+        loading: false,
+        isAscending: false,
+        ticket_exists: false
       }
     default:
       return state;

@@ -1,7 +1,8 @@
 import {
   GET_TECHS,
   USER_ERROR,
-  SET_LOADING
+  SET_LOADING,
+  RESET_USER_STATE
 } from '../actions/types';
 
 const initialState = {
@@ -27,6 +28,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: true
+      }
+    case RESET_USER_STATE:
+      return {
+        techs: null,
+        error: null,
+        loading: false
       }
     default:
       return state;

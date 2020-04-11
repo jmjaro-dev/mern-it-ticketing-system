@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import TicketHeaders from './TicketsHeaders';
 import TicketItem from './TicketItem';
 import PreLoader from '../layout/PreLoader';
-import { getTickets, sortTickets, setSort, clearCurrent } from '../../actions/ticketActions';
+import { getTickets, sortTickets, setSort, resetSort, clearCurrent } from '../../actions/ticketActions';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, loading, getTickets,  sortTickets, setSort, clearCurrent }) => {
+const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, loading, getTickets,  sortTickets, setSort, resetSort, clearCurrent }) => {
   useEffect(() => {
     if(current !== null) {
       clearCurrent();
@@ -15,6 +15,10 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, lo
 
     if(user) {
       getTickets();
+    }
+
+    if(sorted !== null) {
+      resetSort();
     }
     // eslint-disable-next-line
   }, []);
@@ -111,6 +115,7 @@ Tickets.propTypes = {
   getTickets: PropTypes.func.isRequired,
   sortTickets: PropTypes.func.isRequired,
   setSort: PropTypes.func.isRequired,
+  resetSort: PropTypes.func.isRequired,
   clearCurrent: PropTypes.func.isRequired
 };
 
@@ -125,4 +130,4 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { getTickets, sortTickets, setSort, clearCurrent })(Tickets);
+export default connect(mapStateToProps, { getTickets, sortTickets, setSort, resetSort, clearCurrent })(Tickets);

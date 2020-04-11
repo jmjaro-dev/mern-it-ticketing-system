@@ -2,12 +2,18 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
+import { resetUserState } from '../../actions/userActions';
+import { resetTicketState } from '../../actions/ticketActions';
+import { resetCommentState } from '../../actions/commentActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
-const Navbar = ({ title, icon, isAuthenticated, user, logout }) => {
+const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, resetTicketState, resetCommentState }) => {
 
   const onLogout = () => {
+    resetUserState();
+    resetTicketState();
+    resetCommentState();
     logout();
   }
 
@@ -64,7 +70,11 @@ Navbar.propTypes = {
   title: PropTypes.string.isRequired,
   icon: PropTypes.string,
   isAuthenticated: PropTypes.bool,
-  user: PropTypes.object
+  user: PropTypes.object,
+  logout: PropTypes.func.isRequired,
+  resetUserState: PropTypes.func.isRequired,
+  resetTicketState: PropTypes.func.isRequired,
+  resetCommentState: PropTypes.func.isRequired
 }
 
 Navbar.defaultProps = {
@@ -77,4 +87,4 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout, resetUserState, resetTicketState, resetCommentState })(Navbar);

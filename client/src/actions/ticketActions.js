@@ -3,8 +3,10 @@ import {
   GET_TICKET,
   GET_TICKETS,
   SORT_TICKETS,
+  SORT_TICKETS_PROFILE,
   ADD_TICKET,
   DELETE_TICKET,
+  SET_OWNED_TICKETS,
   SET_ASSIGNED_TICKETS,
   SET_CURRENT,
   CLEAR_CURRENT,
@@ -12,11 +14,13 @@ import {
   FILTER_TICKETS,
   SET_FILTER,
   SET_SORTING,
+  RESET_SORT,
   CLEAR_TICKETS,
   CLEAR_FILTER,
   TICKET_ERROR,
   SET_TICKET_EXISTS,
-  SET_LOADING
+  SET_LOADING,
+  RESET_TICKET_STATE
 } from './types';
 
 // Get Ticket by Id
@@ -69,6 +73,15 @@ export const sortTickets = field => async dispatch => {
   dispatch({ 
     type: SORT_TICKETS, 
     payload: field 
+  });
+};
+
+// Sort Tickets in Profile
+export const sortTicketsProfile = ( field, userType ) => async dispatch => {
+  const info = { field, userType }
+  dispatch({ 
+    type: SORT_TICKETS_PROFILE, 
+    payload: info 
   });
 };
 
@@ -149,6 +162,9 @@ export const setCurrent = ticket => async dispatch => dispatch({ type: SET_CURRE
 // Set Ticket Exists
 export const setTicketExists = exist => async dispatch => dispatch({ type: SET_TICKET_EXISTS, payload: exist });
 
+// Set Owned Tickets
+export const setOwnedTickets = id => async dispatch => dispatch({ type: SET_OWNED_TICKETS, payload: id });
+
 // Set Assigned Tickets
 export const setAssignedTickets = id => async dispatch => dispatch({ type: SET_ASSIGNED_TICKETS, payload: id });
 
@@ -162,8 +178,15 @@ export const filterTickets = text => async dispatch => dispatch({ type: FILTER_T
 export const setFilter = (filter, tickets) => async dispatch => {
   dispatch({ type: SET_FILTER, payload: { filter, tickets } });
 };
+
 // Set Sorting method
 export const setSort = sort_method => async dispatch => dispatch({ type: SET_SORTING, payload: sort_method });
 
+// Reset Sorting method
+export const resetSort = () => async dispatch => dispatch({ type: RESET_SORT });
+
 // Clear Filter
 export const clearFilter = () => async dispatch => dispatch({ type: CLEAR_FILTER });
+
+// Reset Ticket State on Log out
+export const resetTicketState = () => async dispatch => dispatch({ type: RESET_TICKET_STATE });

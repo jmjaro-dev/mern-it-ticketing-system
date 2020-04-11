@@ -6,7 +6,8 @@ import {
   COMMENT_ERROR,
   SET_CURRENT_COMMENT,
   SET_EDIT_MODE,
-  CLEAR_CURRENT_COMMENT
+  CLEAR_CURRENT_COMMENT,
+  RESET_COMMENT_STATE
 } from '../actions/types';
 
 const initialState = {
@@ -62,6 +63,13 @@ export default (state = initialState, action) => {
         ...state,
         current_comment: null
       };
+    case RESET_COMMENT_STATE:
+      return {
+        comments: null,
+        current_comment: null,
+        edit_mode: false,
+        error: null
+      }
     default:
       return state;
   }

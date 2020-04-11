@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
   GET_TECHS,
   USER_ERROR,
-  SET_LOADING
+  SET_LOADING,
+  RESET_USER_STATE
 } from './types';
 
 
@@ -27,3 +28,6 @@ export const getTechs = () => async dispatch => {
     });
   }
 };
+
+// Reset User State on Log out
+export const resetUserState = () => async dispatch => dispatch({ type: RESET_USER_STATE });

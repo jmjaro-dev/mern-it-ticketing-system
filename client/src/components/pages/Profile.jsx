@@ -2,36 +2,173 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { getTickets, setAssignedTickets, setCurrent } from '../../actions/ticketActions';
+import { getTickets, setOwnedTickets, setAssignedTickets, setCurrent, setSort, sortTicketsProfile, resetSort } from '../../actions/ticketActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Profile = ({ user, tickets, assigned, getTickets, setAssignedTickets, setCurrent }) => {
+const Profile = ({ user, tickets, owned, assigned, sorted, sorting, getTickets, setOwnedTickets, setAssignedTickets, setCurrent, setSort, sortTicketsProfile, resetSort }) => {
   const [activeTab, setActiveTab] = useState('#profile');
+  const [ownedTickets, setOwned] = useState({
+    open: null,
+    pending: null,
+    closed: null
+  });
   const [assignedTickets, setAssigned] = useState({
     open: null,
     pending: null,
     closed: null
   });
 
+  const { isSorted, order } = sorting;
+  let sortBy = null;
+
   useEffect(() => {
     M.AutoInit();
+
+    if(sorted !== null) {
+      resetSort();
+    }
+
     if(!tickets && user) {
       getTickets();
     }
-    if(tickets && user && !assigned) {
+
+    if(tickets && user && user.userType === 'employee' && owned === null) {
+      setOwnedTickets(user._id);
+    }
+
+    if(tickets && user && user.userType === 'technician' && assigned === null) {
       setAssignedTickets(user._id);
     }
+
+    if(owned) {
+      setOwned({
+        open: owned.filter(ticket => ticket.status === 'open').length,
+        pending: owned.filter(ticket => ticket.status === 'pending').length,
+        closed: owned.filter(ticket => ticket.status === 'closed').length
+      });
+    } 
+    
     if(assigned) {
       setAssigned({
         open: assigned.filter(ticket => ticket.status === 'open').length,
         pending: assigned.filter(ticket => ticket.status === 'pending').length,
         closed: assigned.filter(ticket => ticket.status === 'closed').length
       });
-    }
+    }  
     // eslint-disable-next-line
-  }, [user, tickets, assigned]);
+  }, [user, tickets, assigned, owned]);
+
+  const emp_headers = [
+    { 
+      label: '#',
+      id: 'sortById',
+      data_sort: '_id'
+    }, 
+    { 
+      label: 'Alert',
+      id: 'sortByAlertLevel',
+      data_sort: 'alertLevel'
+    },
+    { 
+      label: 'Status',
+      id: 'sortByStatus',
+      data_sort: 'status'
+    },
+    { 
+      label: 'Subject',
+      id: 'sortByTitle',
+      data_sort: 'title'
+    },
+    { 
+      label: 'Assigned To',
+      id: 'sortByAssignedTo',
+      data_sort: 'assignedTo'
+    },
+    { 
+      label: 'Priority',
+      id: 'sortByPriorityLevel',
+      data_sort: 'priorityLevel'
+    },
+    { 
+      label: 'Date Issued',
+      id: 'sortByDateIssued',
+      data_sort: 'dateIssued'
+    }
+  ];
+
+  const tech_headers = [
+    { 
+      label: '#',
+      id: 'sortById',
+      data_sort: '_id'
+    }, 
+    { 
+      label: 'Alert',
+      id: 'sortByAlertLevel',
+      data_sort: 'alertLevel'
+    },
+    { 
+      label: 'Status',
+      id: 'sortByStatus',
+      data_sort: 'status'
+    },
+    { 
+      label: 'Subject',
+      id: 'sortByTitle',
+      data_sort: 'title'
+    },
+    { 
+      label: 'Issued By',
+      id: 'sortByIssuedBy',
+      data_sort: 'issuedBy'
+    },
+    { 
+      label: 'Priority',
+      id: 'sortByPriorityLevel',
+      data_sort: 'priorityLevel'
+    },
+    { 
+      label: 'Date Issued',
+      id: 'sortByDateIssued',
+      data_sort: 'dateIssued'
+    }
+  ];
+
+  const onSetField = e => {
+    e.preventDefault();
+    sortBy = document.getElementById(e.target.id).getAttribute("data_sort");
+    setSort({ isSorted: true, field: sortBy, order: 'asc'});
+    onSort(sortBy);
+  }
+
+  const onSort = field => {
+    if(isSorted) {
+      if(order === null || order === 'asc') {
+        setSort({ 
+          ...sorting,
+          field: sortBy,
+          order: 'desc'
+        })
+        sortTicketsProfile(field, user.userType);
+      } else {
+        setSort({ 
+          ...sorting,
+          field: sortBy,
+          order: 'asc'
+        })
+        sortTicketsProfile(field, user.userType);
+      }
+    } else {
+      setSort({ 
+        isSorted: true,
+        field: sortBy,
+        order: 'desc'
+      })
+      sortTicketsProfile(field, user.userType);
+    }
+  }
 
   const setActive = e => {
     e.preventDefault();
@@ -74,33 +211,65 @@ const Profile = ({ user, tickets, assigned, getTickets, setAssignedTickets, setC
       <div className="collection-header">
         <h5 style={styles.header} >
           Tickets {' '}
-          <span className="grey-text" style={styles.label}>[{ assigned && assigned.length }]</span> 
+          {assigned ? (
+            <span className="grey-text" style={styles.label}>[{ assigned && assigned.length }]</span>
+          ) : (
+            <span className="grey-text" style={styles.label}>[{ owned && owned.length }]</span>
+          )}
         </h5> 
       </div>
       <div className="collection-item">
         <div className="center">
           {/* Open Tickets */}
-          <span className="green-text text-darken-2" style={styles.ticket_label}> new </span>
-          <span style={styles.label}> [ { assignedTickets.open } ] </span> {' - '}
+          <span className="green-text text-darken-2" style={styles.ticket_label}> open </span>
+          <span style={styles.label}> [ { assigned ? assignedTickets.open : ownedTickets.open } ] </span> {' - '}
           {/* Pending Tickets */}
           <span className="orange-text text-darken-2" style={styles.ticket_label}> pending </span>
-          <span style={styles.label}> [ { assignedTickets.pending } ]  </span> {' - '}
+          <span style={styles.label}> [ { assigned ? assignedTickets.pending : ownedTickets.pending } ]  </span> {' - '}
           {/* Closed Tickets */}
           <span className="grey-text text-darken-2" style={styles.ticket_label}> closed </span>
-          <span style={styles.label}> [ { assignedTickets.closed } ] </span> 
+          <span style={styles.label}> [ { assigned ? assignedTickets.closed : ownedTickets.closed } ] </span> 
         </div>
         <br/>
         {/* tickets */}
         <table className="responsive-table striped">
           <thead>
             <tr className="ticket-info">
-              <th className="center"> # </th>
-              <th className="center"> Alert </th>
-              <th className="center"> Status </th>
-              <th className="center"> Subject </th>
-              <th className="center"> Issued By </th>
-              <th className="center"> Priority </th>
-              <th className="center"> Date Issued </th>
+              {assigned ? tech_headers.map(header => (
+                <th className="center" key={header.id}> 
+                  <a href="#!" id={header.id} data_sort={header.data_sort} onClick={onSetField}>
+                    {header.label} {' '}
+                  </a>
+                  {!sorting.isSorted && sorting.field === null ? (
+                    <FontAwesomeIcon icon="sort"/>
+                  ) : (
+                    <Fragment>
+                      {sorting.isSorted && sorting.order === 'desc' ? (
+                        <FontAwesomeIcon icon="sort-up" />
+                      ) : (
+                        <FontAwesomeIcon icon="sort-down" />
+                      )}
+                    </Fragment>
+                  )}
+                </th>
+              )) : emp_headers.map(header => (
+                <th className="center" key={header.id}> 
+                  <a href="#!" id={header.id} data_sort={header.data_sort} onClick={onSetField}>
+                    {header.label} {' '}
+                  </a>
+                  {!sorting.isSorted && sorting.field === null ? (
+                    <FontAwesomeIcon icon="sort"/>
+                  ) : (
+                    <Fragment>
+                      {sorting.isSorted && sorting.order === 'desc' ? (
+                        <FontAwesomeIcon icon="sort-up" />
+                      ) : (
+                        <FontAwesomeIcon icon="sort-down" />
+                      )}
+                    </Fragment>
+                  )}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -150,7 +319,65 @@ const Profile = ({ user, tickets, assigned, getTickets, setAssignedTickets, setC
                     <span className="priority-badge red-text text-darken-2">{ticket.priority}</span>
                   )}
                 </td>
+                <td className="ticket-info center">
+                  <Moment format="MM-DD-YYYY, ">
+                  {ticket.createdAt} 
+                  </Moment>
+                  <span> at </span>
+                  <Moment format="hh:mm A">
+                  {ticket.createdAt} 
+                  </Moment>
+                </td>
+              </tr>
+            ))}
+
+            {owned && owned.map(ticket => (
+              <tr key={ticket._id}>
+                <td className="ticket-info center">
+                  {ticket._id}
+                </td>
+                <td className="ticket-info center">
+                  {(ticket.priority === 'low') && (
+                    <span className="alert-badge grey"></span>
+                  )}
+                  {(ticket.priority === 'normal') && (
+                    <span className="alert-badge green"></span>
+                  )}
+                  {(ticket.priority === 'high') && (
+                    <span className="alert-badge red"></span>
+                  )}
+                </td>
+                <td className="ticket-info center">
+                  {(ticket.status === 'open') && (
+                    <span className="chip grey lighten-3 green-text text-darken-2">{ticket.status}</span>
+                  )}
+                  {(ticket.status === 'pending') && (
+                    <span className="chip grey lighten-3 orange-text text-darken-3">{ticket.status}</span>
+                  )}
+                  {(ticket.status === 'closed') && (
+                    <span className="chip grey lighten-3 text-darken-2">{ticket.status}</span>
+                  )}
+                </td>
+                <td>
+                  <Link to={`/tickets/${ticket._id}`} className="ticket-details blue-text text-darken-2">
+                    <span className="truncate">{ticket.title}</span>
+                  </Link>  
+                </td>
                 <td className="ticket-info">
+                  {ticket.assignedTo.firstName} {ticket.assignedTo.lastName}
+                </td>
+                <td className="ticket-info center">
+                  {(ticket.priority === 'low') && (
+                    <span className="priority-badge grey-text text-darken-2">{ticket.priority}</span>
+                  )}
+                  {(ticket.priority === 'normal') && (
+                    <span className="priority-badge green-text text-darken-2">{ticket.priority}</span>
+                  )}
+                  {(ticket.priority === 'high') && (
+                    <span className="priority-badge red-text text-darken-2">{ticket.priority}</span>
+                  )}
+                </td>
+                <td className="ticket-info center">
                   <Moment format="MM-DD-YYYY, ">
                   {ticket.createdAt} 
                   </Moment>
@@ -248,7 +475,7 @@ const Profile = ({ user, tickets, assigned, getTickets, setAssignedTickets, setC
 
   return (
     <div className="row card-panel">
-      {user && tickets && assigned && (
+      {user && tickets && (assigned || owned) && (
         <div className="col s12">
           <ul className="tabs">
             <li className="tab col">
@@ -315,14 +542,21 @@ Profile.propTypes = {
   tickets: PropTypes.array,
   assigned: PropTypes.array,
   getTickets: PropTypes.func.isRequired,
+  setOwnedTickets: PropTypes.func.isRequired,
   setAssignedTickets: PropTypes.func.isRequired,
   setCurrent: PropTypes.func.isRequired,
+  sortTicketsProfile: PropTypes.func.isRequired,
+  setSort: PropTypes.func.isRequired,
+  resetSort: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   user: state.auth.user,
   tickets: state.ticket.tickets,
-  assigned: state.ticket.assigned
+  owned: state.ticket.owned,
+  assigned: state.ticket.assigned,
+  sorted: state.ticket.sorted,
+  sorting: state.ticket.sorting
 });
 
-export default connect(mapStateToProps, { getTickets, setAssignedTickets, setCurrent})(Profile);
+export default connect(mapStateToProps, { getTickets, setOwnedTickets, setAssignedTickets, setCurrent, setSort, sortTicketsProfile, resetSort })(Profile);

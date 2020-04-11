@@ -8,7 +8,8 @@ import {
   SET_LOADING,
   SET_CURRENT_COMMENT,
   SET_EDIT_MODE,
-  CLEAR_CURRENT_COMMENT
+  CLEAR_CURRENT_COMMENT,
+  RESET_COMMENT_STATE
 } from './types';
 
 // Get Comments by Ticket Id
@@ -108,3 +109,6 @@ export const setEditMode = () => async dispatch => dispatch({ type: SET_EDIT_MOD
 
 // Clear Current Comment
 export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRENT_COMMENT });
+
+// Reset Comment State on Log out
+export const resetCommentState = () => async dispatch => dispatch({ type: RESET_COMMENT_STATE });
