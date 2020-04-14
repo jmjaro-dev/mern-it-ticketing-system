@@ -1,18 +1,18 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { setCurrent } from '../../actions/ticketActions';
+import { setCurrent } from '../../../actions/ticketActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const TicketItem = ({ ticket, user, setCurrent }) => {
-  const { _id, priority, status, title, issuedBy, createdAt, assignedTo } = ticket;
+const TicketItemTech = ({ ticket, userType, setCurrent }) => {
+  const { _id, priority, status, title, issuedBy, createdAt } = ticket;
 
   // Set Current Ticket
   const onSetCurrent = () => {
-    setCurrent(ticket, user.userType, 'home');
+    setCurrent(ticket, userType, 'profile');
   }
   // Opens Modal
   const openModal = name => {
@@ -25,18 +25,12 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
     onSetCurrent();
     openModal("update-ticket-modal");
   }
-  // Trigger DeleteTicketModal
-  const onDelete = async e => {
-    e.preventDefault();
-    onSetCurrent();
-    openModal("delete-ticket-modal");
-  }
-  
+    
   return (
-    <tr className="hoverable">
-      {/* Ticket ID */}
-      <td className="ticket-info center">{_id}</td>
-      {/* Alert Level */}
+    <tr key={_id}>
+      <td className="ticket-info center">
+        {_id}
+      </td>
       <td className="ticket-info center">
         {(priority === 'low') && (
           <span className="alert-badge grey"></span>
@@ -46,9 +40,8 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
         )}
         {(priority === 'high') && (
           <span className="alert-badge red"></span>
-        )}  
+        )}
       </td>
-      {/* Ticket Status */}
       <td className="ticket-info center">
         {(status === 'open') && (
           <span className="chip grey lighten-3 green-text text-darken-2">{status}</span>
@@ -58,17 +51,16 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
         )}
         {(status === 'closed') && (
           <span className="chip grey lighten-3 text-darken-2">{status}</span>
-        )} 
+        )}
       </td>
-      {/* Ticket Title */}
       <td>
         <Link to={`/tickets/${_id}`} className="ticket-details blue-text text-darken-2" onClick={onSetCurrent}>
           <span className="truncate">{title}</span>
-        </Link>
+        </Link>  
       </td>
-      {/* Issued By */}
-      <td className="ticket-info">{issuedBy.firstName} {' '} {issuedBy.lastName}</td>
-      {/* Priority Level */}
+      <td className="ticket-info">
+        {issuedBy.firstName} {issuedBy.lastName}
+      </td>
       <td className="ticket-info center">
         {(priority === 'low') && (
           <span className="priority-badge grey-text text-darken-2">{priority}</span>
@@ -80,7 +72,6 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
           <span className="priority-badge red-text text-darken-2">{priority}</span>
         )}
       </td>
-      {/* Date Created */}
       <td className="ticket-info center">
         <Moment format="MM-DD-YYYY, ">
         {createdAt} 
@@ -90,58 +81,28 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
         {createdAt} 
         </Moment>
       </td>
-      {/* Assigned To */}
-      <td className="ticket-info">
-        {assignedTo.to !== 'Unassigned' ? (
-          <Fragment>
-            {assignedTo.firstName} {' '} {assignedTo.lastName}
-          </Fragment>
-        ) : (
-          <Fragment>
-            {assignedTo.to}
-          </Fragment>
-        )}
-        
-      </td>
-      {/* Actions */}
       <td className="center">
         <Link to={`/tickets/${_id}`} onClick={onSetCurrent}>
           <FontAwesomeIcon icon="eye" className="blue-text text-darken-2" />
         </Link>
         {' '}
-        {/* Update Link for Ticket Owner and Assigned Technician */}
-        {(issuedBy._id === user._id || (user.userType === 'technician' && ticket.assignedTo._id === user._id)) && (
-          <a href="#!" onClick={onUpdate}>
-            <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
-          </a>
-        )}
-        {/* Update Link for Technicians on unassigned tickets */}
-        {user.userType === 'technician' && ticket.assignedTo.to === 'Unassigned' && (
-          <a href="#!" onClick={onUpdate}>
-            <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
-          </a>
-        )}
-        {issuedBy._id === user._id && (
-          <Fragment>
-            {' '}
-            <a href="#!" onClick={onDelete}>
-              <FontAwesomeIcon icon={[ "far", "trash-alt" ]} className="red-text text-darken-2" />
-            </a>
-          </Fragment>
-        )}
+        {/* Update Link for Assigned Technician */}
+        <a href="#!" onClick={onUpdate}>
+          <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
+        </a>
       </td>
     </tr>
   )
 }
 
-TicketItem.propTypes = {
+TicketItemTech.propTypes = {
   ticket: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  userType: PropTypes.string,
   setCurrent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  userType: state.auth.user.userType
 });
 
-export default connect(mapStateToProps, { setCurrent })(TicketItem);
+export default connect(mapStateToProps, { setCurrent })(TicketItemTech);

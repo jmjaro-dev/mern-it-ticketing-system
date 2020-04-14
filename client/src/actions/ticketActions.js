@@ -24,7 +24,7 @@ import {
 } from './types';
 
 // Get Ticket by Id
-export const getTicket = id => async dispatch => {
+export const getTicket = (id, current_url) => async dispatch => {
   // Set Loading to True
   dispatch({
     type: SET_LOADING
@@ -35,7 +35,10 @@ export const getTicket = id => async dispatch => {
 
     dispatch({
       type: GET_TICKET,
-      payload: res.data
+      payload: {
+        ticket: res.data,
+        current_url
+      }
     });
   } catch (err) {
     dispatch({
@@ -131,7 +134,7 @@ export const deleteTicket = id => async dispatch => {
 };
 
 // Update Ticket
-export const updateTicket = ticket => async dispatch => {
+export const updateTicket = (ticket, userType, current_url = 'home') => async dispatch => {
   try {
     const config = {
       headers: {
@@ -143,12 +146,16 @@ export const updateTicket = ticket => async dispatch => {
 
     dispatch({
       type: UPDATE_TICKET,
-      payload: res.data
+      payload: {
+        data: res.data,
+        current_url,
+        userType
+      }
     });
   } catch (err) {
     dispatch({
       type: TICKET_ERROR,
-      payload: err.response.msg
+      payload: err.response
     });
   }
 };
@@ -157,7 +164,13 @@ export const updateTicket = ticket => async dispatch => {
 export const clearTicket = () => async dispatch => dispatch({ type: CLEAR_TICKETS });
 
 // Set Curent Ticket
-export const setCurrent = ticket => async dispatch => dispatch({ type: SET_CURRENT, payload: ticket });
+export const setCurrent = (ticket, current_url) => async dispatch => dispatch({ 
+  type: SET_CURRENT, 
+  payload: { 
+    ticket, 
+    current_url 
+  } 
+});
 
 // Set Ticket Exists
 export const setTicketExists = exist => async dispatch => dispatch({ type: SET_TICKET_EXISTS, payload: exist });
@@ -175,8 +188,8 @@ export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRE
 export const filterTickets = text => async dispatch => dispatch({ type: FILTER_TICKETS, payload: text });
 
 // Set Tickets by Filter
-export const setFilter = (filter, tickets) => async dispatch => {
-  dispatch({ type: SET_FILTER, payload: { filter, tickets } });
+export const setFilter = (filter, tickets, current_url) => async dispatch => {
+  dispatch({ type: SET_FILTER, payload: { filter, tickets, current_url } });
 };
 
 // Set Sorting method

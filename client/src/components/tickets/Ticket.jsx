@@ -12,12 +12,12 @@ import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 
-const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTicket, getComments, setCurrent, clearCurrent, setTicketExists }) => {
+const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTicket, getComments, setCurrent, clearCurrent, setTicketExists }) => {
   useEffect(() => {
     if(user) {
-      getTicket(match.params.id);
+      getTicket(match.params.id, 'home');
       getComments(match.params.id);
-      setCurrent(ticket);    
+      setCurrent(current.ticket, user.userType, 'home');    
       setTicketExists(true);
     }
     // eslint-disable-next-line
@@ -36,18 +36,18 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
 
   const onUpdate = e => {
     e.preventDefault();
-    setCurrent(ticket);
+    setCurrent(current, user.userType, 'home');
     openModal("update-ticket-modal");
   }
   const onDelete = e => {
     e.preventDefault();
-    setCurrent(ticket);
+    setCurrent(current, user.userType, 'home');
     openModal("delete-ticket-modal");
   }
 
   return (
     <Fragment>
-      {ticket && ticket_exists && !loading ? (
+      {current && ticket_exists && !loading ? (
         <div id="ticketContainer">
           {/* Ticket Details */}
           <div>
@@ -72,26 +72,26 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                     <div className="col s12">
                       {/* Ticket ID */}
                       <span className="ticket-label">[ Ticket ID ]</span> {' '}
-                      <span className="ticket-details black-text">{ticket._id} </span>
+                      <span className="ticket-details black-text">{current.ticket._id} </span>
                     </div>
                     <div className="col s12">
                       {/* Title */}
                       <span className="ticket-label">[ Subject ]</span> {' '}
-                      <span id="ticket-title" className="blue-text text-darken-2">{ticket.title}</span>
+                      <span id="ticket-title" className="blue-text text-darken-2">{current.ticket.title}</span>
                     </div>
                     <div className="col s12">
                       <span className="ticket-label">
                         [ Issued By ] 
-                      </span> <span className="ticket-details">{ticket.issuedBy.firstName} {' '} {ticket.issuedBy.lastName} </span>
+                      </span> <span className="ticket-details">{current.ticket.issuedBy.firstName} {' '} {current.ticket.issuedBy.lastName} </span>
                     </div>
                     <div className="col s12">
                       <span className="ticket-label">[ Date Issued ]</span> {' '}
                       <Moment format="MM-DD-YYYY, " className="ticket-details">
-                      {ticket.createdAt} 
+                      {current.ticket.createdAt} 
                       </Moment>
                       <span className="ticket-details"> @ </span>
                       <Moment format="h:mm A" className="ticket-details">
-                      {ticket.createdAt} 
+                      {current.ticket.createdAt} 
                       </Moment>
                     </div>
                   </div>                  
@@ -100,7 +100,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                   <p>
                     <span className="ticket-label">
                       Description <FontAwesomeIcon icon="chevron-right"/> 
-                    </span> <span className="ticket-desc">{ticket.description}</span>
+                    </span> <span className="ticket-desc">{current.ticket.description}</span>
                   </p>
                 </div>
                 {/* Comments Section */}
@@ -109,16 +109,16 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                     Comments
                 </p>   
                 <div>
-                  {ticket ? ( 
+                  {current ? ( 
                     <div className="collection card-panel comment-container">
-                      <Comments ticket_id={ticket._id} current_user={user._id}/>
+                      <Comments ticket_id={current.ticket._id} current_user={user._id}/>
                     </div>
                     ) : (
                     <PreLoader />
                   )}
                 </div>
                 {/* Comment Box for Ticket owner or Assigned Technician */}
-                {(ticket.issuedBy._id === user._id || ticket.assignedTo._id === user._id) && (
+                {(current.ticket.issuedBy._id === user._id || current.ticket.assignedTo._id === user._id) && (
                   <Fragment>
                     <div className="divider"></div>
                     <p className="center section-label"> 
@@ -126,7 +126,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                     </p>
                     <div>
                       {comments && (
-                        <AddComment user={user} ticket_id={ticket._id}/>
+                        <AddComment user={user} ticket_id={current.ticket._id}/>
                       )}
                     </div>
                   </Fragment>
@@ -139,57 +139,57 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                   {/* Lastest Update */}
                   <span className="ticket-label">Latest Update <FontAwesomeIcon icon="chevron-right"/> </span>
                   <Moment fromNow className="ticket-details">
-                  {ticket.updatedAt} 
+                  {current.ticket.updatedAt} 
                   </Moment>
                   <br/>
                   {/* Status */}
                   <span className="ticket-label">Status <FontAwesomeIcon icon="chevron-right"/> </span> 
-                  {(ticket.status === 'open') && (
-                    <span className="ticket-details green-text text-darken-2">{ticket.status}</span> 
+                  {(current.ticket.status === 'open') && (
+                    <span className="ticket-details green-text text-darken-2">{current.ticket.status}</span> 
                   )}
-                  {(ticket.status === 'pending') && (
-                    <span className="ticket-details orange-text text-darken-2">{ticket.status}</span> 
+                  {(current.ticket.status === 'pending') && (
+                    <span className="ticket-details orange-text text-darken-2">{current.ticket.status}</span> 
                   )}
-                  {(ticket.status === 'closed') && (
-                    <span className="ticket-details red-text text-darken-2">{ticket.status}</span> 
+                  {(current.ticket.status === 'closed') && (
+                    <span className="ticket-details red-text text-darken-2">{current.ticket.status}</span> 
                   )}
                   <br/>
                   {/* Priority Level */}
                   <span className="ticket-label">Priority Level <FontAwesomeIcon icon="chevron-right"/> </span>
-                  {(ticket.priority === 'low') && (
-                    <span className="priority-badge ticket-details grey-text text-darken-2">{ticket.priority}</span>
+                  {(current.ticket.priority === 'low') && (
+                    <span className="priority-badge ticket-details grey-text text-darken-2">{current.ticket.priority}</span>
                   )}
-                  {(ticket.priority === 'normal') && (
-                    <span className="priority-badge ticket-details green-text text-darken-2">{ticket.priority}</span>
+                  {(current.ticket.priority === 'normal') && (
+                    <span className="priority-badge ticket-details green-text text-darken-2">{current.ticket.priority}</span>
                   )}
-                  {(ticket.priority === 'high') && (
-                    <span className="priority-badge ticket-details red-text text-darken-2">{ticket.priority}</span>
+                  {(current.ticket.priority === 'high') && (
+                    <span className="priority-badge ticket-details red-text text-darken-2">{current.ticket.priority}</span>
                   )}
                   <br/>
                   {/* Alert Level */}
                   <span className="ticket-label">Alert Level <FontAwesomeIcon icon="chevron-right"/> </span>{' '}
-                  {(ticket.priority === 'low') && (
-                    <span className="priority-badge ticket-details grey-text text-darken-2">{ticket.priority}</span>
+                  {(current.ticket.priority === 'low') && (
+                    <span className="priority-badge ticket-details grey-text text-darken-2">{current.ticket.priority}</span>
                   )}
-                  {(ticket.priority === 'normal') && (
-                    <span className="priority-badge ticket-details green-text text-darken-2">{ticket.priority}</span>
+                  {(current.ticket.priority === 'normal') && (
+                    <span className="priority-badge ticket-details green-text text-darken-2">{current.ticket.priority}</span>
                   )}
-                  {(ticket.priority === 'high') && (
-                    <span className="priority-badge ticket-details red-text text-darken-2">{ticket.priority}</span>
+                  {(current.ticket.priority === 'high') && (
+                    <span className="priority-badge ticket-details red-text text-darken-2">{current.ticket.priority}</span>
                   )}
                   <br/>
                   {/* Assigned To */}
                   <span className="ticket-label"> Assigned to <FontAwesomeIcon icon="chevron-right"/> </span>{' '}
-                  {ticket.assignedTo._id !== user._id ? (
+                  {current.ticket.assignedTo._id !== user._id ? (
                     <Fragment>
                       <span className="ticket-details">
-                        {ticket.assignedTo.to !== 'Unassigned' ? (
+                        {current.ticket.assignedTo.to !== 'Unassigned' ? (
                           <Fragment>
-                            {ticket.assignedTo.firstName} {ticket.assignedTo.lastName}
+                            {current.ticket.assignedTo.firstName} {current.ticket.assignedTo.lastName}
                           </Fragment>
                         ) : (
                           <Fragment>
-                            {ticket.assignedTo.to}
+                            {current.ticket.assignedTo.to}
                           </Fragment>
                         )}
                       </span>
@@ -203,7 +203,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                   )}
                 </p> 
                 {/* Show update action for Technicians if Ticket is Unassigned */}
-                {ticket.assignedTo.to === 'Unassigned' && user.userType === 'technician' && (
+                {current.ticket.assignedTo.to === 'Unassigned' && user.userType === 'technician' && (
                   <Fragment>
                     <div className="divider"></div>
                     <div className="center ticket-actions-header">Actions</div>
@@ -218,7 +218,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                   </Fragment>
                 )}  
                 {/* Show Actions for Ticket owner && Assigned Technician */}
-                {(ticket.issuedBy._id === user._id || ticket.assignedTo._id === user._id) && (
+                {(current.ticket.issuedBy._id === user._id || current.ticket.assignedTo._id === user._id) && (
                   <Fragment>
                     <div className="divider"></div>
                     <div className="center ticket-actions-header">Actions</div>
@@ -230,7 +230,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
                         </a>
                       </div>
                       {/* Show delete action for ticket owner only */}
-                      {ticket.issuedBy._id === user._id && (
+                      {current.ticket.issuedBy._id === user._id && (
                         <div className="col s12 m6 center">
                           <a href="#!" onClick={onDelete}>
                             <FontAwesomeIcon icon={[ "far", "trash-alt" ]} className="red-text text-darken-2" />
@@ -248,7 +248,7 @@ const Ticket = ({ match, user, ticket, ticket_exists, comments, loading, getTick
         </div>
       ) : (
         <Fragment>
-          {!ticket && !ticket_exists ? (
+          {!current && !ticket_exists ? (
             <Redirect to="/" />
           ) : (
             <PreLoader/>
@@ -274,7 +274,7 @@ Ticket.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.auth.user,
-  ticket: state.ticket.current,
+  current: state.ticket.current,
   ticket_exists: state.ticket.ticket_exists,
   loading: state.ticket.loading,
   comments: state.comment.comments

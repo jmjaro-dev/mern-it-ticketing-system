@@ -92,7 +92,7 @@ router.put('/:id', [ auth , [
   if(!ticket) return res.status(404).json({ msg: 'Ticket not found' });
   
   // Destructure
-  const { userId, title, description, priority, status, assignedTo } = req.body;
+  const { title, description, priority, status, assignedTo } = req.body;
 
   // If user owns the ticket THEN
   // Build updated ticket object 

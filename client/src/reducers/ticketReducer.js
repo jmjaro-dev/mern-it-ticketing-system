@@ -50,7 +50,10 @@ export default (state = initialState, action) => {
     case GET_TICKET:
       return {
         ...state,
-        current: action.payload,
+        current: {
+          ticket: action.payload.ticket,
+          current_url: action.payload.current_url
+        },
         loading: false
       };
     case GET_TICKETS:
@@ -1028,13 +1031,31 @@ export default (state = initialState, action) => {
         loading: false
       };
     case UPDATE_TICKET:
-      return {
-        ...state,
-        tickets: state.tickets.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
-        mapped:  state.mapped.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
-        sorted:  state.sorted.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
-        filtered:  state.filtered.map(ticket => ticket._id === action.payload._id ? action.payload : ticket),
-        loading: false 
+      if(action.payload.current_url !== 'profile') {
+        return {
+          ...state,
+          tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+          mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+          sorted:  state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+          filtered:  state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+          loading: false 
+        }
+      } else {
+        if(action.payload.userType !== 'employee') {
+          return {
+            ...state,
+            assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            sorted: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            filtered: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
+          }
+        } else {
+          return {
+            ...state,
+            owned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            sorted: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            filtered: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
+          }
+        }
       }
     case DELETE_TICKET:
       return {
@@ -1068,7 +1089,10 @@ export default (state = initialState, action) => {
     case SET_CURRENT:
       return {
         ...state,
-        current: action.payload
+        current: {
+          ticket: action.payload.ticket,
+          current_url: action.payload.current_url
+        }
       };
     case CLEAR_CURRENT:
       return {
@@ -1088,13 +1112,21 @@ export default (state = initialState, action) => {
         }) 
       };
     case SET_FILTER:
-      return {
-        ...state,
-        active_filter: action.payload.filter,
-        mapped: action.payload.tickets,
-        sorted: action.payload.tickets,
-        filtered: action.payload.tickets,
-    };
+      if(action.payload.current_url !== 'profile') {
+        return {
+          ...state,
+          active_filter: action.payload.filter,
+          mapped: action.payload.tickets,
+          sorted: action.payload.tickets,
+          filtered: action.payload.tickets
+        };
+      } else {
+        return {
+          ...state,
+          filtered: action.payload.tickets
+        };
+      }
+      
     case SET_SORTING:
       return {
         ...state,

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const DeleteTicketModal = ({ current, ticket_exists, deleteTicket, setAlert, setTicketExists, clearCurrent }) => {
   const onConfirm = async e => {
     e.preventDefault();
-    deleteTicket(current._id);
+    deleteTicket(current.ticket._id);
     if(ticket_exists) {
       setTicketExists(false);
     }

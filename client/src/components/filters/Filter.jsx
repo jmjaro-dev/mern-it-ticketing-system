@@ -113,7 +113,7 @@ const Filter = ({ filter, tickets, user_id, setFilter }) => {
 
 Filter.propTypes = {
   user_id: PropTypes.string.isRequired,
-  Tickets: PropTypes.array,
+  tickets: PropTypes.array,
   filter: PropTypes.string.isRequired,
   setFilter: PropTypes.func.isRequired
 }

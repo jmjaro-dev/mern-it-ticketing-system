@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
-import Profile from './components/pages/Profile';
+import Profile from './components/profile/Profile';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -65,7 +65,7 @@ const App = () => {
               {/* <AddBtn /> */}
               <CreateTicketModal />
               <DeleteTicketModal />
-              <UpdateTicketModal />
+              {/* <UpdateTicketModal /> */}
               <DeleteCommentModal />
               
               <Switch>
