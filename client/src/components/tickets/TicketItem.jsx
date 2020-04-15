@@ -12,7 +12,7 @@ const TicketItem = ({ ticket, user, setCurrent }) => {
 
   // Set Current Ticket
   const onSetCurrent = () => {
-    setCurrent(ticket, user.userType, 'home');
+    setCurrent(ticket, 'home');
   }
   // Opens Modal
   const openModal = name => {

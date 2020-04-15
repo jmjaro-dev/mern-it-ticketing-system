@@ -5,10 +5,10 @@ import { deleteTicket, clearCurrent, setTicketExists } from '../../actions/ticke
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
-const DeleteTicketModal = ({ current, ticket_exists, deleteTicket, setAlert, setTicketExists, clearCurrent }) => {
+const DeleteTicketModal = ({ current, user, ticket_exists, deleteTicket, setAlert, setTicketExists, clearCurrent }) => {
   const onConfirm = async e => {
     e.preventDefault();
-    deleteTicket(current.ticket._id);
+    deleteTicket(current.ticket._id, user.userType, current.current_url);
     if(ticket_exists) {
       setTicketExists(false);
     }
@@ -37,6 +37,7 @@ const DeleteTicketModal = ({ current, ticket_exists, deleteTicket, setAlert, set
 
 DeleteTicketModal.propTypes = {
   current: PropTypes.object,
+  user: PropTypes.object,
   ticket_exists: PropTypes.bool,
   deleteTicket: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
@@ -59,6 +60,7 @@ const styles = {
 
 const mapStateToProps = state => ({
   current: state.ticket.current,
+  user: state.auth.user,
   ticket_exists: state.ticket.ticket_exists
 });
 

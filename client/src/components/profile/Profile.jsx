@@ -8,6 +8,7 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets, setOwnedTickets, setAssignedTickets, resetSort, clearFilter }) => {
   const [activeTab, setActiveTab] = useState('#profile');
+  const [currTickets, setCurrTickets] = useState(null);
   
   useEffect(() => {
     M.AutoInit();
@@ -21,14 +22,26 @@ const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets,
     }
 
     if(!tickets && user) {
-      getTickets()
+      getTickets();
+    }
+
+    if(tickets !== null) {
+      setCurrTickets(tickets.length);
     }
 
     if(tickets && user && user.userType === 'employee' && owned === null) {
       setOwnedTickets(user._id);
     }
 
+    if(tickets && user && user.userType === 'employee' && currTickets !== tickets.length ) {
+      setOwnedTickets(user._id);
+    }
+
     if(tickets && user.userType === 'technician' && assigned === null) {
+      setAssignedTickets(user._id);
+    }
+
+    if(tickets && user && user.userType === 'technician' && currTickets !== tickets.length ) {
       setAssignedTickets(user._id);
     }
     // eslint-disable-next-line

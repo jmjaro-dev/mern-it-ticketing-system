@@ -71,7 +71,7 @@ router.post('/', [ auth, [
   }
 });
 
-// @route   PUT api/tickets
+// @route   PUT api/tickets/:id
 // @desc    Update ticket
 // @access  Private
 router.put('/:id', [ auth , [

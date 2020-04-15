@@ -65,7 +65,7 @@ const App = () => {
               {/* <AddBtn /> */}
               <CreateTicketModal />
               <DeleteTicketModal />
-              {/* <UpdateTicketModal /> */}
+              <UpdateTicketModal />
               <DeleteCommentModal />
               
               <Switch>

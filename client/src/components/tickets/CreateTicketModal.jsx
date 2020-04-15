@@ -43,7 +43,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
       if(assignedTo !== 'Unassigned') {
         assignedTO = techs.find(tech => assignedTo === tech._id);
       } else {
-        assignedTO = 'Unassigned'
+        assignedTO = { to: 'Unassigned' }
       }
       // Create new ticket object
       const newTicket = {

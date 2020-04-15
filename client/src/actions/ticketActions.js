@@ -112,18 +112,13 @@ export const addTicket = ticket => async dispatch => {
 };
 
 // Delete Ticket
-export const deleteTicket = id => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-
+export const deleteTicket = (id, userType, current_url) => async dispatch => {
   try {
     await axios.delete(`/api/tickets/${id}`);
 
     dispatch({
       type: DELETE_TICKET,
-      payload: id
+      payload: { id, userType, current_url }
     });
   } catch (err) {
     dispatch({
@@ -134,7 +129,7 @@ export const deleteTicket = id => async dispatch => {
 };
 
 // Update Ticket
-export const updateTicket = (ticket, userType, current_url = 'home') => async dispatch => {
+export const updateTicket = (ticket, userType, current_url) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -147,15 +142,15 @@ export const updateTicket = (ticket, userType, current_url = 'home') => async di
     dispatch({
       type: UPDATE_TICKET,
       payload: {
-        data: res.data,
-        current_url,
-        userType
+        ticket: res.data,
+        userType,
+        current_url
       }
     });
   } catch (err) {
     dispatch({
       type: TICKET_ERROR,
-      payload: err.response
+      payload: err.response.msg
     });
   }
 };

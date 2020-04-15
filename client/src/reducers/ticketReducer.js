@@ -1022,50 +1022,137 @@ export default (state = initialState, action) => {
       }
       break;
     case ADD_TICKET:
-      return {
-        ...state,
-        tickets: [action.payload, ...state.tickets],
-        mapped:  [action.payload, ...state.tickets],
-        sorted:  [action.payload, ...state.tickets],
-        filtered:  [action.payload, ...state.tickets],
-        loading: false
-      };
-    case UPDATE_TICKET:
-      if(action.payload.current_url !== 'profile') {
+      if(state.sorted !== null && state.filtered !== null) {
         return {
           ...state,
-          tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-          mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-          sorted:  state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-          filtered:  state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-          loading: false 
-        }
+          tickets: [action.payload, ...state.tickets],
+          mapped:  [action.payload, ...state.tickets],
+          sorted:  [action.payload, ...state.tickets],
+          filtered:  [action.payload, ...state.tickets],
+          loading: false
+        };
       } else {
-        if(action.payload.userType !== 'employee') {
+        return {
+          ...state,
+          tickets: [action.payload, ...state.tickets],
+          mapped:  [action.payload, ...state.tickets],
+          loading: false
+        };
+      }
+    case UPDATE_TICKET:
+      if(action.payload.current_url === 'home') {
+        if(state.sorted !== null && state.filtered !== null) {
           return {
             ...state,
-            assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            sorted: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            filtered: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
+            tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            sorted:  state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            filtered:  state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            loading: false 
           }
         } else {
           return {
             ...state,
-            owned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            sorted: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            filtered: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
+            tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            loading: false 
+          }
+        }
+      } else {
+        if(action.payload.userType !== 'employee') {
+          if(state.sorted !== null && state.filtered !== null) {
+            return {
+              ...state,
+              tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              assigned: state.assigned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              loading: false
+            }
+          } else {
+            return {
+              ...state,
+              tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              assigned: state.assigned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              loading: false
+            }
+          }
+          
+        } else {
+          if(state.sorted !== null && state.filtered !== null) {
+            return {
+              ...state,
+              tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              loading: false
+            }
+          } else {
+            return {
+              ...state,
+              tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              loading: false
+            }
           }
         }
       }
     case DELETE_TICKET:
-      return {
-        ...state,
-        tickets: state.tickets.filter(ticket => ticket._id !== action.payload),
-        mapped:  state.tickets.filter(ticket => ticket._id !== action.payload),
-        sorted:  state.tickets.filter(ticket => ticket._id !== action.payload),
-        filtered:  state.tickets.filter(ticket => ticket._id !== action.payload),
-        loading: false
-      };      
+      if(action.payload.current_url === 'home') {
+        if(state.sorted !== null && state.filtered !== null) {
+          return {
+            ...state,
+            tickets: state.tickets.filter(ticket => ticket._id !== action.payload.id),
+            mapped:  state.mapped.filter(ticket => ticket._id !== action.payload.id),
+            sorted:  state.sorted.filter(ticket => ticket._id !== action.payload.id),
+            filtered:  state.filtered.filter(ticket => ticket._id !== action.payload.id)
+          };
+        } else {
+          return {
+            ...state,
+            tickets: state.tickets.filter(ticket => ticket._id !== action.payload.id),
+            mapped:  state.mapped.filter(ticket => ticket._id !== action.payload.id)
+          };
+        }
+        
+      } else {
+        if(action.payload.userType !== 'employee') {
+          if(state.sorted !== null && state.filtered !== null) {
+            return {
+              ...state,
+              tickets: state.tickets.filter(ticket => ticket._id !== action.payload.id),
+              assigned:  state.assigned.filter(ticket => ticket._id !== action.payload.id),
+              sorted:  state.sorted.filter(ticket => ticket._id !== action.payload.id),
+              filtered:  state.filtered.filter(ticket => ticket._id !== action.payload.id)
+            };
+            
+          } else {
+            return {
+              ...state,
+              tickets: state.tickets.filter(ticket => ticket._id !== action.payload.id),
+              assigned:  state.assigned.filter(ticket => ticket._id !== action.payload.id)
+            }
+          }
+        } else {
+          if(state.sorted !== null && state.filtered !== null) {
+            return {
+              ...state,
+              tickets: state.tickets.filter(ticket => ticket._id !== action.payload.id),
+              owned:  state.owned.filter(ticket => ticket._id !== action.payload.id),
+              sorted:  state.sorted.filter(ticket => ticket._id !== action.payload.id),
+              filtered:  state.filtered.filter(ticket => ticket._id !== action.payload.id)
+            };
+            
+          } else {
+            return {
+              ...state,
+              tickets: state.tickets.filter(ticket => ticket._id !== action.payload.id),
+              owned:  state.owned.filter(ticket => ticket._id !== action.payload.id)
+            }
+          }
+        }
+      }   
     case CLEAR_TICKETS: 
       return {
         ...state,
