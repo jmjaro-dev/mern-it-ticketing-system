@@ -31,14 +31,14 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
   const authLinks = (
     <Fragment>
       <li>
-        <Link to="/profile" className="nav-links">
+        <Link to="/" className="nav-links">
           <FontAwesomeIcon icon={["fas", "user"]} style={{ marginRight: "0.5em" }}/>
           { user && user.firstName }
         </Link>
       </li>
       
       <li>
-        <Link to="/" className="nav-links">
+        <Link to="/tickets" className="nav-links">
           Tickets
         </Link>
       </li>

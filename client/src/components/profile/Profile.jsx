@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets, setOwnedTickets, setAssignedTickets, resetSort, clearFilter }) => {
-  const [activeTab, setActiveTab] = useState('#profile');
-  const [currTickets, setCurrTickets] = useState(null);
+  const [activeTab, setActiveTab] = useState('#my-tickets');
+  const [currTickets, setCurrTickets] = useState(undefined);
   
   useEffect(() => {
     M.AutoInit();
-
+    
     if(sorted !== null) {
       resetSort();
     }
@@ -33,7 +33,7 @@ const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets,
       setOwnedTickets(user._id);
     }
 
-    if(tickets && user && user.userType === 'employee' && currTickets !== tickets.length ) {
+    if(tickets && user && user.userType === 'employee' && currTickets !== tickets.length) {
       setOwnedTickets(user._id);
     }
 
@@ -41,7 +41,7 @@ const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets,
       setAssignedTickets(user._id);
     }
 
-    if(tickets && user && user.userType === 'technician' && currTickets !== tickets.length ) {
+    if(tickets && user && user.userType === 'technician' && currTickets !== tickets.length) {
       setAssignedTickets(user._id);
     }
     // eslint-disable-next-line
@@ -59,11 +59,9 @@ const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets,
       {user && tickets && (assigned || owned) && (
         <div className="col s12">
           <ul className="tabs">
+            
             <li className="tab col">
-              <a className="active" href="#profile" onClick={setActive} >Profile</a>
-              </li>
-            <li className="tab col">
-              <a href="#my-tickets" onClick={setActive} >
+              <a className="active" href="#my-tickets" onClick={setActive} >
               {user && user.userType !== 'employee' ? (
                 <Fragment>
                   Assigned Tickets ({ assigned.length })
@@ -75,16 +73,19 @@ const Profile = ({ user, tickets, owned, assigned, sorted, filtered, getTickets,
               )}
               </a>
             </li>
+            <li className="tab col">
+              <a  href="#profile" onClick={setActive} >Profile</a>
+            </li>
           </ul>
           <div className="row">
-            {activeTab !== '#profile' ? 
-              <TicketsTab user={user} owned={owned} assigned={assigned} /> 
+            {activeTab !== '#my-tickets' ? 
+              <ProfileTab user={user} /> 
               : 
-              <ProfileTab user={user} /> }
+              <TicketsTab user={user} owned={owned} assigned={assigned} /> 
+            }
           </div>
       </div> 
       )}
-        
     </div>
   )
 }

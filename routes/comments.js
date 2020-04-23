@@ -78,8 +78,9 @@ router.put('/:id', [ auth, [
 
   // If user owns the comment THEN
   // Build updated comment object 
-  const messageField = { message };
-  
+  const messageField = { message, isUpdated : true };
+  if(message) messageField.message = message;
+
   try {
     // Update ticket with new information
     comment = await Comment.findByIdAndUpdate(req.params.id, { $set: messageField }, { new: true });

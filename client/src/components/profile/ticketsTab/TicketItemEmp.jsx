@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
@@ -65,7 +65,16 @@ const TicketItemEmp = ({ ticket, userType, setCurrent }) => {
         </Link>  
       </td>
       <td className="ticket-info">
-        {assignedTo.firstName} {assignedTo.lastName}
+        {!assignedTo.to ? 
+          <Fragment>
+            {assignedTo.firstName} {assignedTo.lastName} 
+          </Fragment> 
+          :
+          <Fragment> 
+            {assignedTo.to}
+          </Fragment>
+        }
+        
       </td>
       <td className="ticket-info center">
         {(priority === 'low') && (

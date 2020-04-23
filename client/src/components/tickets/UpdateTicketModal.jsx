@@ -82,8 +82,10 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
         assignedTo: ''
       });
 
-      closeModal();      
-      clearCurrent();
+      closeModal();   
+      if(current_url !== 'ticket') {
+        clearCurrent();
+      }
       setAlert('Ticket updated successfully!', 'success');
     }
   }

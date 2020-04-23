@@ -11,6 +11,7 @@ import {
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_TICKET,
+  UPDATE_NAME_ON_TICKETS,
   FILTER_TICKETS,
   SET_FILTER,
   SET_SORTING,
@@ -146,6 +147,30 @@ export const updateTicket = (ticket, userType, current_url) => async dispatch =>
         userType,
         current_url
       }
+    });
+  } catch (err) {
+    dispatch({
+      type: TICKET_ERROR,
+      payload: err.response.msg
+    });
+  }
+};
+
+// Update the name on own Tickets
+export const updateNameOnTickets = user => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    
+    // Update User's name in tickets database
+    const res = await axios.put(`/api/users/tickets/${user.id}`, user, config);
+
+    dispatch({
+      type: UPDATE_NAME_ON_TICKETS,
+      payload: res.data
     });
   } catch (err) {
     dispatch({

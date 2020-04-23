@@ -10,6 +10,7 @@ import {
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_TICKET,
+  UPDATE_NAME_ON_TICKETS,
   FILTER_TICKETS,
   SET_FILTER,
   SET_SORTING,
@@ -1054,10 +1055,11 @@ export default (state = initialState, action) => {
           return {
             ...state,
             tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+            mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),  
             loading: false 
           }
         }
+        
       } else {
         if(action.payload.userType !== 'employee') {
           if(state.sorted !== null && state.filtered !== null) {
@@ -1086,6 +1088,10 @@ export default (state = initialState, action) => {
               owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              current: {
+                ticket: action.payload.ticket,
+                current_url: action.payload.current_url
+              },
               loading: false
             }
           } else {
@@ -1093,10 +1099,25 @@ export default (state = initialState, action) => {
               ...state,
               tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              current: {
+                ticket: action.payload.ticket,
+                current_url: action.payload.current_url
+              },
               loading: false
             }
           }
         }
+      }
+    case UPDATE_NAME_ON_TICKETS:
+      return {
+        ...state,
+        tickets: state.tickets.map(ticket => {
+          return action.payload.forEach(updated_ticket => {
+            if(ticket._id === updated_ticket._id) {
+              return updated_ticket;
+            } 
+          });
+        })
       }
     case DELETE_TICKET:
       if(action.payload.current_url === 'home') {

@@ -24,7 +24,7 @@ const DeleteTicketModal = ({ current, user, ticket_exists, deleteTicket, setAler
         Are you sure?
         </h5>
         <br/>
-        <p className="center">Click <span className="blue darken-2 white-text z-depth-1" style={styles.confirm_text}>YES</span> to <span className="red-text text-darken-2">delete</span> your comment.</p>
+        <p className="center">Click <span className="blue darken-2 white-text z-depth-1" style={styles.confirm_text}>YES</span> to <span className="red-text text-darken-2">delete</span> your ticket.</p>
       </div>
       <div className="modal-footer">
         <button className="modal-close btn-small white black-text">Cancel</button>

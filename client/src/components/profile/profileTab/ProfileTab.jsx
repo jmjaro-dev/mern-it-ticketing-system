@@ -1,12 +1,31 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
 const ProfileTab = ({ user }) => {
+  // Opens Modal
+  const openModal = name => {
+    let instance = M.Modal.getInstance(document.getElementById(name));
+    instance.open();
+  }
+  // Trigger UpdateTicketModal
+  const onUpdate = e => {
+    e.preventDefault();
+    openModal("update-profile-modal");
+  }
+
   return (
     <div id="profile" className="col s12 collection with-header">
-      <div className="collection-header">
-        <h5 style={styles.header} >Profile</h5> 
+      <div className="collection-header" style={{ paddingTop: '1.5em', paddingBottom: '1.5em' }}>
+        <span style={styles.header} >Profile</span>
+        <span className="right">
+          {user.userType === 'employee' && (
+            <a href="#update-profile-modal" className="nav-links btn-small right blue darken-1" onClick={onUpdate}>
+              Update Profile
+            </a>
+          )}
+        </span> 
       </div>
       <div className="collection-item avatar">
         <i className="circle grey lighten-2 z-depth-2">

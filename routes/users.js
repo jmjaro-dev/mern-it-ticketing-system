@@ -7,6 +7,8 @@ const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
+const Ticket = require('../models/Ticket');
+const Comment = require('../models/Comment');
 
 // @route   GET api/users
 // @desc    Get all users
@@ -133,12 +135,141 @@ router.put('/:id', [ auth, [
       return res.status(404).json({ msg: 'User not found' });
     } 
     else {
+      // Update Info in Users database
       user = await User.findByIdAndUpdate(req.params.id, { $set: userFields }, { new: true });
       res.json(user);
     } 
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+
+// @route   PUT api/users/tickets/:user_id
+// @desc    Update user's first and last name in Tickets Table
+// @access  Private
+router.put('/tickets/:id', [ auth, [
+  check('firstName', 'Please enter first name').not().isEmpty(),
+  check('lastName', 'Please enter last name').not().isEmpty()
+  ] ], async (req,res) => {
+  const errors = validationResult(req);
+
+  // If there are errors in validation
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Destructure firstName and lastName
+  const { firstName, lastName } = req.body;
+
+  // Build updated user object 
+  const userFields = {
+    issuedBy: {
+      _id: '',
+      firstName: '',
+      lastName: ''
+    }
+  };
+  
+  userFields.issuedBy._id = req.params.id;
+  if(firstName) userFields.issuedBy.firstName = firstName;
+  if(lastName) userFields.issuedBy.lastName = lastName;
+
+  try {
+    // Find user that matches the id
+    let user = await User.findById(req.params.id);
+
+    // If user does not exists
+    if(!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    } 
+    else {
+      // Update User's Info in Tickets database
+      Ticket.find().where({ 'issuedBy._id': req.params.id })
+        .then(tickets => {
+          tickets.forEach(ticket => {
+            Ticket.findByIdAndUpdate(ticket._id, { $set: userFields }, { new: false })
+            .then( _ => ticket)
+            .catch(err => res.status(400).send({ msg: `Error: ${err}.`}));
+          });
+        })
+        .then( async _ => {
+          let updated_tickets = await Ticket.find().where({ 'issuedBy._id': req.params.id });
+          if(updated_tickets) {
+            res.json(updated_tickets);
+          }
+        })
+        .catch(err => res.status(400).json({ msg: `Error: ${err}`}));
+    } 
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send({ msg: `Server Error: ${err.message}`});
+  }
+});
+
+// @route   PUT api/users/comments/:user_id
+// @desc    Update user's first and last name in Comments Table
+// @access  Private
+router.put('/comments/:id', [ auth, [
+  check('firstName', 'Please enter first name').not().isEmpty(),
+  check('lastName', 'Please enter last name').not().isEmpty(),
+  check('userType', 'userType is required').not().isEmpty()
+  ] ], async (req,res) => {
+  const errors = validationResult(req);
+
+  // If there are errors in validation
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Destructure firstName and lastName
+  const { firstName, lastName, userType } = req.body;
+
+  // Build updated user object 
+  const userFields = {
+    user: {
+      id: '',
+      firstName: '',
+      lastName: '',
+      userType: ''
+    }
+  };
+  
+  userFields.user.id = req.params.id;
+  if(firstName) userFields.user.firstName = firstName;
+  if(lastName) userFields.user.lastName = lastName;
+  if(userType) userFields.user.userType = userType;
+
+  try {
+    // Find user that matches the id
+    let user = await User.findById(req.params.id);
+
+    // If user does not exists
+    if(!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    } 
+    else {
+      // Update User's Info in Comments database
+      Comment.find().where({ 'user.id': req.params.id })
+        .then(comments => {
+          comments.forEach(comment => {
+            Comment.findByIdAndUpdate(comment._id, { $set: userFields }, { new: false })
+              .then( _ => comment)
+              .catch(err => res.status(400).json({ msg: `Error: ${err}`}));
+          });
+        })
+        .then( async _ => {
+          let updated_comments = await Comment.find().where({ 'user.id': req.params.id });
+          if(updated_comments) {
+            res.json(updated_comments);
+          }
+        })
+        .catch(err => res.status(400).json({ msg: `Error: ${err}`}));
+    } 
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send(`Server Error: ${err.message}`);
   }
 });
 

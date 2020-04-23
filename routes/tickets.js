@@ -102,6 +102,7 @@ router.put('/:id', [ auth , [
   if(priority) ticketFields.priority = priority;
   if(status) ticketFields.status = status;
   if(assignedTo) ticketFields.assignedTo = assignedTo;
+  ticketFields.isUpdated = true;
 
   try {
     // Update ticket with new information

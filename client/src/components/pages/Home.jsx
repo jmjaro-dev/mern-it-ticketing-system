@@ -4,7 +4,7 @@ import { loadUser } from '../../actions/authActions';
 import TicketFilters from '../filters/TicketFilters'
 import Tickets from '../tickets/Tickets';
 import PreLoader from '../layout/PreLoader';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const Home = ({ tickets, isAuthenticated, loading, loadUser }) => {
   useEffect(() => {

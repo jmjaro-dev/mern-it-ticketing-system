@@ -2,7 +2,9 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
+  UPDATE_USER_NAME,
   AUTH_ERROR,
+  USER_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
@@ -15,7 +17,8 @@ const initialState = {
   isAuthenticated: null,
   loading: false,
   user: null,
-  error: null
+  auth_error: null,
+  user_error: null
 }
 
 export default (state = initialState, action) => {
@@ -26,6 +29,12 @@ export default (state = initialState, action) => {
         isAuthenticated: true,
         loading: false,
         user: action.payload
+      }
+    case UPDATE_USER_NAME : 
+      return {
+        ...state,
+        user: action.payload,
+        loading: false
       }
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
@@ -47,12 +56,19 @@ export default (state = initialState, action) => {
         isAuthenticated: false,
         loading: false,
         user: null,
-        error: action.payload
+        auth_error: action.payload
       };
+    case USER_ERROR: {
+      return {
+        ...state,
+        user_error: action.payload
+      }
+    }
     case CLEAR_ERRORS:
       return {
         ...state,
-        error: null
+        auth_error: null,
+        user_error: null
       }
     case SET_LOADING:
       return {

@@ -5,7 +5,9 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
+  UPDATE_USER_NAME,
   AUTH_ERROR,
+  USER_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
@@ -110,3 +112,32 @@ export const login = formData => async (dispatch) => {
 
 // Logout
 export const logout = () => async dispatch => dispatch({ type: LOGOUT });
+
+// Update User's Name
+export const updateUserName = user => async dispatch => {
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
+
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    // Update User's name in users database
+    const res = await axios.put(`/api/users/${user.id}`, user, config);
+
+    dispatch({
+      type: UPDATE_USER_NAME,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: USER_ERROR,
+      payload: err.response.msg
+    });
+  }
+};

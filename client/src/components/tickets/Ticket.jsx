@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
@@ -13,15 +13,23 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 
 const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTicket, getComments, setCurrent, clearCurrent, setTicketExists }) => {
+  const [updatedTicket, setUpdatedTicket] = useState(null);
+
   useEffect(() => {
-    if(user) {
+    if(user && current && updatedTicket === null) {
       getTicket(match.params.id, 'home');
       getComments(match.params.id);
-      setCurrent(current.ticket, user.userType, 'home');    
+      setCurrent(current.ticket, 'home');    
       setTicketExists(true);
+      setUpdatedTicket(current.ticket);
+    } 
+
+    if(current && updatedTicket !== current.ticket && updatedTicket) {
+      setUpdatedTicket(current.ticket);
+      getTicket(match.params.id, 'home');
     }
     // eslint-disable-next-line
-  }, []);
+  }, [updatedTicket]);
 
   const onBack = () => {
     clearCurrent();
@@ -36,12 +44,12 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
 
   const onUpdate = e => {
     e.preventDefault();
-    setCurrent(current, user.userType, 'home');
+    setCurrent(current.ticket, 'ticket');
     openModal("update-ticket-modal");
   }
   const onDelete = e => {
     e.preventDefault();
-    setCurrent(current, user.userType, 'home');
+    setCurrent(current.ticket, 'ticket');
     openModal("delete-ticket-modal");
   }
 
@@ -139,7 +147,7 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
                   {/* Lastest Update */}
                   <span className="ticket-label">Latest Update <FontAwesomeIcon icon="chevron-right"/> </span>
                   <Moment fromNow className="ticket-details">
-                  {current.ticket.updatedAt} 
+                  {!current.ticket.isUpdated ? current.ticket.createdAt : current.ticket.updatedAt} 
                   </Moment>
                   <br/>
                   {/* Status */}

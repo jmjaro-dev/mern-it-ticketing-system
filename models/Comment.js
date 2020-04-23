@@ -12,6 +12,10 @@ const CommentSchema = mongoose.Schema({
   message: {
     type: String,
     required: true
+  },
+  isUpdated : {
+    type: Boolean,
+    default: false
   }
 },
 {

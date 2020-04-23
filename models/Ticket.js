@@ -35,6 +35,10 @@ const TicketSchema = mongoose.Schema({
     default: {
       to: 'Unassigned'
     }
+  },
+  isUpdated : {
+    type: Boolean,
+    default: false
   }
 },
 {

@@ -6,6 +6,7 @@ import TicketItemEmp from './TicketItemEmp';
 import TicketFilters from './filters/TicketFilters';
 import { setSort, sortTicketsProfile } from '../../../actions/ticketActions';
 import PropTypes from 'prop-types';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
 const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTicketsProfile }) => {
   
@@ -17,6 +18,12 @@ const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTic
     sortBy = document.getElementById(e.target.id).getAttribute("data_sort");
     setSort({ isSorted: true, field: sortBy, order: 'asc'});
     onSort(sortBy);
+  }
+
+  const onCreate = e => {
+    e.preventDefault();
+    let instance = M.Modal.getInstance(document.getElementById("create-ticket-modal"));
+    instance.open();
   }
 
   const onSort = field => {
@@ -49,16 +56,23 @@ const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTic
   return (
     <div id="my-tickets" className="col s12 collection with-header">
       {/* Owned/Assigned Tickets */}
-      <div className="collection-header">
+      <div className="collection-header" style={{ paddingTop: '1.5em', paddingBottom: '1.5em' }}>
         {/*  */}
-        <h5 style={styles.header} >
+        <span style={styles.header} >
           Tickets {' '}
           {assigned ? (
             <span className="grey-text" style={styles.label}>[{ assigned && assigned.length }]</span>
           ) : (
             <span className="grey-text" style={styles.label}>[{ owned && owned.length }]</span>
           )}
-        </h5> 
+        </span>
+        <span className="right">
+          {user.userType === 'employee' && (
+            <a href="#create-ticket-modal" className="nav-links btn-small right blue darken-1" onClick={onCreate}>
+              Create ticket
+            </a>
+          )}
+        </span> 
       </div>
       <div className="collection-item">
         {/* Filters */}

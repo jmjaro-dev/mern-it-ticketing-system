@@ -3,6 +3,7 @@ import {
   ADD_COMMENT,
   DELETE_COMMENT,
   UPDATE_COMMENT,
+  UPDATE_NAME_ON_COMMENTS,
   COMMENT_ERROR,
   SET_CURRENT_COMMENT,
   SET_EDIT_MODE,
@@ -36,6 +37,11 @@ export default (state = initialState, action) => {
         ...state,
         comments: state.comments.map(comment => comment._id === action.payload._id ? action.payload : comment),
         loading: false 
+      }
+    case UPDATE_NAME_ON_COMMENTS:
+      return {
+        ...state,
+        comments: action.payload
       }
     case DELETE_COMMENT:
       return {

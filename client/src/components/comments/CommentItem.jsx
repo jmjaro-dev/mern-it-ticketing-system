@@ -6,8 +6,8 @@ import Moment from 'react-moment';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import PropTypes from 'prop-types';
 
-const CommentItem = ({ comment, comments_length, index, current_user, current_comment, edit_mode, updateComment, setCurrent, clearCurrent, setEditMode }) => {
-  const { message, user, createdAt, updatedAt } = comment;
+const CommentItem = ({ comment, current_user, current_comment, edit_mode, updateComment, setCurrent, clearCurrent, setEditMode }) => {
+  const { message, user, isUpdated, createdAt, updatedAt } = comment;
 
   const [newMessage, setNewMessage] = useState('');
   const [current, setCurrentComment] = useState(false);
@@ -77,7 +77,7 @@ const CommentItem = ({ comment, comments_length, index, current_user, current_co
           {/* Comment Recency */}
           <span className="right grey-text text-darken-1">
             <Moment fromNow className="comment-time">
-              {createdAt !== updatedAt ? updatedAt : createdAt}
+              {!isUpdated ? createdAt : updatedAt}
             </Moment>
           </span>
         </div>
@@ -163,8 +163,6 @@ const CommentItem = ({ comment, comments_length, index, current_user, current_co
 
 CommentItem.propTypes = {
   comment: PropTypes.object.isRequired,
-  comments_length: PropTypes.number,
-  index: PropTypes.number.isRequired,
   current_user: PropTypes.string.isRequired,
   current_comment: PropTypes.string,
   edit_mode: PropTypes.bool,
@@ -175,7 +173,6 @@ CommentItem.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  comments_length: state.comment.comments.length,
   current_comment: state.comment.current_comment,
   edit_mode: state.comment.edit_mode
 });

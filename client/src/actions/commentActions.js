@@ -4,6 +4,7 @@ import {
   ADD_COMMENT,
   DELETE_COMMENT,
   UPDATE_COMMENT,
+  UPDATE_NAME_ON_COMMENTS,
   COMMENT_ERROR,
   SET_LOADING,
   SET_CURRENT_COMMENT,
@@ -101,6 +102,29 @@ export const updateComment = (comment_id, newCommentInfo) => async dispatch => {
   }
 };
 
+// Update the name on own Comments
+export const updateNameOnComments = user => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    
+    // Update User's name in comments database
+    const res = await axios.put(`/api/users/comments/${user.id}`, user, config);
+
+    dispatch({
+      type: UPDATE_NAME_ON_COMMENTS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: COMMENT_ERROR,
+      payload: err.response.msg
+    });
+  }
+};
 // Set Curent Comment
 export const setCurrent = comment => async dispatch => dispatch({ type: SET_CURRENT_COMMENT, payload: comment });
 

@@ -7,22 +7,30 @@ const TicketHeader = ({ sorting, label, id, data_sort, onSetField }) => {
   const { isSorted, field, order} = sorting;
 
   return (
-    <th className="center" key={id}> 
-      <a href="#!" id={id} data_sort={data_sort} onClick={onSetField}>
-        {label} {' '}
-      </a>
-      {!isSorted && field === null ? (
-        <FontAwesomeIcon icon="sort"/>
-      ) : (
-        <Fragment>
-          {isSorted && order === 'desc' ? (
-            <FontAwesomeIcon icon="sort-up" />
+    <Fragment>
+      {label !== 'Actions' ? (
+        <th className="center" key={id}> 
+          <a href="#!" id={id} data_sort={data_sort} onClick={onSetField}>
+            {label} {' '}
+          </a>
+          {!isSorted && field === null ? (
+            <FontAwesomeIcon icon="sort"/>
           ) : (
-            <FontAwesomeIcon icon="sort-down" />
+            <Fragment>
+              {isSorted && order === 'desc' ? (
+                <FontAwesomeIcon icon="sort-up" />
+              ) : (
+                <FontAwesomeIcon icon="sort-down" />
+              )}
+            </Fragment>
           )}
-        </Fragment>
-      )}
-    </th>
+        </th>
+      ) : (
+        <th className="center" key={id}> 
+          {label}
+        </th>
+      )}   
+    </Fragment>
   )
 }
 

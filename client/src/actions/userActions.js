@@ -6,7 +6,6 @@ import {
   RESET_USER_STATE
 } from './types';
 
-
 // Get All Technicians
 export const getTechs = () => async dispatch => {
   // Set Loading to True

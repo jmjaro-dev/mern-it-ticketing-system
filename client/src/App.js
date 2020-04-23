@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
 import Profile from './components/profile/Profile';
+import UpdateProfileModal from './components/profile/profileTab/UpdateProfileModal';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -15,7 +16,6 @@ import DeleteCommentModal from './components/comments/DeleteCommentModal';
 import Alerts from './components/layout/Alerts';
 // Redux
 import { Provider } from 'react-redux';
-// import { PersistGate } from 'redux-persist/integration/react';
 import store from './store';
 // Utils
 import setAuthToken from './utils/setAuthToken';
@@ -41,7 +41,7 @@ import {
   faChevronRight,
   faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
-// font library init
+// icons library 
 library.add(faSpinner, faUser, faIdCardAlt, faExclamationCircle, faSearch, faSort, faSortUp, faSortDown, faEye, faEdit, faTrashAlt, faChevronLeft, faChevronRight, faPaperPlane);
 
 
@@ -62,15 +62,15 @@ const App = () => {
           <Navbar />
             <div className="main-container">
               <Alerts />
-              {/* <AddBtn /> */}
+              <UpdateProfileModal />
               <CreateTicketModal />
               <DeleteTicketModal />
               <UpdateTicketModal />
               <DeleteCommentModal />
               
               <Switch>
-                <PrivateRoute exact path='/' component={Home} />
-                <PrivateRoute exact path='/profile' component={Profile} />
+                <PrivateRoute exact path='/' component={Profile} />
+                <PrivateRoute exact path='/tickets' component={Home} />
                 <PrivateRoute exact path='/tickets/:id' component={Ticket}/>
                 <Route exact path ='/login' component={Login} />
                 <Route exact path ='/register' component={Register} />
