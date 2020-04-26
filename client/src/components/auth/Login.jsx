@@ -74,14 +74,14 @@ const styles = {
 
 Login.propTypes = {
   isAuthenticated: PropTypes.bool,
-  error: PropTypes.string,
+  error: PropTypes.object,
   login: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.auth.error
+  error: state.auth.authError
 });
 
 export default connect(mapStateToProps, { login, setAlert })(Login);

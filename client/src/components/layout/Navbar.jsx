@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
@@ -7,15 +7,58 @@ import { resetTicketState } from '../../actions/ticketActions';
 import { resetCommentState } from '../../actions/commentActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, resetTicketState, resetCommentState }) => {
+  const [dropdown, setDropdown] = useState({
+    instance: null,
+    options: {
+      inDuration: 300,
+      outDuration: 300,
+      coverTrigger: false // Displays dropdown below the button
+    }
+  });
 
+  useEffect(() => {
+    M.AutoInit();
+    if(user) {
+      let ddown = document.querySelector('.dropdown-trigger');
+      let instance = M.Dropdown.init(ddown, dropdown.options);
+      setDropdown({
+        ...dropdown,
+        instance: instance
+      })
+    }
+    // eslint-disable-next-line
+  },[user]);
+
+  const onDropdown = () => {    
+    dropdown.instance.open();
+  }
+  
   const onLogout = () => {
     resetUserState();
     resetTicketState();
     resetCommentState();
     logout();
   }
+
+  const dropDownContent = (
+    <ul id="dropdown1" className="dropdown-content">
+      <li className="blue-text text-darken-2">
+        <Link to="/settings" className="nav-links">
+          <FontAwesomeIcon icon='cog' style={{ marginRight: '0.35em'}}/>
+          Settings
+        </Link>
+      </li>
+      <li className="blue-text text-darken-2">
+        <a href="#!" className="nav-links" onClick={onLogout}>
+          <FontAwesomeIcon icon='sign-out-alt' style={{ marginRight: '0.35em'}}/>
+          Logout
+        </a>
+      </li>
+    </ul>
+  )
 
   const guestLinks = (
     <Fragment>
@@ -44,25 +87,28 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
       </li>
 
       <li>
-        <a href='#!' className="nav-links" onClick={onLogout}>
-          Logout
+        <a className="dropdown-trigger" href="#!" data-target="dropdown1" onClick={onDropdown}>
+          <FontAwesomeIcon icon='chevron-circle-down'/>
         </a>
       </li>
     </Fragment>
   )
 
   return (
-    <nav className="blue darken-2">
-      <div className="nav-wrapper container">
-        <Link to="/">
-          <FontAwesomeIcon icon={icon} size="lg" style={{ marginRight: "0.5em" }} />
-          {' '} {title}
-        </Link>
-        <ul id="nav-mobile" className="right">
-          {isAuthenticated ? authLinks : guestLinks}
-        </ul>
-      </div>
-    </nav>
+    <Fragment>
+      {dropDownContent}
+      <nav className="blue darken-2">
+        <div className="nav-wrapper container">
+          <Link to="/">
+            <FontAwesomeIcon icon={icon} size="lg" style={{ marginRight: "0.5em" }} />
+            {' '} {title}
+          </Link>
+          <ul id="nav-mobile" className="right">
+            {isAuthenticated ? authLinks : guestLinks}
+          </ul>
+        </div>
+      </nav>
+    </Fragment>
   )
 }
 

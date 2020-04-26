@@ -2,14 +2,21 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
+  UPDATE_EMAIL,
+  UPDATE_PASSWORD,
   UPDATE_USER_NAME,
   AUTH_ERROR,
   USER_ERROR,
+  ACCOUNT_ERROR,
+  EMAIL_ERROR,
+  PASSWORD_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
-  SET_LOADING
+  DELETE_ACCOUNT,
+  SET_LOADING,
+  RESET_STATUS
 } from '../actions/types';
 
 const initialState = {
@@ -17,8 +24,14 @@ const initialState = {
   isAuthenticated: null,
   loading: false,
   user: null,
-  auth_error: null,
-  user_error: null
+  authError: null,
+  userError: null,
+  accountError: null,
+  emailError: null,
+  passError: null,
+  emailUpdateStatus: null,
+  accountDeleteStatus: null,
+  passwordChangeStatus: null
 }
 
 export default (state = initialState, action) => {
@@ -30,12 +43,35 @@ export default (state = initialState, action) => {
         loading: false,
         user: action.payload
       }
+    case UPDATE_PASSWORD:
+      return {
+        ...state,
+        passError: null,
+        passwordChangeStatus: 'success',
+        loading: false
+      };
+    case UPDATE_EMAIL:
+      return {
+        ...state,
+        user: action.payload,
+        emailError: null,
+        emailUpdateStatus: 'success',
+        loading: false
+      }
     case UPDATE_USER_NAME : 
       return {
         ...state,
         user: action.payload,
+        userError: null,
         loading: false
       }
+    case DELETE_ACCOUNT: {
+      return {
+        ...state,
+        accountDeleteStatus: 'success',
+        loading: false
+      }
+    }
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.payload.token);
@@ -56,24 +92,77 @@ export default (state = initialState, action) => {
         isAuthenticated: false,
         loading: false,
         user: null,
-        auth_error: action.payload
+        authError: action.payload,
+        accountError: null,
+        emailError: null,
+        passError: null,
+        userError: null,
+        emailUpdateStatus: null,
+        accountDeleteStatus: null,
+        passwordChangeStatus: null
       };
-    case USER_ERROR: {
+    case USER_ERROR:
       return {
         ...state,
-        user_error: action.payload
+        userError: action.payload,
+        loading: false
       }
-    }
+    case ACCOUNT_ERROR: 
+      return {
+        ...state,
+        accountError: action.payload,
+        accountDeleteStatus: 'failed',
+        loading:false
+      }
+    case EMAIL_ERROR: 
+      return {
+        ...state,
+        emailError: action.payload,
+        emailUpdateStatus: 'failed',
+        loading:false
+      }
+    case PASSWORD_ERROR: 
+      return {
+        ...state,
+        passError: action.payload,
+        passwordChangeStatus: 'failed',
+        loading:false
+      }
     case CLEAR_ERRORS:
       return {
         ...state,
-        auth_error: null,
-        user_error: null
+        authError: null,
+        userError: null,
+        accountError: null,
+        emailError: null,
+        passError: null,
       }
     case SET_LOADING:
       return {
         ...state,
         loading: true
+      }
+    case RESET_STATUS:
+      switch(action.payload) {
+        case 'email' :
+          return {
+            ...state,
+            emailUpdateStatus: null
+          }
+        case 'account':
+          return {
+            ...state,
+            accountDeleteStatus: null,
+          }
+        case 'password': 
+          return {
+            ...state,
+            passwordChangeStatus: null
+          }
+        default:
+          return {
+            ...state
+          }
       }
     default:
       return state;

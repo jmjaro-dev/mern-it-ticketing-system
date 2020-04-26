@@ -55,8 +55,8 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
     if(title !== '' || description !== '' || priority !== '' || status !== '' || assignedTo !== '') {
       let assignedTO;
       
-      if(assignedTo !== 'Unassigned') {
-        assignedTO = techs.find(tech => assignedTo._id === tech._id);
+      if(!assignedTo.to) {
+        assignedTO = techs.find(tech => assignedTo === tech._id);
       } else {
         assignedTO = { to: 'Unassigned' }
       }
@@ -176,7 +176,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
                   {/* If user = employee and owns the ticket : show Assign field*/}
                   {user && user.userType === 'employee' && user._id === current.ticket.issuedBy._id && (
                     <div className="form-group col s12">
-                      <label>Assign To</label>
+                      <label>Assigned To</label>
                       <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
                         <option value="" disabled>- Assign Ticket To -</option>
                         <option value="Unassigned">- Unassigned -</option>
@@ -193,9 +193,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
                       <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>
                         <option value="" disabled>- Assign Ticket To -</option>
                         <option value="Unassigned">- Unassigned -</option>
-                        {techs && techs.map(tech => (
-                          <option key={tech._id} value={tech._id}>{tech.firstName} {tech.lastName}</option>
-                        ))}
+                        <option value={user._id}>{user.firstName} {user.lastName}</option>
                       </select>
                     </div>
                   )}

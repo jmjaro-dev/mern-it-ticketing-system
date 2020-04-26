@@ -5,14 +5,21 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
+  UPDATE_EMAIL,
+  UPDATE_PASSWORD,
   UPDATE_USER_NAME,
   AUTH_ERROR,
   USER_ERROR,
+  ACCOUNT_ERROR,
+  EMAIL_ERROR,
+  PASSWORD_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
-  SET_LOADING
+  DELETE_ACCOUNT,
+  SET_LOADING,
+  RESET_STATUS
 } from './types';
 
 // Load User
@@ -113,6 +120,76 @@ export const login = formData => async (dispatch) => {
 // Logout
 export const logout = () => async dispatch => dispatch({ type: LOGOUT });
 
+// Update User's Email
+export const updateEmail = user => async dispatch => {
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
+
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    // Update User's email in users database
+    const res = await axios.put(`/api/users/update/email/${user.id}`, user, config);
+
+    dispatch({
+      type: UPDATE_EMAIL,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EMAIL_ERROR,
+      payload: err.response.data.msg
+    });
+
+    setTimeout(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    }, 4000);
+  }
+};
+
+// Update User's Password
+export const updatePassword = (user_id, passwords) => async dispatch => {
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
+
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    // Update User's password in users database
+    const res = await axios.put(`/api/users/update/password/${user_id}`, passwords, config);
+
+    dispatch({
+      type: UPDATE_PASSWORD,
+      payload: res.data.msg
+    });
+  } catch (err) {
+    dispatch({
+      type: PASSWORD_ERROR,
+      payload: err.response.data.msg
+    });
+
+    setTimeout(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    }, 4000);
+  }
+};
+
 // Update User's Name
 export const updateUserName = user => async dispatch => {
   // Set Loading to True
@@ -139,5 +216,46 @@ export const updateUserName = user => async dispatch => {
       type: USER_ERROR,
       payload: err.response.msg
     });
+
+    setTimeout(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    }, 4000);
   }
 };
+
+// Delete User Account
+export const deleteAccount = (id, password) => async dispatch => {
+  // Set Loading to True
+  dispatch({
+    type: SET_LOADING
+  });
+
+  const config = {
+    headers: {
+      password
+    }
+  }
+
+  try {
+    // Delete user in users database
+    await axios.delete(`/api/users/${id}`, config);
+
+    dispatch({ type: DELETE_ACCOUNT });
+  } catch (err) {
+    dispatch({
+      type: ACCOUNT_ERROR,
+      payload: err.response.data.msg
+    });
+
+    setTimeout(() => {
+      dispatch({
+        type: CLEAR_ERRORS
+      });
+    }, 4000);
+  }
+};
+
+// Reset Status
+export const resetStatus = status => async dispatch => dispatch({ type: RESET_STATUS, payload: status });

@@ -104,6 +104,89 @@ router.post('/', [
   }
 });
 
+// @route   PUT api/users/update/email/:id
+// @desc    Update user's email
+// @access  Private
+router.put('/update/email/:id', [ auth, [
+  check('email', 'Please enter a valid email').isEmail()
+  ] ], async (req,res) => {
+  const errors = validationResult(req);
+
+  // If there are errors in validation
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Destructure email
+  const { email } = req.body;
+
+  const emailField = { email };
+
+  try {
+    // Find user that matches the id
+    let user = await User.findOne().where({ email: email });
+
+    // If user does not exists
+    if(user) {
+      return res.status(404).json({ msg: 'Email is already taken by another user.' });
+    } 
+    else {
+      // Update the email in Users database
+      let updated_user = await User.findByIdAndUpdate(req.params.id, { $set: emailField }, { new: true }).select('-password -isActive');
+      res.json(updated_user);
+    } 
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT api/users/update/password/:id
+// @desc    Update user's Password
+// @access  Private
+router.put('/update/password/:id', [ auth, [
+  check('currentPassword', 'Password must be > 6 characters.').isLength({ min: 6 }),
+  check('newPassword', 'Password must be > 6 characters.').isLength({ min: 6 })
+  ] ], async (req,res) => {
+  const errors = validationResult(req);
+
+  // If there are errors in validation
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Destructure password
+  const { currentPassword, newPassword } = req.body;
+
+  // Find user that matches the id
+  let user = await User.findById(req.params.id);
+
+  try {
+    // If user exists then compare user input password to current password in database
+    let isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    // If passwords doesn't match then update password
+    if(!isMatch) {
+      return res.status(400).json({ msg: 'Current password is incorrect. Please try again.' });
+    } else {
+      // Generate salt for new password
+      const salt = await bcrypt.genSalt(12);
+
+      // Hash the new password
+      const updatedPassword = await bcrypt.hash(newPassword, salt);
+
+      const passwordField = { password: updatedPassword };
+      
+      // Update the password in Users database
+      await User.findByIdAndUpdate(req.params.id, { $set: passwordField }, { new: true });
+      res.json({ msg: 'success'});
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   PUT api/users
 // @desc    Update user's first and last name
 // @access  Private
@@ -277,21 +360,26 @@ router.put('/comments/:id', [ auth, [
 // @desc    Delete a user
 // @access  Private
 router.delete('/:id', auth, async (req,res) => {
-  try {
-    // Find the user by id
-    let user = await User.findById(req.params.id) 
-
-    if(!user) {
-      return res.status(404).json({ msg: 'User not found' });
-    } else {
-      await User.findByIdAndDelete(req.params.id);
-
-      res.json({ msg: 'User deleted' });
-    }
     
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+  // Find the user by id
+  let user = await User.findById(req.params.id) 
+
+  if(!user) {
+    return res.status(404).json({ msg: 'User not found' });
+  }
+  // If user exists then compare user input password to current password in database
+  let isMatch = await bcrypt.compare(req.headers.password, user.password);
+  
+  if(!isMatch) {
+    return res.status(400).json({ msg: 'Incorrect password'});
+  } else {
+    try {
+      await User.findByIdAndDelete(req.params.id);
+      res.json({ msg: 'User deleted' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   }
 });
 

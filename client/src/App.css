@@ -32,6 +32,14 @@ select {
 /* END OF UTILS */
 
 /* OVER WRITE MATERIALIZE CSS */
+
+/* Dropwdown */
+.dropdown-content li>a {
+  color: var(--primary-color);
+  font-size: 0.9em;
+}
+
+/* Chip */
 a.chip.active,
 a.chip:active{
   background-color: var(--primary-color);
@@ -75,10 +83,12 @@ a.chip.filter.grey-text:focus > span.grey-text{
   transition: ease 0.7s;
 }
 
+/* Btn */
 .btn-flat:hover {
   background-color: white !important;
 }
 
+/* Input Text boxes */
 input[type=text] {
   font-size: 0.9em !important;
 }
@@ -95,6 +105,7 @@ input[type=email]:focus {
   border-color: var(--primary-color) !important;
 }
 
+/* Radio button */
 [type=radio]:checked+span,
 [type=radio]:checked+span:before,
 [type=radio]:checked+span:after,
@@ -110,6 +121,7 @@ input[type=email]:focus {
   background-color: var(--primary-color) !important;
 }
 
+/* Text Area */
 textarea:focus {
   border-color: var(--primary-color) !important;
 }
@@ -118,6 +130,7 @@ textarea:focus {
   font-size: 0.9em !important;
 }
 
+/* Tab */
 .tab a {
   text-transform: capitalize !important;
   color: #4e4e4e !important;
@@ -135,6 +148,7 @@ textarea:focus {
   background-color: var(--primary-color) !important;
 }
 
+/* Collecton */
 .collection-item {
   padding-bottom: 2em !important; 
 }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
 import Profile from './components/profile/Profile';
+import Settings from './components/settings/Settings';
 import UpdateProfileModal from './components/profile/profileTab/UpdateProfileModal';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -32,17 +33,21 @@ import {
   faIdCardAlt,
   faExclamationCircle,
   faSearch,
+  faCog,
+  faSignOutAlt,
   faSort,
   faSortUp,
   faSortDown,
   faEye, 
   faEdit,
+  faPencilAlt,
   faChevronLeft,
   faChevronRight,
+  faChevronCircleDown,
   faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 // icons library 
-library.add(faSpinner, faUser, faIdCardAlt, faExclamationCircle, faSearch, faSort, faSortUp, faSortDown, faEye, faEdit, faTrashAlt, faChevronLeft, faChevronRight, faPaperPlane);
+library.add(faSpinner, faUser, faIdCardAlt, faExclamationCircle, faSearch, faCog, faSignOutAlt, faSort, faSortUp, faSortDown, faEye, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane);
 
 
 if(localStorage.token) {
@@ -72,6 +77,7 @@ const App = () => {
                 <PrivateRoute exact path='/' component={Profile} />
                 <PrivateRoute exact path='/tickets' component={Home} />
                 <PrivateRoute exact path='/tickets/:id' component={Ticket}/>
+                <PrivateRoute exact path='/settings' component={Settings}/>
                 <Route exact path ='/login' component={Login} />
                 <Route exact path ='/register' component={Register} />
               </Switch>
