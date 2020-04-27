@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTicketsProfile }) => {
-  
   const { isSorted, order } = sorting;
   let sortBy = null;
   
@@ -57,7 +56,6 @@ const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTic
     <div id="my-tickets" className="col s12 collection with-header">
       {/* Owned/Assigned Tickets */}
       <div className="collection-header" style={{ paddingTop: '1.5em', paddingBottom: '1.5em' }}>
-        {/*  */}
         <span style={styles.header} >
           Tickets {' '}
           {assigned ? (
@@ -119,8 +117,6 @@ const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTic
                 )}   
               </Fragment>
             )}
-            
-            
           </tbody>
         </table>
       </div>
@@ -141,6 +137,7 @@ TicketsTab.propTypes = {
   user: PropTypes.object,
   tickets: PropTypes.array,
   filtered: PropTypes.array,
+  sorting: PropTypes.object,
   assigned: PropTypes.array,
   sortTicketsProfile: PropTypes.func.isRequired,
   setSort: PropTypes.func.isRequired
@@ -149,7 +146,6 @@ TicketsTab.propTypes = {
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   filtered: state.ticket.filtered,
-  sorted: state.ticket.sorted,
   sorting: state.ticket.sorting
 });
 

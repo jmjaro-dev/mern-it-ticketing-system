@@ -78,7 +78,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
       <div id="create-ticket-modal" className="modal" style={styles.modal}>
         <div className="modal-content">
           <p className="center" style={styles.ticket_header}>
-            <FontAwesomeIcon icon="id-card-alt" size="lg" className="blue-text text-darken-2"/> {' '}
+            <FontAwesomeIcon icon="file-invoice" size="lg" className="blue-text text-darken-2"/> {' '}
             Create Ticket
           </p>
           {/* Form Starts */}

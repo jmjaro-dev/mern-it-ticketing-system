@@ -1187,12 +1187,14 @@ export default (state = initialState, action) => {
     case SET_OWNED_TICKETS: 
       return {
         ...state,
-        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload)
+        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload),
+        loading: false
       }
     case SET_ASSIGNED_TICKETS: 
     return {
       ...state,
-      assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload)
+      assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload),
+      loading: false
     }
     case SET_CURRENT:
       return {

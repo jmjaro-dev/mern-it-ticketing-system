@@ -10,32 +10,71 @@ import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, resetTicketState, resetCommentState }) => {
-  const [dropdown, setDropdown] = useState({
-    instance: null,
-    options: {
-      inDuration: 300,
-      outDuration: 300,
-      coverTrigger: false // Displays dropdown below the button
-    }
-  });
-
+  const [currentPage, setCurrentPage] = useState(null);
   useEffect(() => {
     M.AutoInit();
-    if(user) {
-      let ddown = document.querySelector('.dropdown-trigger');
-      let instance = M.Dropdown.init(ddown, dropdown.options);
-      setDropdown({
-        ...dropdown,
-        instance: instance
-      })
+
+    setCurrentPage(window.location.pathname)
+    
+    if(currentPage) {
+      setCurrentPage(window.location.pathname);
+      onSetActive(window.location.pathname);
     }
     // eslint-disable-next-line
   },[user]);
 
-  const onDropdown = () => {    
-    dropdown.instance.open();
+  const onSetActive = path => {
+    const links = document.querySelector('ul.right').children;
+    console.log(links); 
+    let current;
+    console.log(links)
+    switch(path){
+      case '/':
+        current = links[0].innerText;
+        break;
+      case '/tickets':
+        current = 'Tickets'
+        break;
+      case '/settings':
+        current = 'Settings'
+        break;
+      case '/login':
+        current = 'Login'
+        break;
+      case '/register':
+        current = 'Register'
+        break;
+      default:
+        current = null
+    }
+
+    // Adding/Removing 'active' class from element
+    for(let index=0; index < links.length; index++) {
+      if(links[index].innerText !== current) {
+        links[index].classList.remove('active');
+      } else {
+        links[index].classList.add('active');
+      }
+    }
   }
-  
+
+  const setActive = e => {
+    e.preventDefault();
+    // Gets UL element children
+    const links = e.target.parentElement.parentElement.children;
+    // Current clicked link
+    const current = e.target.innerText;
+    // Adding/Removing 'active' class from element
+    for(let index=0; index < links.length; index++) {
+      if(links[index].innerText !== current) {
+        links[index].classList.remove('active');
+      } else {
+        links[index].classList.add('active');
+      }
+    }
+    setCurrentPage(window.location.pathname);
+  }
+
   const onLogout = () => {
     resetUserState();
     resetTicketState();
@@ -43,29 +82,12 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
     logout();
   }
 
-  const dropDownContent = (
-    <ul id="dropdown1" className="dropdown-content">
-      <li className="blue-text text-darken-2">
-        <Link to="/settings" className="nav-links">
-          <FontAwesomeIcon icon='cog' style={{ marginRight: '0.35em'}}/>
-          Settings
-        </Link>
-      </li>
-      <li className="blue-text text-darken-2">
-        <a href="#!" className="nav-links" onClick={onLogout}>
-          <FontAwesomeIcon icon='sign-out-alt' style={{ marginRight: '0.35em'}}/>
-          Logout
-        </a>
-      </li>
-    </ul>
-  )
-
   const guestLinks = (
     <Fragment>
-      <li>
+      <li onClick={setActive}>
         <Link to='/login' className="nav-links">Login</Link>
       </li>
-      <li>
+      <li onClick={setActive}>
         <Link to='/register' className="nav-links">Register</Link>
       </li>
     </Fragment>
@@ -73,22 +95,31 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
 
   const authLinks = (
     <Fragment>
-      <li>
+      <li onClick={setActive}>
         <Link to="/" className="nav-links">
           <FontAwesomeIcon icon={["fas", "user"]} style={{ marginRight: "0.5em" }}/>
           { user && user.firstName }
         </Link>
       </li>
       
-      <li>
+      <li onClick={setActive}>
         <Link to="/tickets" className="nav-links">
+          <FontAwesomeIcon icon='file-invoice' style={{ marginRight: '0.35em'}}/>
           Tickets
         </Link>
       </li>
 
-      <li>
-        <a className="dropdown-trigger" href="#!" data-target="dropdown1" onClick={onDropdown}>
-          <FontAwesomeIcon icon='chevron-circle-down'/>
+      <li onClick={setActive}>
+        <Link to="/settings" className="nav-links">
+          <FontAwesomeIcon icon='cog' style={{ marginRight: '0.35em'}}/>
+          Settings
+        </Link>
+      </li>
+
+      <li onClick={setActive}>
+        <a href="#!" className="nav-links" onClick={onLogout}>
+          <FontAwesomeIcon icon='sign-out-alt' style={{ marginRight: '0.35em'}}/>
+          Logout
         </a>
       </li>
     </Fragment>
@@ -96,14 +127,13 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
 
   return (
     <Fragment>
-      {dropDownContent}
       <nav className="blue darken-2">
         <div className="nav-wrapper container">
           <Link to="/">
             <FontAwesomeIcon icon={icon} size="lg" style={{ marginRight: "0.5em" }} />
             {' '} {title}
           </Link>
-          <ul id="nav-mobile" className="right">
+          <ul className="right">
             {isAuthenticated ? authLinks : guestLinks}
           </ul>
         </div>
@@ -125,7 +155,7 @@ Navbar.propTypes = {
 
 Navbar.defaultProps = {
   title: 'IT Ticket Tracker',
-  icon: 'id-card-alt'
+  icon: 'file-invoice'
 }
 
 const mapStateToProps = state => ({

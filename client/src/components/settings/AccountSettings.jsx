@@ -148,39 +148,39 @@ const AccountSettings = ({ user, emailUpdateStatus, accountDeleteStatus, account
   
   return (
     <div id="account-settings" className="col s12 collection with-header">
-    <div className="collection-header">
-      <h5 style={styles.header} >Account Email</h5> 
+      <div className="collection-header">
+        <h5 style={styles.header} >Account Email</h5> 
+      </div>
+      <div className="collection-item">
+        {/* Account Email */}
+        {!isVisible.update ? (
+          <div>
+            <span className="grey-text" style={styles.label}>Email:</span> 
+            <span className="blue-text" style={styles.email}> { user.email } </span>    
+            <a href="#!" className="green-text" onClick={onUpdate} style={styles.updateBtn}>
+              [ update ] 
+            </a>
+          </div>
+        ) : 
+          updateEmailForm
+        }
+      </div>
+      <div className="collection-header">
+        <h5 style={styles.header} >Delete Account</h5> 
+      </div>
+      <div className="collection-item">
+        {/* Delete Account */}
+        {!isVisible.delete ? (
+          <div>
+            <span className="grey-text text-darken-1" style={styles.helper}>Click the button to <span className="red-text text-lighten-1" style={styles.emphasize}>delete</span> your account.</span>
+            <br/>
+            <span className="btn-small red darken-2" onClick={onDelete} style={styles.deleteBtn}>Delete Account</span>
+          </div>
+        ) : 
+          deleteAccountForm
+        }
+      </div>
     </div>
-    <div className="collection-item">
-      {/* Account Email */}
-      {!isVisible.update ? (
-        <div>
-          <span className="grey-text" style={styles.label}>Email:</span> 
-          <span className="blue-text" style={styles.email}> { user.email } </span>    
-          <a href="#!" className="green-text" onClick={onUpdate} style={styles.updateBtn}>
-            [ update ] 
-          </a>
-        </div>
-      ) : 
-        updateEmailForm
-      }
-    </div>
-    <div className="collection-header">
-      <h5 style={styles.header} >Delete Account</h5> 
-    </div>
-    <div className="collection-item">
-      {/* Delete Account */}
-      {!isVisible.delete ? (
-        <div>
-          <span className="grey-text text-darken-1" style={styles.helper}>Click the button to <span className="red-text text-lighten-1" style={styles.emphasize}>delete</span> your account.</span>
-          <br/>
-          <span className="btn-small red darken-2" onClick={onDelete} style={styles.deleteBtn}>Delete Account</span>
-        </div>
-      ) : 
-        deleteAccountForm
-      }
-    </div>
-  </div>
   )
 }
 

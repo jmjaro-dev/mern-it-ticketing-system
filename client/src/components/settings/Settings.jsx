@@ -23,7 +23,6 @@ const Settings = ({ user }) => {
       {user && (
         <div className="col s12">
           <ul className="tabs">
-            
             <li className="tab col">
               <a className="active" href="#account" onClick={setActive} >
                 Account Settings
@@ -35,7 +34,6 @@ const Settings = ({ user }) => {
           </ul>
           <div className="row">
             {activeTab !== '#account' ? <SecuritySettings user={user}/> :  <AccountSettings user={user}/>}
-            
           </div>
       </div> 
       )}

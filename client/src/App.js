@@ -30,7 +30,7 @@ import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { 
   faSpinner,
   faUser, 
-  faIdCardAlt,
+  faFileInvoice,
   faExclamationCircle,
   faSearch,
   faCog,
@@ -47,7 +47,7 @@ import {
   faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 // icons library 
-library.add(faSpinner, faUser, faIdCardAlt, faExclamationCircle, faSearch, faCog, faSignOutAlt, faSort, faSortUp, faSortDown, faEye, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane);
+library.add(faSpinner, faUser, faFileInvoice, faExclamationCircle, faSearch, faCog, faSignOutAlt, faSort, faSortUp, faSortDown, faEye, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane);
 
 
 if(localStorage.token) {
