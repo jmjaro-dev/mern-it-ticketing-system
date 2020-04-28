@@ -15,14 +15,14 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   DELETE_ACCOUNT,
-  SET_LOADING,
+  SET_AUTHLOADING,
   RESET_STATUS
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
-  loading: false,
+  authLoading: false,
   user: null,
   authError: null,
   userError: null,
@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
+        authLoading: false,
         user: action.payload
       }
     case UPDATE_PASSWORD:
@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
         ...state,
         passError: null,
         passwordChangeStatus: 'success',
-        loading: false
+        authLoading: false
       };
     case UPDATE_EMAIL:
       return {
@@ -56,20 +56,20 @@ export default (state = initialState, action) => {
         user: action.payload,
         emailError: null,
         emailUpdateStatus: 'success',
-        loading: false
+        authLoading: false
       }
     case UPDATE_USER_NAME : 
       return {
         ...state,
         user: action.payload,
         userError: null,
-        loading: false
+        authLoading: false
       }
     case DELETE_ACCOUNT: {
       return {
         ...state,
         accountDeleteStatus: 'success',
-        loading: false
+        authLoading: false
       }
     }
     case REGISTER_SUCCESS:
@@ -79,7 +79,7 @@ export default (state = initialState, action) => {
         ...state,
         ...action.payload,
         isAuthenticated: true,
-        loading: false
+        authLoading: false
       };
     case REGISTER_FAIL:
     case LOGIN_FAIL:
@@ -90,7 +90,7 @@ export default (state = initialState, action) => {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false,
+        authLoading: false,
         user: null,
         authError: action.payload,
         accountError: null,
@@ -105,28 +105,28 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userError: action.payload,
-        loading: false
+        authLoading: false
       }
     case ACCOUNT_ERROR: 
       return {
         ...state,
         accountError: action.payload,
         accountDeleteStatus: 'failed',
-        loading:false
+        authLoading:false
       }
     case EMAIL_ERROR: 
       return {
         ...state,
         emailError: action.payload,
         emailUpdateStatus: 'failed',
-        loading:false
+        authLoading:false
       }
     case PASSWORD_ERROR: 
       return {
         ...state,
         passError: action.payload,
         passwordChangeStatus: 'failed',
-        loading:false
+        authLoading:false
       }
     case CLEAR_ERRORS:
       return {
@@ -137,10 +137,10 @@ export default (state = initialState, action) => {
         emailError: null,
         passError: null,
       }
-    case SET_LOADING:
+    case SET_AUTHLOADING:
       return {
         ...state,
-        loading: true
+        authLoading: true
       }
     case RESET_STATUS:
       switch(action.payload) {

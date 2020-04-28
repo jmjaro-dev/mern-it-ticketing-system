@@ -1,14 +1,14 @@
 import {
   GET_TECHS,
   USER_ERROR,
-  SET_LOADING,
+  SET_USERLOADING,
   RESET_USER_STATE
 } from '../actions/types';
 
 const initialState = {
   techs: null,
   error: null,
-  loading: false
+  userLoading: false
 };
 
 export default (state = initialState, action) => {
@@ -17,23 +17,23 @@ export default (state = initialState, action) => {
       return {
         ...state,
         techs: action.payload,
-        loading: false
+        userLoading: false
       };
     case USER_ERROR:
       return {
         ...state,
         error: action.payload
       };
-    case SET_LOADING:
+    case SET_USERLOADING:
       return {
         ...state,
-        loading: true
+        userLoading: true
       }
     case RESET_USER_STATE:
       return {
         techs: null,
         error: null,
-        loading: false
+        userLoading: false
       }
     default:
       return state;

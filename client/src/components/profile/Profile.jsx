@@ -9,19 +9,15 @@ import M from 'materialize-css/dist/js/materialize.js';
 const Profile = ({ user, tickets, loading, owned, assigned, sorted, filtered, getTickets, setOwnedTickets, setAssignedTickets, resetSort, clearFilter }) => {
   const [activeTab, setActiveTab] = useState('#my-tickets');
   const [currTickets, setCurrTickets] = useState(null);
-  
+  const [tabInstance, setTabInstance] = useState(null);
   useEffect(() => {
     M.AutoInit();
-
-    if(!user) {
-      setActiveTab('#my-tickets');
-    }
-
+    
     if(sorted !== null) {
       resetSort();
     }
 
-    if(filtered !== null) {
+    if(filtered !== null && currTickets !== tickets.length) {
       clearFilter();
     }
 
@@ -37,7 +33,7 @@ const Profile = ({ user, tickets, loading, owned, assigned, sorted, filtered, ge
       setOwnedTickets(user._id);
     }
 
-    if(tickets && user.userType === 'employee' && currTickets !== tickets.length) {
+    if(tickets && user.userType === 'employee' && owned && currTickets !== tickets.length) {
       setOwnedTickets(user._id);
     }
 
@@ -45,51 +41,60 @@ const Profile = ({ user, tickets, loading, owned, assigned, sorted, filtered, ge
       setAssignedTickets(user._id);
     }
 
-    if(tickets && user.userType === 'technician' && currTickets !== tickets.length) {
+    if(tickets && user.userType === 'technician' && assigned && currTickets !== tickets.length) {
       setAssignedTickets(user._id);
     }
+
+    if(user && tickets && (assigned || owned) && !loading) {
+      let elem = document.querySelector('.tabs');
+      let instance = M.Tabs.getInstance(elem);
+      setTabInstance(instance);
+    }
     // eslint-disable-next-line
-  }, [user, tickets]);
+  }, [user, tickets, loading, assigned, owned]);
 
   
   const setActive = e => {
     e.preventDefault();
 
     setActiveTab(e.target.getAttribute('href'));
+    tabInstance.updateTabIndicator();
   }
 
   return (
-    <div className="row card-panel">
+    <Fragment>
       {user && tickets && (assigned || owned) && !loading && (
-        <div className="col s12">
-          <ul className="tabs">
-            <li className="tab col">
-              <a className="active" href="#my-tickets" onClick={setActive} >
-              {user && user.userType !== 'employee' ? (
-                <Fragment>
-                  Assigned Tickets ({ assigned.length })
-                </Fragment>
-              ) : (
-                <Fragment>
-                  My Tickets ({ owned.length })
-                </Fragment>
-              )}
-              </a>
-            </li>
-            <li className="tab col">
-              <a href="#profile" onClick={setActive} >Profile</a>
-            </li>
-          </ul>
-          <div className="row">
-            {activeTab !== '#my-tickets' ? 
-              <ProfileTab user={user} /> 
-              : 
-              <TicketsTab user={user} owned={owned} assigned={assigned} /> 
-            }
+        <div className="row card-panel">
+          <div className="col s12">
+            <ul className="tabs">
+              <li className="tab col">
+                <a className="active" href="#my-tickets" onClick={setActive} >
+                {user && user.userType !== 'employee' ? (
+                  <Fragment>
+                    Assigned Tickets ({ assigned.length })
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    My Tickets ({ owned.length })
+                  </Fragment>
+                )}
+                </a>
+              </li>
+              <li className="tab col">
+                <a href="#profile" onClick={setActive} >Profile</a>
+              </li>
+            </ul>
+            <div className="row">
+              {activeTab !== '#my-tickets' ? 
+                <ProfileTab user={user} /> 
+                : 
+                <TicketsTab user={user} owned={owned} assigned={assigned} /> 
+              }
+            </div>
           </div>
-      </div> 
-      )}
-    </div>
+        </div>
+        )}
+    </Fragment>
   )
 }
 
@@ -117,7 +122,7 @@ const mapStateToProps = state => ({
   sorted: state.ticket.sorted,
   filtered: state.ticket.filtered,
   sorting: state.ticket.sorting,
-  loading: state.ticket.loading
+  loading: state.ticket.ticketLoading
 });
 
 export default connect(mapStateToProps, { getTickets, setOwnedTickets, setAssignedTickets, resetSort, clearFilter })(Profile);

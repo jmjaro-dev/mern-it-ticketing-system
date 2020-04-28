@@ -1,20 +1,16 @@
-import React, { Fragment,useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { loadUser } from '../../actions/authActions';
+// import { loadUser } from '../../actions/authActions';
 import TicketFilters from '../filters/TicketFilters'
 import Tickets from '../tickets/Tickets';
 import PreLoader from '../layout/PreLoader';
 import PropTypes from 'prop-types';
 
-const Home = ({ tickets, isAuthenticated, loading, loadUser }) => {
-  useEffect(() => {
-    loadUser();
-    // eslint-disable-next-line
-  }, []);
+const Home = ({ tickets, isAuthenticated, loading }) => {
   return (
     <Fragment>
       <div>
-        {!loading && !isAuthenticated && !tickets ? (
+        {!isAuthenticated && !tickets ? (
           <PreLoader />
         ) : (
           <Fragment>
@@ -30,14 +26,13 @@ const Home = ({ tickets, isAuthenticated, loading, loadUser }) => {
 Home.propTypes = {
   tickets: PropTypes.array,
   isAuthenticated: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
-  loadUser: PropTypes.func.isRequired
+  loading: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   isAuthenticated: state.auth.isAuthenticated,
-  loading: state.auth.loading
+  loading: state.ticket.ticketLoading
 });
 
-export default connect(mapStateToProps, { loadUser })(Home);
+export default connect(mapStateToProps, null)(Home);

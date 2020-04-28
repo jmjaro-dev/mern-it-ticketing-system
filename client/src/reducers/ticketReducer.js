@@ -19,7 +19,7 @@ import {
   CLEAR_FILTER,
   TICKET_ERROR,
   SET_TICKET_EXISTS,
-  SET_LOADING,
+  SET_TICKETLOADING,
   RESET_TICKET_STATE
 } from '../actions/types';
 
@@ -41,7 +41,7 @@ const initialState = {
   pending: null,
   closed: null,
   error: null,
-  loading: false,
+  ticketLoading: false,
   isAscending: false,
   ticket_exists: false
 };
@@ -55,14 +55,14 @@ export default (state = initialState, action) => {
           ticket: action.payload.ticket,
           current_url: action.payload.current_url
         },
-        loading: false
+        ticketLoading: false
       };
     case GET_TICKETS:
       return {
         ...state,
         tickets: action.payload,
         mapped: action.payload.map(ticket => ticket),
-        loading: false
+        ticketLoading: false
       };
     case SORT_TICKETS:
       switch(action.payload) {
@@ -1029,15 +1029,13 @@ export default (state = initialState, action) => {
           tickets: [action.payload, ...state.tickets],
           mapped:  [action.payload, ...state.tickets],
           sorted:  [action.payload, ...state.tickets],
-          filtered:  [action.payload, ...state.tickets],
-          loading: false
+          filtered:  [action.payload, ...state.tickets]
         };
       } else {
         return {
           ...state,
           tickets: [action.payload, ...state.tickets],
-          mapped:  [action.payload, ...state.tickets],
-          loading: false
+          mapped:  [action.payload, ...state.tickets]
         };
       }
     case UPDATE_TICKET:
@@ -1048,15 +1046,13 @@ export default (state = initialState, action) => {
             tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
             mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
             sorted:  state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            filtered:  state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            loading: false 
+            filtered:  state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
           }
         } else {
           return {
             ...state,
             tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-            mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),  
-            loading: false 
+            mapped:  state.mapped.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
           }
         }
         
@@ -1068,15 +1064,13 @@ export default (state = initialState, action) => {
               tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               assigned: state.assigned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              loading: false
+              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
             }
           } else {
             return {
               ...state,
               tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              assigned: state.assigned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              loading: false
+              assigned: state.assigned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket)
             }
           }
           
@@ -1091,8 +1085,7 @@ export default (state = initialState, action) => {
               current: {
                 ticket: action.payload.ticket,
                 current_url: action.payload.current_url
-              },
-              loading: false
+              }
             }
           } else {
             return {
@@ -1102,8 +1095,7 @@ export default (state = initialState, action) => {
               current: {
                 ticket: action.payload.ticket,
                 current_url: action.payload.current_url
-              },
-              loading: false
+              }
             }
           }
         }
@@ -1187,14 +1179,12 @@ export default (state = initialState, action) => {
     case SET_OWNED_TICKETS: 
       return {
         ...state,
-        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload),
-        loading: false
+        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload)
       }
     case SET_ASSIGNED_TICKETS: 
     return {
       ...state,
-      assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload),
-      loading: false
+      assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload)
     }
     case SET_CURRENT:
       return {
@@ -1271,10 +1261,10 @@ export default (state = initialState, action) => {
         ...state,
         ticket_exists: action.payload
       }
-    case SET_LOADING:
+    case SET_TICKETLOADING:
       return {
         ...state,
-        loading: true
+        ticketLoading: true
       }
     case RESET_TICKET_STATE:
       return {
@@ -1295,7 +1285,7 @@ export default (state = initialState, action) => {
         pending: null,
         closed: null,
         error: null,
-        loading: false,
+        ticketLoading: false,
         isAscending: false,
         ticket_exists: false
       }

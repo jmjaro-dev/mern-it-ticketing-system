@@ -10,7 +10,7 @@ const TicketFilters = ({ tickets, loading }) => {
       {tickets && !loading && (
         <div className="row white">
           <Fragment>
-            <Filters />
+            <Filters tickets={tickets}/>
           </Fragment>
         </div>
       )}

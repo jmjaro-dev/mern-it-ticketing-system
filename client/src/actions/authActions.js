@@ -18,7 +18,7 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   DELETE_ACCOUNT,
-  SET_LOADING,
+  SET_AUTHLOADING,
   RESET_STATUS
 } from './types';
 
@@ -26,7 +26,7 @@ import {
 export const loadUser = () => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   // Set global header token
@@ -53,7 +53,7 @@ export const loadUser = () => async dispatch => {
 export const register = formData => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   const config = {
@@ -87,7 +87,7 @@ export const register = formData => async dispatch => {
 export const login = formData => async (dispatch) => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   const config = {
@@ -124,7 +124,7 @@ export const logout = () => async dispatch => dispatch({ type: LOGOUT });
 export const updateEmail = user => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   try {
@@ -159,7 +159,7 @@ export const updateEmail = user => async dispatch => {
 export const updatePassword = (user_id, passwords) => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   try {
@@ -194,7 +194,7 @@ export const updatePassword = (user_id, passwords) => async dispatch => {
 export const updateUserName = user => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   try {
@@ -229,7 +229,7 @@ export const updateUserName = user => async dispatch => {
 export const deleteAccount = (id, password) => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_AUTHLOADING
   });
 
   const config = {

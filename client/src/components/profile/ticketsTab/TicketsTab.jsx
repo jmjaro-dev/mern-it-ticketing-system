@@ -11,7 +11,7 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 const TicketsTab = ({ user, owned, assigned, filtered, sorting, setSort, sortTicketsProfile }) => {
   const { isSorted, order } = sorting;
   let sortBy = null;
-  
+
   const onSetField = e => {
     e.preventDefault();
     sortBy = document.getElementById(e.target.id).getAttribute("data_sort");

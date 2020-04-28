@@ -1,12 +1,38 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setFilter } from '../../../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Filter = ({ filter, assigned, owned, ownedTickets, assignedTickets, setFilter }) => {
-  
+const Filter = ({ filter, assigned, owned, ownedTickets, assignedTickets, setFilter, activeFilter, setActiveFilter }) => {
+  // useEffect(() => {
+  //   if(activeFilter !== null) {
+      
+  //   }
+  // }, [activeFilter]);
+  const setActive = e => {
+    e.preventDefault();
+    // Gets UL element children
+    let links;
+    if(e.target.tagName === 'A') {
+      links = e.target.parentElement.children;
+    } else {
+      links = e.target.parentElement.parentElement.children;
+    }
+    // Current clicked link
+    const current = e.target.innerText;
+    // Adding/Removing 'active' class from element
+    for(let index=0; index < links.length; index++) {
+      if(links[index].innerText !== current) {
+        links[index].classList.remove('active');
+      } else {
+        links[index].classList.add('active');
+      }
+    }
+  }
+
   const onSetFilter = (e, filter) => {
     e.preventDefault();
+    setActive(e);
     // Assigns link's text to filter 
     if(e.target.classList.contains('chip')) {
       // if Target is the 'a' tag slice textContent
@@ -15,6 +41,7 @@ const Filter = ({ filter, assigned, owned, ownedTickets, assignedTickets, setFil
       // if Target is the 'span' tag, slice the textContent of the parent 'a' tag
       filter = e.target.parentElement.textContent.slice(0, e.target.parentElement.textContent.indexOf(' '));
     }
+    setActiveFilter(filter);
     let arr = [];
     const current_url = 'profile';
     // Set filter depending on 'filter' value
@@ -75,7 +102,7 @@ const Filter = ({ filter, assigned, owned, ownedTickets, assignedTickets, setFil
   return (
     <Fragment>
       {filter === 'all' && (
-        <a href="#!" className="chip filter" style={styles.ticket_label} onClick={onSetFilter}> 
+        <a href="#!" className="chip filter active" style={styles.ticket_label} onClick={onSetFilter}> 
           {filter} {' '}
           <span className="grey-text" style={styles.label}> 
             ({ assigned ? assignedTickets.all : ownedTickets.all })
@@ -125,7 +152,8 @@ Filter.propTypes = {
   ownedTickets: PropTypes.object,
   assignedTickets: PropTypes.object,
   filter: PropTypes.string.isRequired,
-  setFilter: PropTypes.func.isRequired
+  setFilter: PropTypes.func.isRequired,
+  setActiveFilter: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

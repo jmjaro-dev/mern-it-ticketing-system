@@ -3,11 +3,16 @@ import { connect } from 'react-redux';
 import { setFilter } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Filter = ({ filter, tickets, user_id, setFilter }) => {
+const Filter = ({ filter, tickets, user_id, counter, setFilter }) => {
   const setActive = e => {
     e.preventDefault();
     // Gets UL element children
-    const links = e.target.parentElement.parentElement.children;
+    let links;
+    if(e.target.tagName === 'A') {
+      links = e.target.parentElement.parentElement.children;
+    } else {
+      links = e.target.parentElement.parentElement.parentElement.children;
+    }
     // Current clicked link
     const current = e.target.innerText;
     // Adding/Removing 'active' class from element
@@ -25,7 +30,13 @@ const Filter = ({ filter, tickets, user_id, setFilter }) => {
     // Sets active link
     setActive(e);
     // Assigns link's text to filter
-    filter = e.target.innerText;
+    if(e.target.classList.contains('chip')) {
+      // if Target is the 'a' tag slice textContent
+      filter = e.target.textContent.slice(0, e.target.textContent.lastIndexOf(' '));
+    } else {
+      // if Target is the 'span' tag, slice the textContent of the parent 'a' tag
+      filter = e.target.parentElement.textContent.slice(0, e.target.parentElement.textContent.lastIndexOf(' '));
+    }
     let arr = [];
     // Set filter depending on 'filter' value
     switch(filter) {
@@ -79,14 +90,41 @@ const Filter = ({ filter, tickets, user_id, setFilter }) => {
         <Fragment>
         {filter !== 'All Tickets' ? (
           <li>
-              <a href="#!" className="chip" onClick={onSetFilter}>
-                {filter} {' '}
-              </a>
-            </li>
+            <a href="#!" className="chip" onClick={onSetFilter}>
+              {filter}{' '}
+              
+              {filter.toLowerCase() === 'unassigned' && (
+                <span className="grey-text"> 
+                  ({ counter && counter.unassigned })
+                </span>
+              )}
+
+              {filter.toLowerCase() === 'open' && (
+                <span className="grey-text"> 
+                  ({ counter && counter.open })
+                </span>
+              )}
+
+              {filter.toLowerCase() === 'pending' && (
+                <span className="grey-text"> 
+                  ({ counter && counter.pending })
+                </span>
+              )}
+
+              {filter.toLowerCase() === 'closed' && (
+                <span className="grey-text"> 
+                  ({ counter && counter.closed })
+                </span>
+              )}
+            </a>
+          </li>
         ) : (
           <li>
             <a href="#!" className="chip active" onClick={onSetFilter}>
               {filter} {' '}
+              <span className="grey-text"> 
+                ({ counter && counter.all })
+              </span>
             </a>
           </li>
         )}
@@ -96,14 +134,19 @@ const Filter = ({ filter, tickets, user_id, setFilter }) => {
           <a href="#!" className="chip" onClick={onSetFilter}>
             {filter !== 'employee' ? (
               <Fragment>
-                Assigned To Me
+                Assigned To Me{' '}
+                <span className="grey-text"> 
+                  ({ counter && counter.assigned })
+                </span>
               </Fragment> 
             ) : (
               <Fragment>
-                My Tickets
+                My Tickets{' '}
+                <span className="grey-text"> 
+                  ({ counter && counter.owned })
+                </span>
               </Fragment> 
             )}
-            {' '}
           </a>
         </li>   
       )}
@@ -119,8 +162,7 @@ Filter.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  user_id: state.auth.user._id,
-  tickets: state.ticket.tickets,
+  user_id: state.auth.user._id
 });
 
 export default connect(mapStateToProps, { setFilter })(Filter);

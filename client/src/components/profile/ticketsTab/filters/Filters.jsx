@@ -1,9 +1,24 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Filter from './Filter';
 import PropTypes from 'prop-types';
 
 const Filters = ({ owned, assigned }) => {
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [ownedTickets, setOwned] = useState({
+    all: null,
+    open: null,
+    pending: null,
+    closed: null
+  });
+  
+  const [assignedTickets, setAssigned] = useState({
+    all: null,
+    open: null,
+    pending: null,
+    closed: null
+  });
+
   const filters = ["all", "open", "pending", "closed"];
   
   useEffect(() => {
@@ -23,25 +38,12 @@ const Filters = ({ owned, assigned }) => {
       });
     } 
     //eslint-disable-next-line
-  }, []);
+  }, [owned, assigned]);
 
-  const [ownedTickets, setOwned] = useState({
-    all: null,
-    open: null,
-    pending: null,
-    closed: null
-  });
-  const [assignedTickets, setAssigned] = useState({
-    all: null,
-    open: null,
-    pending: null,
-    closed: null
-  });
-  
   return (
     <Fragment>
       {filters.map(filter => (
-        <Filter key={filter} filter={filter} ownedTickets={ownedTickets} assignedTickets={assignedTickets} />
+        <Filter key={filter} filter={filter} ownedTickets={ownedTickets} assignedTickets={assignedTickets} activeFilter={activeFilter} setActiveFilter={setActiveFilter}/>
       ))}         
     </Fragment>
   )

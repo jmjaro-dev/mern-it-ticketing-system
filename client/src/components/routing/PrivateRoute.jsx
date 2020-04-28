@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ component:  Component, isAuthenticated, loading, user, current, setCurrent, getTicket, loadUser, ...rest }) => {
   useEffect(() => {
-    if(localStorage.token) {
+    if(localStorage.token && !user) {
       loadUser();
     }
     // eslint-disable-next-line
@@ -34,17 +34,17 @@ PrivateRoute.propTypes = {
   isAuthenticated: PropTypes.bool,
   loading: PropTypes.bool.isRequired,
   user: PropTypes.object,
-  current: PropTypes.object,
-  setCurrent: PropTypes.func.isRequired,
-  getTicket: PropTypes.func.isRequired,
+  // current: PropTypes.object,
+  // setCurrent: PropTypes.func.isRequired,
+  // getTicket: PropTypes.func.isRequired,
   loadUser: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  loading: state.auth.loading,
+  loading: state.auth.authLoading,
   user: state.auth.user,
-  current: state.ticket.current
+  // current: state.ticket.current
 });
 
 export default connect(mapStateToProps, { setCurrent, getTicket, loadUser })(PrivateRoute);

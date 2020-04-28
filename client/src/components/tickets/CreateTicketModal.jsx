@@ -16,9 +16,11 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
   });
 
   useEffect(() => {
-    getTechs();
+    if(user && !techs && user.userType === 'employee'){
+      getTechs();
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   const { title, description, priority, assignedTo } = ticket;
 

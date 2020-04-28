@@ -20,7 +20,7 @@ import {
   CLEAR_FILTER,
   TICKET_ERROR,
   SET_TICKET_EXISTS,
-  SET_LOADING,
+  SET_TICKETLOADING,
   RESET_TICKET_STATE
 } from './types';
 
@@ -28,7 +28,7 @@ import {
 export const getTicket = (id, current_url) => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_TICKETLOADING
   });
 
   try {
@@ -53,7 +53,7 @@ export const getTicket = (id, current_url) => async dispatch => {
 export const getTickets = () => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_TICKETLOADING
   });
 
   try {
@@ -73,7 +73,6 @@ export const getTickets = () => async dispatch => {
 
 // Sort Tickets
 export const sortTickets = field => async dispatch => {
-
   dispatch({ 
     type: SORT_TICKETS, 
     payload: field 
@@ -90,7 +89,7 @@ export const sortTicketsProfile = ( field, userType ) => async dispatch => {
 };
 
 // Add Ticket
-export const addTicket = ticket => async dispatch => {
+export const addTicket = ticket => async dispatch => {  
   try {
     const config = {
       headers: {

@@ -23,20 +23,17 @@ export default (state = initialState, action) => {
     case GET_COMMENTS:
       return {
         ...state,
-        comments: action.payload,
-        loading: false
+        comments: action.payload
       };
     case ADD_COMMENT:
       return {
         ...state,
-        comments: [...state.comments, action.payload],
-        loading: false
+        comments: [...state.comments, action.payload]
       };
     case UPDATE_COMMENT:
       return {
         ...state,
-        comments: state.comments.map(comment => comment._id === action.payload._id ? action.payload : comment),
-        loading: false 
+        comments: state.comments.map(comment => comment._id === action.payload._id ? action.payload : comment)
       }
     case UPDATE_NAME_ON_COMMENTS:
       return {
@@ -46,8 +43,7 @@ export default (state = initialState, action) => {
     case DELETE_COMMENT:
       return {
         ...state,
-        comments: state.comments.filter(comment => comment._id !== action.payload),
-        loading: false
+        comments: state.comments.filter(comment => comment._id !== action.payload)
       };
     case COMMENT_ERROR:
       return {

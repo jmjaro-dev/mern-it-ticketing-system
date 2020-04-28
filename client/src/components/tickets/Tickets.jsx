@@ -13,7 +13,7 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, lo
       clearCurrent();
     }
 
-    if(user) {
+    if(user && !tickets) {
       getTickets();
     }
 
@@ -21,7 +21,7 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, lo
       resetSort();
     }
     // eslint-disable-next-line
-  }, []);
+  }, [tickets]);
 
   const { isSorted, order } = sorting;
   let sortBy = null;

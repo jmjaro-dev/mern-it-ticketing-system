@@ -25,9 +25,9 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
 
   const onSetActive = path => {
     const links = document.querySelector('ul.right').children;
-    console.log(links); 
+    
     let current;
-    console.log(links)
+    
     switch(path){
       case '/':
         current = links[0].innerText;

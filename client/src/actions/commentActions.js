@@ -6,7 +6,6 @@ import {
   UPDATE_COMMENT,
   UPDATE_NAME_ON_COMMENTS,
   COMMENT_ERROR,
-  SET_LOADING,
   SET_CURRENT_COMMENT,
   SET_EDIT_MODE,
   CLEAR_CURRENT_COMMENT,
@@ -15,11 +14,6 @@ import {
 
 // Get Comments by Ticket Id
 export const getComments = ticket_id => async dispatch => {
-  // Set Loading to True
-  dispatch({
-    type: SET_LOADING
-  });
-
   try {
     const res = await axios.get(`/api/comments/${ticket_id}`);
   
@@ -53,23 +47,6 @@ export const addComment = (ticket_id, message, userInfo) => async dispatch => {
     dispatch({
       type: ADD_COMMENT,
       payload: res.data
-    });
-  } catch (err) {
-    dispatch({
-      type: COMMENT_ERROR,
-      payload: err.response.msg
-    });
-  }
-};
-
-// Delete Comment
-export const deleteComment = id => async dispatch => {
-  try {
-    await axios.delete(`/api/comments/${id}`);
-
-    dispatch({
-      type: DELETE_COMMENT,
-      payload: id
     });
   } catch (err) {
     dispatch({
@@ -125,6 +102,24 @@ export const updateNameOnComments = user => async dispatch => {
     });
   }
 };
+
+// Delete Comment
+export const deleteComment = id => async dispatch => {
+  try {
+    await axios.delete(`/api/comments/${id}`);
+
+    dispatch({
+      type: DELETE_COMMENT,
+      payload: id
+    });
+  } catch (err) {
+    dispatch({
+      type: COMMENT_ERROR,
+      payload: err.response.msg
+    });
+  }
+};
+
 // Set Curent Comment
 export const setCurrent = comment => async dispatch => dispatch({ type: SET_CURRENT_COMMENT, payload: comment });
 

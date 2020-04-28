@@ -2,7 +2,6 @@
 :root {
   --primary-color: #1e88e5;
   --dark-color: #333333;
-  --light-color: #f4f4f4;
   --danger-color: #f75353;
   --success-color: #28a745;
 }
@@ -41,46 +40,59 @@ select {
 
 /* Chip */
 a.chip.active,
-a.chip:active{
+a.chip:active,
+a.chip:focus,
+a.chip:focus > span.grey-text,
+a.chip.active > span.grey-text,
+a.chip.active:active > span.grey-text
+a.chip.active:focus > span.grey-text {
   background-color: var(--primary-color);
-  color: white;
-  transition: ease 0.7s;
+  color: white !important;
+  transition: ease 0.5s;
 }
 
+a.chip.filter.active,
+a.chip.filter.active > span.grey-text,
 a.chip.filter:active,
 a.chip.filter:focus,
 a.chip.filter:active > span.grey-text,
 a.chip.filter:focus > span.grey-text{
   background-color: var(--primary-color) !important;
   color: white !important;
-  transition: ease 0.7s;
+  transition: ease 0.5s;
 }
 
+a.chip.filter.green-text.active,
+a.chip.filter.green-text.active > span.grey-text,
 a.chip.filter.green-text:active,
 a.chip.filter.green-text:focus,
 a.chip.filter.green-text:active > span.grey-text,
 a.chip.filter.green-text:focus > span.grey-text{
   background-color: #388e3c !important;
   color: white !important;
-  transition: ease 0.7s;
+  transition: ease 0.5s;
 }
 
+a.chip.filter.orange-text.active,
+a.chip.filter.orange-text.active > span.grey-text,
 a.chip.filter.orange-text:active,
 a.chip.filter.orange-text:focus,
 a.chip.filter.orange-text:active > span.grey-text,
 a.chip.filter.orange-text:focus > span.grey-text{
   background-color: #f57c00 !important;
   color: white !important;
-  transition: ease 0.7s;
+  transition: ease 0.5s;
 }
 
+a.chip.filter.grey-text.active,
+a.chip.filter.grey-text.active > span.grey-text,
 a.chip.filter.grey-text:active,
 a.chip.filter.grey-text:focus,
 a.chip.filter.grey-text:active > span.grey-text,
 a.chip.filter.grey-text:focus > span.grey-text{
   background-color: #616161 !important;
   color: white !important;
-  transition: ease 0.7s;
+  transition: ease 0.5s;
 }
 
 /* Btn */

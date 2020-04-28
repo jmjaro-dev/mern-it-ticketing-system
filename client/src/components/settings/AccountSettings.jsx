@@ -240,7 +240,7 @@ AccountSettings.propTypes = {
 const mapStateToProps = state => ({
   emailUpdateStatus: state.auth.emailUpdateStatus,
   accountDeleteStatus: state.auth.accountDeleteStatus,
-  loading: state.auth.loading,
+  loading: state.auth.authLoading,
   accountError: state.auth.accountError,
   emailError: state.auth.emailError
 });

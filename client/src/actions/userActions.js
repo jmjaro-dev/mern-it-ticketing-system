@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   GET_TECHS,
   USER_ERROR,
-  SET_LOADING,
+  SET_USERLOADING,
   RESET_USER_STATE
 } from './types';
 
@@ -10,7 +10,7 @@ import {
 export const getTechs = () => async dispatch => {
   // Set Loading to True
   dispatch({
-    type: SET_LOADING
+    type: SET_USERLOADING
   });
 
   try {
