@@ -9,22 +9,64 @@ const TicketHeader = ({ sorting, label, id, data_sort, onSetField }) => {
   return (
     <Fragment>
       {label !== 'Actions' ? (
-        <th className="ticket-info center">
-          <a href="#!" id={id} data_sort={data_sort} onClick={onSetField}>
-            {label} {' '}
-          </a>
-          {!isSorted && field === null ? (
-            <FontAwesomeIcon icon="sort"/>
-          ) : (
-            <Fragment>
-              {isSorted && order === 'desc' ? (
-                <FontAwesomeIcon icon="sort-up" />
+        <Fragment>
+          {(label === '#' || label === 'Date Issued') && (
+            <th className="center" key={id}> 
+              <a href="#!" id={id} data_sort={data_sort} onClick={onSetField}>
+                {label} {' '}
+              </a>
+              {!isSorted && field === null ? (
+                <FontAwesomeIcon icon="sort"/>
               ) : (
-                <FontAwesomeIcon icon="sort-down" />
+                <Fragment>
+                  {isSorted && order === 'desc' ? (
+                    <FontAwesomeIcon icon="sort-numeric-up" />
+                  ) : (
+                    <FontAwesomeIcon icon="sort-numeric-down" />
+                  )}
+                </Fragment>
               )}
-            </Fragment>
+            </th>
+          )} 
+          
+          {(label === 'Alert' || label === 'Status' || label === 'Priority') && (
+            <th className="center" key={id}> 
+              <a href="#!" id={id} data_sort={data_sort} onClick={onSetField}>
+                {label} {' '}
+              </a>
+              {!isSorted && field === null ? (
+                <FontAwesomeIcon icon="sort"/>
+              ) : (
+                <Fragment>
+                  {isSorted && order === 'desc' ? (
+                    <FontAwesomeIcon icon="sort-amount-up" />
+                  ) : (
+                    <FontAwesomeIcon icon="sort-amount-down" />
+                  )}
+                </Fragment>
+              )}
+            </th>
           )}
-        </th>
+
+          {(label === 'Subject' || label === 'Assigned To' || label === 'Issued By') && (
+            <th className="center" key={id}> 
+              <a href="#!" id={id} data_sort={data_sort} onClick={onSetField}>
+                {label} {' '}
+              </a>
+              {!isSorted && field === null ? (
+                <FontAwesomeIcon icon="sort"/>
+              ) : (
+                <Fragment>
+                  {isSorted && order === 'desc' ? (
+                    <FontAwesomeIcon icon="sort-alpha-up" />
+                  ) : (
+                    <FontAwesomeIcon icon="sort-alpha-down" />
+                  )}
+                </Fragment>
+              )}
+            </th>
+          )}
+        </Fragment>
       ) : (
         <th className="ticket-info center">Actions</th>
       )}

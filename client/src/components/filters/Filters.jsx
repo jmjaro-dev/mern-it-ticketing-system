@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setFilter } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Filters = ({ tickets, user, active_filter, setFilter }) => 
+const Filters = ({ tickets, filtered, user, active_filter, setFilter }) => 
 {
   const [ticketCounter, setTicketCounter] = useState({
     all: null,
@@ -42,6 +42,11 @@ const Filters = ({ tickets, user, active_filter, setFilter }) =>
           closed: tickets.filter(ticket => ticket.status === 'closed').length
         })
       } 
+    }
+
+    if(tickets && !filtered) {
+      onSetFilter(active_filter);
+      setActiveFilter(active_filter);
     }
 
     if(active_filter !== activeFilter && tickets) {

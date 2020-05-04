@@ -28,6 +28,14 @@ const Dashboard = ({ user, tickets, active_filter, loading, owned, assigned, una
       getTickets();
     }
 
+    if(tickets && user && !unassigned) {
+      setUnassignedTickets(user._id, user.userType);
+      setTicketCounter({
+        ...ticketCounter,
+        totalUnassigned: tickets.filter(ticket => ticket.assignedTo.to === 'Unassigned').length
+      })
+    }
+    
     if(tickets && user && (owned || assigned) && unassigned && totalAssigned && unassigned.length !== totalUnassigned) {
       setUnassignedTickets(user._id, user.userType);
       setTicketCounter({

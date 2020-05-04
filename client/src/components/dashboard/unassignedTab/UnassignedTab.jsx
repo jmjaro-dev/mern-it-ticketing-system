@@ -3,19 +3,37 @@ import { connect } from 'react-redux';
 import TicketHeaders from './TicketHeaders';
 import TicketItemTech from './TicketItemTech';
 import TicketItemEmp from './TicketItemEmp';
-import { setSort, sortTicketsProfile, clearFilter } from '../../../actions/ticketActions';
+import { setSort, sortTicketsProfile, setFilter, clearFilter } from '../../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const UnassignedTab = ({ user, activeTab, tickets, unassigned, loading, owned, assigned, filtered, sorting, setSort, sortTicketsProfile, clearFilter }) => {
+const UnassignedTab = ({ user, activeTab, active_filter, tickets, unassigned, loading, sorting, setSort, sortTicketsProfile, setFilter, clearFilter }) => {
   const { isSorted, order } = sorting;
   let sortBy = null;
 
   useEffect(() => {
     if(activeTab === '#unassigned') {
-      clearFilter();
+      clearFilter('unassigned');
+      onSetFilter(user.userType);
     }
     // eslint-disable-next-line
   }, [activeTab]);
+
+  const onSetFilter = userType => {
+    let arr = [];
+    const current_url = 'dashboard';
+
+    if(userType === 'employee') {
+      arr = tickets.filter(ticket => {
+        return ticket.issuedBy._id === user._id && ticket.assignedTo.to === 'Unassigned';
+      })
+      setFilter(active_filter, arr, current_url, user.userType);
+    } else {
+      arr = tickets.filter(ticket => {
+        return ticket.assignedTo.to === 'Unassigned';
+      })
+      setFilter(active_filter, arr, current_url, user.userType);
+    }
+  }
 
   const onSetField = e => {
     e.preventDefault();
@@ -74,7 +92,7 @@ const UnassignedTab = ({ user, activeTab, tickets, unassigned, loading, owned, a
               {/* Table Body */}
               <tbody>
                 {/* Ticket Items for Technicians */}
-                {!filtered ? (
+                {unassigned && (
                   <Fragment>
                     {( unassigned && unassigned.length === 0 ) ? (
                       <tr>
@@ -99,38 +117,6 @@ const UnassignedTab = ({ user, activeTab, tickets, unassigned, loading, owned, a
                         )}  
                       </Fragment>
                     )}
-                  </Fragment>
-                ) : (
-                  <Fragment>
-                    {user.userType !== 'employee' ? (
-                      <Fragment>
-                        {filtered.map(ticket => (
-                          <TicketItemTech key={ticket._id} ticket={ticket} />
-                        ))}
-
-                        {filtered.length === 0 && (
-                          <tr>
-                            <td className="center" colSpan="9">
-                              There are no <span style={styles.emphasized}>Unassigned</span> tickets.
-                            </td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    ) : (
-                      <Fragment>
-                        {filtered.map(ticket => (
-                          <TicketItemEmp key={ticket._id} ticket={ticket} />
-                        ))}
-
-                        {filtered !== null && filtered.length === 0 && (
-                          <tr>
-                            <td className="center" colSpan="9">
-                              There are no <span style={styles.emphasized}>Unassigned</span> tickets.
-                            </td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    )}   
                   </Fragment>
                 )}
               </tbody>
@@ -158,23 +144,21 @@ UnassignedTab.propTypes = {
   user: PropTypes.object,
   tickets: PropTypes.array,
   active_filter: PropTypes.string,
-  filtered: PropTypes.array,
+  unassigned: PropTypes.array,
   sorting: PropTypes.object,
-  assigned: PropTypes.array,
   loading: PropTypes.bool,
   sortTicketsProfile: PropTypes.func.isRequired,
   setSort: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   clearFilter: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
-  owned: state.ticket.owned,
-  assigned: state.ticket.assigned,
-  filtered: state.ticket.filtered,
+  unassigned: state.ticket.unassigned,
   sorting: state.ticket.sorting,
   active_filter: state.ticket.active_filter_profile,
   loading: state.ticket.ticketLoading
 });
 
-export default connect(mapStateToProps, { setSort, sortTicketsProfile, clearFilter })(UnassignedTab);
+export default connect(mapStateToProps, { setSort, sortTicketsProfile, setFilter, clearFilter })(UnassignedTab);

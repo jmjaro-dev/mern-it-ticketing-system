@@ -60,7 +60,7 @@ const Filter = ({ filter, user, tickets, ownedTickets, assignedTickets, active_f
 
   const onSetActiveFilter = filter => {
     let arr = [];
-    const current_url = 'profile';
+    const current_url = 'dashboard';
     // Set filter depending on 'filter' value
     switch(filter) {
       case "all": 
@@ -148,7 +148,7 @@ const Filter = ({ filter, user, tickets, ownedTickets, assignedTickets, active_f
       filter = e.target.parentElement.textContent.slice(0, e.target.parentElement.textContent.indexOf(' '));
     }
     let arr = [];
-    const current_url = 'profile';
+    const current_url = 'dashboard';
     // Set filter depending on 'filter' value
     switch(filter) {
       case "all":

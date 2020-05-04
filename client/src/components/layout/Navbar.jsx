@@ -26,7 +26,7 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
       onSetActive(window.location.pathname);
     }
     // eslint-disable-next-line
-  },[user]);
+  },[user, currentPage]);
 
   const onSetActive = path => {
     const links = document.querySelector('ul.right').children;
@@ -54,7 +54,7 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
     }
 
     let sideNavLinks;
-    if(current === 'Login' || current === 'Register') {
+    if(!user && (path === '/login' || path === '/register')) {
       sideNavLinks = document.querySelector('#sidenav-guest').children;
       // Adding/Removing 'active' class from Guest SideNav Links elements
       for(let index=0; index < sideNavLinks.length; index++) {
@@ -107,7 +107,6 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
     onSetActive(window.location.pathname);
     const instance = M.Sidenav.getInstance(elem);
     instance.close();
-
   }
 
   const onLogout = () => {

@@ -202,7 +202,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
               </form>
             </div>
 
-            <div className="modal-footer">
+            <div className="modal-footer" style={styles.footer}>
               <button onClick={onCancel} className="btn-small white black-text">Cancel</button>
               {' '}
               {current !== null && title !== '' && description !== '' && priority !== '' && priority !== '' && assignedTo !== '' ? (
@@ -227,13 +227,14 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
 
 const styles = {
   modal : {
-    padding: '0 0.5em 0 0.5em',
-    width: '500px',
-    borderRadius: '0.5em'
+    padding: '0 0.5em 0 0.5em'
   },
   ticket_header: {
     fontSize: "1.5em",
     fontWeight: "bold"
+  }, 
+  footer: {
+    paddingRight: '1em'
   }
 }
 

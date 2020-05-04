@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import Filters from './Filters';
 import PropTypes from 'prop-types';
 
-const TicketFilters = ({ tickets, loading }) => {
+const TicketFilters = ({ tickets, filtered, loading }) => {
 
   return (
     <Fragment>
       {tickets && !loading && (
         <div className="row card-panel">
           <Fragment>
-            <Filters tickets={tickets}/>
+            <Filters tickets={tickets} filtered={filtered}/>
           </Fragment>
         </div>
       )}
@@ -20,16 +20,14 @@ const TicketFilters = ({ tickets, loading }) => {
 
 TicketFilters.propTypes = {
   tickets: PropTypes.array,
-  loading: PropTypes.bool,
-  owned: PropTypes.array,
-  filtered: PropTypes.array
+  filtered: PropTypes.array,
+  loading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
-  loading: state.ticket.loading,
-  owned: state.ticket.owned,
-  filtered: state.ticket.filtered
+  filtered: state.ticket.filtered,
+  loading: state.ticket.loading
 });
 
 export default connect(mapStateToProps, null)(TicketFilters);

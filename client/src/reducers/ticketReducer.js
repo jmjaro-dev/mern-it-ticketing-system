@@ -595,6 +595,7 @@ export default (state = initialState, action) => {
                 ...state,
                 sorted: state.assigned.sort((a, b) => a._id-b._id),
                 filtered: state.filtered.sort((a, b) => a._id-b._id),
+                unassigned: state.unassigned.sort((a, b) => a._id-b._id),
                 isAscending: !state.isAscending
               }
             } else {
@@ -602,6 +603,7 @@ export default (state = initialState, action) => {
                 ...state,
                 sorted: state.owned.sort((a, b) => a._id-b._id),
                 filtered: state.filtered.sort((a, b) => a._id-b._id),
+                unassigned: state.unassigned.sort((a, b) => a._id-b._id),
                 isAscending: !state.isAscending
               }
             }
@@ -613,6 +615,7 @@ export default (state = initialState, action) => {
                 ...state,
                 sorted: state.assigned.sort((a, b) => b._id-a._id),
                 filtered: state.filtered.sort((a, b) => b._id-a._id),
+                unassigned: state.unassigned.sort((a, b) => b._id-a._id),
                 isAscending: !state.isAscending
               }
             } else {
@@ -620,6 +623,7 @@ export default (state = initialState, action) => {
                 ...state,
                 sorted: state.owned.sort((a, b) => b._id-a._id),
                 filtered: state.filtered.sort((a, b) => b._id-a._id),
+                unassigned: state.unassigned.sort((a, b) => b._id-a._id),
                 isAscending: !state.isAscending
               }
             }
@@ -656,6 +660,19 @@ export default (state = initialState, action) => {
 
                   return statusA - statusB; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusA - statusB; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -675,6 +692,19 @@ export default (state = initialState, action) => {
                   return statusA - statusB; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusA - statusB; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let statusA, statusB;
 
                   if(a.status ==='open') { statusA = 1 };
@@ -722,6 +752,19 @@ export default (state = initialState, action) => {
 
                   return statusB - statusA; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusB - statusA; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -741,6 +784,19 @@ export default (state = initialState, action) => {
                   return statusB - statusA; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let statusA, statusB;
+
+                  if(a.status ==='open') { statusA = 1 };
+                  if(a.status ==='pending') { statusA = 2 };
+                  if(a.status ==='closed') { statusA = 3 };
+                  
+                  if(b.status ==='open') { statusB = 1 };
+                  if(b.status ==='pending') { statusB = 2 };
+                  if(b.status ==='closed') { statusB = 3 };
+
+                  return statusB - statusA; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let statusA, statusB;
 
                   if(a.status ==='open') { statusA = 1 };
@@ -789,6 +845,19 @@ export default (state = initialState, action) => {
 
                   return alertA - alertB; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertA - alertB; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -808,6 +877,19 @@ export default (state = initialState, action) => {
                   return alertA - alertB; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertA - alertB; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let alertA, alertB;
 
                   if(a.priority ==='low') { alertA = 1 };
@@ -855,6 +937,19 @@ export default (state = initialState, action) => {
 
                   return alertB - alertA; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertB - alertA; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -874,6 +969,19 @@ export default (state = initialState, action) => {
                   return alertB - alertA; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let alertA, alertB;
+
+                  if(a.priority ==='low') { alertA = 1 };
+                  if(a.priority ==='normal') { alertA = 2 };
+                  if(a.priority ==='high') { alertA = 3 };
+                  
+                  if(b.priority ==='low') { alertB = 1 };
+                  if(b.priority ==='normal') { alertB = 2 };
+                  if(b.priority ==='high') { alertB = 3 };
+
+                  return alertB - alertA; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let alertA, alertB;
 
                   if(a.priority ==='low') { alertA = 1 };
@@ -924,6 +1032,20 @@ export default (state = initialState, action) => {
   
                   return 0; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA < titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA > titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -944,6 +1066,20 @@ export default (state = initialState, action) => {
                   return 0; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA < titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA > titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   const titleA = a.title.toLowerCase();
                   const titleB = b.title.toLowerCase();
   
@@ -994,6 +1130,20 @@ export default (state = initialState, action) => {
   
                   return 0; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA > titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA < titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1014,6 +1164,20 @@ export default (state = initialState, action) => {
                   return 0; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  const titleA = a.title.toLowerCase();
+                  const titleB = b.title.toLowerCase();
+  
+                  if(titleA > titleB) {
+                    return -1;
+                  }
+  
+                  if(titleA < titleB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   const titleA = a.title.toLowerCase();
                   const titleB = b.title.toLowerCase();
   
@@ -1065,6 +1229,20 @@ export default (state = initialState, action) => {
 
                   return 0; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA < issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA > issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1085,6 +1263,20 @@ export default (state = initialState, action) => {
                   return 0; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA < issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA > issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   const issuedByA = a.title.toLowerCase();
                   const issuedByB = b.title.toLowerCase();
 
@@ -1135,6 +1327,20 @@ export default (state = initialState, action) => {
 
                   return 0; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA > issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA < issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1155,6 +1361,20 @@ export default (state = initialState, action) => {
                   return 0; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  const issuedByA = a.title.toLowerCase();
+                  const issuedByB = b.title.toLowerCase();
+
+                  if( issuedByA > issuedByB) {
+                    return -1;
+                  }
+
+                  if( issuedByA < issuedByB) {
+                    return 1;
+                  }
+
+                  return 0; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   const issuedByA = a.title.toLowerCase();
                   const issuedByB = b.title.toLowerCase();
 
@@ -1204,6 +1424,19 @@ export default (state = initialState, action) => {
   
                   return priorityA - priorityB; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityA - priorityB; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1223,6 +1456,19 @@ export default (state = initialState, action) => {
                   return priorityA - priorityB; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityA - priorityB; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let priorityA, priorityB;
   
                   if(a.priority ==='low') { priorityA = 1 };
@@ -1270,6 +1516,19 @@ export default (state = initialState, action) => {
   
                   return priorityB - priorityA; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityB - priorityA; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1289,6 +1548,19 @@ export default (state = initialState, action) => {
                   return priorityB - priorityA; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let priorityA, priorityB;
+  
+                  if(a.priority ==='low') { priorityA = 1 };
+                  if(a.priority ==='normal') { priorityA = 2 };
+                  if(a.priority ==='high') { priorityA = 3 };
+                  
+                  if(b.priority ==='low') { priorityB = 1 };
+                  if(b.priority ==='normal') { priorityB = 2 };
+                  if(b.priority ==='high') { priorityB = 3 };
+  
+                  return priorityB - priorityA; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let priorityA, priorityB;
   
                   if(a.priority ==='low') { priorityA = 1 };
@@ -1323,6 +1595,12 @@ export default (state = initialState, action) => {
   
                   return dateA - dateB; 
                 }),
+                unassigned: state.filtered.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateA - dateB; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1335,6 +1613,12 @@ export default (state = initialState, action) => {
                   return dateA - dateB; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateA - dateB; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   const dateA = new Date(a.createdAt);
                   const dateB = new Date(b.createdAt);
   
@@ -1361,6 +1645,12 @@ export default (state = initialState, action) => {
   
                   return dateB - dateA; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateB - dateA; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1373,6 +1663,12 @@ export default (state = initialState, action) => {
                   return dateB - dateA; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+  
+                  return dateB - dateA; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   const dateA = new Date(a.createdAt);
                   const dateB = new Date(b.createdAt);
   
@@ -1438,6 +1734,31 @@ export default (state = initialState, action) => {
   
                   return 0; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                                  
+                  if(assignedToA < assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA > assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1469,6 +1790,31 @@ export default (state = initialState, action) => {
                   return 0; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                                  
+                  if(assignedToA < assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA > assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let assignedToA, assignedToB;
   
                   if(!a.assignedTo.to) {
@@ -1552,6 +1898,31 @@ export default (state = initialState, action) => {
   
                   return 0; 
                 }),
+                unassigned: state.unassigned.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                  
+                  if(assignedToA > assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA < assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
                 isAscending: !state.isAscending
               }
             } else {
@@ -1583,6 +1954,31 @@ export default (state = initialState, action) => {
                   return 0; 
                 }),
                 filtered: state.filtered.sort((a, b) => {
+                  let assignedToA, assignedToB;
+  
+                  if(!a.assignedTo.to) {
+                    assignedToA = a.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToA = a.assignedTo.to
+                  }
+  
+                  if(!b.assignedTo.to) {
+                    assignedToB = b.assignedTo.firstName.toLowerCase();
+                  } else {
+                    assignedToB = b.assignedTo.to
+                  }
+                  
+                  if(assignedToA > assignedToB) {
+                    return -1;
+                  }
+  
+                  if(assignedToA < assignedToB) {
+                    return 1;
+                  }
+  
+                  return 0; 
+                }),
+                unassigned: state.unassigned.sort((a, b) => {
                   let assignedToA, assignedToB;
   
                   if(!a.assignedTo.to) {
@@ -1707,9 +2103,9 @@ export default (state = initialState, action) => {
             return {
               ...state,
               tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === action.payload.userID),
+              assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
               sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === action.payload.userID),
+              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
               unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
             }
           } else {
@@ -1717,15 +2113,15 @@ export default (state = initialState, action) => {
               return {
                 ...state,
                 tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-                assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === action.payload.userID),
-                filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === action.payload.userID),
+                assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
+                filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
                 unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
               }
             } else {
               return {
                 ...state,
                 tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-                assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === action.payload.userID),
+                assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
                 unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
               }
             }
@@ -1738,7 +2134,7 @@ export default (state = initialState, action) => {
               owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-              unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
+              unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned' && ticket.issuedBy._id === action.payload.userID)
             }
           } else {
             if(state.filtered !== null) {
@@ -1747,14 +2143,14 @@ export default (state = initialState, action) => {
                 tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
                 owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
                 filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned' && ticket.issuedBy._id === action.payload.userID)
               }
             } else {
               return {
                 ...state,
                 tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
                 owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
-                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned' && ticket.issuedBy._id === action.payload.userID)
               }
             }
           }
@@ -1842,14 +2238,12 @@ export default (state = initialState, action) => {
     case SET_OWNED_TICKETS: 
       return {
         ...state,
-        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload),
-        unassigned: state.tickets.filter(ticket => ticket.assignedTo.to === 'Unassigned')
+        owned: state.tickets.filter(ticket => ticket.issuedBy._id === action.payload)
       }
     case SET_ASSIGNED_TICKETS: 
       return {
         ...state,
-        assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload),
-        unassigned: state.tickets.filter(ticket => ticket.assignedTo.to === 'Unassigned')
+        assigned: state.tickets.filter(ticket => ticket.assignedTo._id === action.payload)
       }
     case SET_UNASSIGNED_TICKETS: 
       switch(action.payload.userType) {
@@ -1894,7 +2288,7 @@ export default (state = initialState, action) => {
         }) 
       };
     case SET_FILTER:
-      if(action.payload.current_url !== 'profile') {
+      if(action.payload.current_url !== 'dashboard') {
         return {
           ...state,
           active_filter_tickets: action.payload.filter,
@@ -1903,44 +2297,20 @@ export default (state = initialState, action) => {
           filtered: action.payload.tickets
         };
       } else {
-        if(action.payload.filter !== 'all') {
-          if(action.payload.userType === 'employee') {
-            return {
-              ...state,
-              active_filter_profile: action.payload.filter,
-              owned: action.payload.tickets,
-              filtered: action.payload.tickets
-            };
-          } else {
-            return {
-              ...state,
-              active_filter_profile: action.payload.filter,
-              assigned: action.payload.tickets,
-              filtered: action.payload.tickets
-            };
-          }
+        if(action.payload.userType === 'employee') {
+          return {
+            ...state,
+            active_filter_profile: action.payload.filter,
+            owned: action.payload.tickets,
+            filtered: action.payload.tickets
+          };
         } else {
-          switch(action.payload.userType){
-            case 'employee':
-              return {
-                ...state,
-                active_filter_profile: action.payload.filter,
-                owned: action.payload.tickets,
-                filtered: action.payload.tickets
-              };
-            case 'technician':
-              return {
-                ...state,
-                active_filter_profile: action.payload.filter,
-                assigned: action.payload.tickets,
-                filtered: action.payload.tickets
-              };
-            default: {
-              return {
-                ...state
-              }
-            }
-          }
+          return {
+            ...state,
+            active_filter_profile: action.payload.filter,
+            assigned: action.payload.tickets,
+            filtered: action.payload.tickets
+          };
         }
       }
       

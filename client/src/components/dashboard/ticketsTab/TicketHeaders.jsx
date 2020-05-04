@@ -87,9 +87,9 @@ const TicketHeaders = ({ tickets, userType, onSetField, onSort }) => {
   
   return (
     <tr className="ticket-info">
-      {tickets && userType !== 'technician' ? tech_headers.map(header => (
+      {tickets && userType !== 'technician' ? emp_headers.map(header => (
         <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
-      )) : emp_headers.map(header => (
+      )) : tech_headers.map(header => (
         <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
       ))}
     </tr>

@@ -129,7 +129,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
           {/* Form Ends */}
         </div>
         {/* Modal Footer - Buttons */}
-        <div className="modal-footer">
+        <div className="modal-footer" style={styles.footer}> 
           {/* Cancel Btn */}
           <button onClick={onCancel} className="modal-close btn-small white black-text">Cancel</button>
           {' '}
@@ -147,13 +147,14 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
 
 const styles = {
   modal : {
-    padding: '0 0.5em 0 0.5em',
-    width: '500px',
-    borderRadius: '0.5em'
+    padding: '0 0.5em 0 0.5em'
   },
   ticket_header: {
     fontSize: "1.5em",
     fontWeight: "bold"
+  }, 
+  footer: {
+    paddingRight: '1em'
   }
 }
 

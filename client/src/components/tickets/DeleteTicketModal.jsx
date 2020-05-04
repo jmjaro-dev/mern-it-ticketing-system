@@ -17,7 +17,7 @@ const DeleteTicketModal = ({ current, user, ticket_exists, deleteTicket, setAler
   }
 
   return (
-    <div id="delete-ticket-modal" className="modal modal-fixed-footer" style={styles.modal}>
+    <div id="delete-ticket-modal" className="modal" style={styles.modal}>
       <div className="modal-content">
         <h5 className="center grey-text text-darken-2">
         <FontAwesomeIcon icon="exclamation-circle" size="lg" className="yellow-text text-darken-2"/> {' '}
@@ -26,7 +26,7 @@ const DeleteTicketModal = ({ current, user, ticket_exists, deleteTicket, setAler
         <br/>
         <p className="center">Click <span className="blue darken-2 white-text z-depth-1" style={styles.confirm_text}>YES</span> to <span className="red-text text-darken-2">delete</span> your ticket.</p>
       </div>
-      <div className="modal-footer">
+      <div className="modal-footer" style={styles.footer}>
         <button className="modal-close btn-small white black-text">Cancel</button>
         {' '}
         <button onClick={onConfirm} className="modal-close waves-effect btn-small blue darken-2">Yes</button>
@@ -48,13 +48,15 @@ DeleteTicketModal.propTypes = {
 const styles = {
   modal: {
     padding: '0 0.5em 0.5em 0.5em',
-    width: '450px',
-    borderRadius: '1em'
+    width: '450px'
   },
   confirm_text: {
     padding: "0.5em 1em",
     borderRadius: "0.1em",
     fontSize: "0.9em",
+  }, 
+  footer: {
+    padding: '0 1em 1em 0'
   }
 };
 
