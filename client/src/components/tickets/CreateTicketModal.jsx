@@ -16,7 +16,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
   });
 
   useEffect(() => {
-    if(user && !techs && user.userType === 'employee'){
+    if(user && !techs){
       getTechs();
     }
     // eslint-disable-next-line
@@ -60,7 +60,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
         assignedTo: assignedTO
       }
 
-      addTicket(newTicket);
+      addTicket(newTicket, user.userType);
 
       setTicket({
         title: '',
@@ -77,7 +77,7 @@ const CreateTicketModal = ({ user, techs, getTechs, addTicket, setAlert }) => {
 
   return (
     <Fragment>
-      <div id="create-ticket-modal" className="modal" style={styles.modal}>
+      <div id="create-ticket-modal" className="modal modal-fixed-footer" style={styles.modal}>
         <div className="modal-content">
           <p className="center" style={styles.ticket_header}>
             <FontAwesomeIcon icon="file-invoice" size="lg" className="blue-text text-darken-2"/> {' '}

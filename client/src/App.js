@@ -2,10 +2,9 @@ import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 // Components
 import Navbar from './components/layout/Navbar';
-import Home from './components/pages/Home';
-import Profile from './components/profile/Profile';
+import TicketsPage from './components/tickets/TicketsPage';
+import Dashboard from './components/dashboard/Dashboard';
 import Settings from './components/settings/Settings';
-import UpdateProfileModal from './components/profile/profileTab/UpdateProfileModal';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -29,16 +28,21 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { 
   faSpinner,
-  faUser, 
+  faUser,
+  faUserPlus,
+  faColumns, 
   faFileInvoice,
   faExclamationCircle,
   faSearch,
   faCog,
+  faSignInAlt,
   faSignOutAlt,
+  faBars,
   faSort,
   faSortUp,
   faSortDown,
-  faEye, 
+  faEye,
+  faPlus, 
   faEdit,
   faPencilAlt,
   faChevronLeft,
@@ -47,7 +51,7 @@ import {
   faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 // icons library 
-library.add(faSpinner, faUser, faFileInvoice, faExclamationCircle, faSearch, faCog, faSignOutAlt, faSort, faSortUp, faSortDown, faEye, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane);
+library.add(faSpinner, faUser, faUserPlus, faColumns, faFileInvoice, faExclamationCircle, faSearch, faCog, faSignInAlt, faSignOutAlt, faBars, faSort, faSortUp, faSortDown, faEye, faPlus, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane);
 
 
 if(localStorage.token) {
@@ -67,15 +71,13 @@ const App = () => {
           <Navbar />
             <div className="main-container">
               <Alerts />
-              <UpdateProfileModal />
               <CreateTicketModal />
               <DeleteTicketModal />
               <UpdateTicketModal />
               <DeleteCommentModal />
-              
               <Switch>
-                <PrivateRoute exact path='/' component={Profile} />
-                <PrivateRoute exact path='/tickets' component={Home} />
+                <PrivateRoute exact path='/' component={Dashboard} />
+                <PrivateRoute exact path='/tickets' component={TicketsPage} />
                 <PrivateRoute exact path='/tickets/:id' component={Ticket}/>
                 <PrivateRoute exact path='/settings' component={Settings}/>
                 <Route exact path ='/login' component={Login} />

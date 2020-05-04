@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { updatePassword } from '../../actions/authActions';
 import { logout } from '../../actions/authActions';
 import { setAlert } from '../../actions/alertActions';
+import { resetUserState } from '../../actions/userActions';
+import { resetTicketState } from '../../actions/ticketActions';
+import { resetCommentState } from '../../actions/commentActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PreLoader from '../layout/PreLoader';
 import PropTypes from 'prop-types';
-// import M from 'materialize-css/dist/js/materialize.min.js';
 
-const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, updatePassword, logout, setAlert }) => {
+const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, updatePassword, resetUserState, resetTicketState, resetCommentState, logout, setAlert }) => {
   const [isVisible, setVisible] = useState(false);
   const [password, setPassword] = useState({
     current: '',
@@ -19,11 +20,19 @@ const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, upda
   useEffect(() => {
     if(!loading && passwordChangeStatus === 'failed' && passError !== null) {
       setAlert(passError, 'danger');
+      setPassword({
+        ...password,
+        newPassword: '',
+        confirmPass: ''
+      });
     }
     if(!loading && passwordChangeStatus === 'success' && !passError) {
       setAlert('Password changed successfully! You will be automatically logged out in 5 seconds.', 'success');
       setTimeout(() => {
-        logout()
+        resetUserState();
+        resetTicketState();
+        resetCommentState();
+        logout();
       }, 5000);
 
       setPassword({
@@ -33,7 +42,7 @@ const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, upda
       });
     }
     // eslint-disable-next-line
-  }, [loading]); 
+  }, [loading, passError]); 
 
   const { current, newPassword, confirmPass } = password;
 
@@ -42,6 +51,11 @@ const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, upda
   }
   
   const onCancelChange = () => {
+    setPassword({
+      current: '',
+      newPassword: '',
+      confirmPass: ''
+    });
     setVisible(false);
   }
 
@@ -74,13 +88,13 @@ const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, upda
         <div className="row">
           <div className="form-group col s12" style={styles.passField}>
             <label htmlFor="newPassword">New Password</label>
-            <input type="password" name="newPassword" onChange={onChange} required minLength="6"/>
+            <input type="password" name="newPassword" onChange={onChange} value={newPassword}  required minLength="6"/>
           </div>  
         </div>
         <div className="row">
           <div className="form-group col s12" style={styles.passField}>
             <label htmlFor="confirmPass">Confirm Password</label>
-            <input type="password" name="confirmPass" onChange={onChange} required minLength="6"/>
+            <input type="password" name="confirmPass" onChange={onChange} value={confirmPass} required minLength="6"/>
           </div>  
         </div>
         <div>
@@ -113,22 +127,23 @@ const SecuritySettings = ({ user, loading, passError, passwordChangeStatus, upda
     </div>
     <div className="collection-item">
       {/* Change Password */}
-      {!loading ? (
+      {user && (
         <Fragment>
           {!isVisible ? (
             <div>
               <span className="grey-text text-darken-1" style={styles.helper}>Click the button to <span className="green-text text-darken-1" style={styles.emphasize}>change</span> your password.</span>
               <br/>
-              <span className="btn-small green" style={styles.changeBtn} onClick={onChangePass}>Change Password</span>          
+              <span className="btn-small green" style={styles.changeBtn} onClick={onChangePass}>Change Password</span>
+              <br/>
+              {loading && (
+                <FontAwesomeIcon icon="spinner" size="3x" className="blue-text" spin/>
+              )}          
             </div>
             ) :
               passwordForm
           }
         </Fragment>
-      ) : (
-        <PreLoader />
       )}
-
     </div>
   </div>
   )
@@ -183,8 +198,8 @@ SecuritySettings.propTypes = {
 const mapStateToProps = state => ({
   alert: state.alert,
   passwordChangeStatus: state.auth.passwordChangeStatus,
-  loading: state.auth.loading,
+  loading: state.auth.authLoading,
   passError: state.auth.passError
 })
 
-export default connect(mapStateToProps, { updatePassword, logout, setAlert })(SecuritySettings);
+export default connect(mapStateToProps, { updatePassword, resetUserState, resetTicketState, resetCommentState, logout, setAlert })(SecuritySettings);

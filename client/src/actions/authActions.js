@@ -9,8 +9,8 @@ import {
   UPDATE_PASSWORD,
   UPDATE_USER_NAME,
   AUTH_ERROR,
-  USER_ERROR,
   ACCOUNT_ERROR,
+  USER_NAME_ERROR,
   EMAIL_ERROR,
   PASSWORD_ERROR,
   LOGIN_SUCCESS,
@@ -213,7 +213,7 @@ export const updateUserName = user => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: USER_ERROR,
+      type: USER_NAME_ERROR,
       payload: err.response.msg
     });
 

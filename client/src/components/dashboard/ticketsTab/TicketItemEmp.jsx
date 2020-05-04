@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const TicketItemTech = ({ ticket, userType, setCurrent }) => {
-  const { _id, priority, status, title, issuedBy, createdAt } = ticket;
+const TicketItemEmp = ({ ticket, setCurrent }) => {
+  const { _id, priority, status, title, createdAt, assignedTo } = ticket;
 
   // Set Current Ticket
   const onSetCurrent = () => {
-    setCurrent(ticket, userType, 'profile');
+    setCurrent(ticket, 'dashboard');
   }
   // Opens Modal
   const openModal = name => {
@@ -24,6 +24,12 @@ const TicketItemTech = ({ ticket, userType, setCurrent }) => {
     e.preventDefault();
     onSetCurrent();
     openModal("update-ticket-modal");
+  }
+  // Trigger DeleteTicketModal
+  const onDelete = async e => {
+    e.preventDefault();
+    onSetCurrent();
+    openModal("delete-ticket-modal");
   }
     
   return (
@@ -59,7 +65,16 @@ const TicketItemTech = ({ ticket, userType, setCurrent }) => {
         </Link>  
       </td>
       <td className="ticket-info">
-        {issuedBy.firstName} {issuedBy.lastName}
+        {!assignedTo.to ? 
+          <Fragment>
+            {assignedTo.firstName} {assignedTo.lastName} 
+          </Fragment> 
+          :
+          <Fragment> 
+            {assignedTo.to}
+          </Fragment>
+        }
+        
       </td>
       <td className="ticket-info center">
         {(priority === 'low') && (
@@ -86,23 +101,21 @@ const TicketItemTech = ({ ticket, userType, setCurrent }) => {
           <FontAwesomeIcon icon="eye" className="blue-text text-darken-2" />
         </Link>
         {' '}
-        {/* Update Link for Assigned Technician */}
         <a href="#!" onClick={onUpdate}>
           <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
+        </a>
+        {' '}
+        <a href="#!" onClick={onDelete}>
+          <FontAwesomeIcon icon={[ "far", "trash-alt" ]} className="red-text text-darken-2" />
         </a>
       </td>
     </tr>
   )
 }
 
-TicketItemTech.propTypes = {
+TicketItemEmp.propTypes = {
   ticket: PropTypes.object.isRequired,
-  userType: PropTypes.string,
   setCurrent: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  userType: state.auth.user.userType
-});
-
-export default connect(mapStateToProps, { setCurrent })(TicketItemTech);
+export default connect(null, { setCurrent })(TicketItemEmp);

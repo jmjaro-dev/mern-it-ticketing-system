@@ -17,7 +17,7 @@ const DeleteTicketModal = ({ current, user, ticket_exists, deleteTicket, setAler
   }
 
   return (
-    <div id="delete-ticket-modal" className="modal" style={styles.modal}>
+    <div id="delete-ticket-modal" className="modal modal-fixed-footer" style={styles.modal}>
       <div className="modal-content">
         <h5 className="center grey-text text-darken-2">
         <FontAwesomeIcon icon="exclamation-circle" size="lg" className="yellow-text text-darken-2"/> {' '}

@@ -8,7 +8,7 @@ const TicketFilters = ({ tickets, loading }) => {
   return (
     <Fragment>
       {tickets && !loading && (
-        <div className="row white">
+        <div className="row card-panel">
           <Fragment>
             <Filters tickets={tickets}/>
           </Fragment>

@@ -8,6 +8,7 @@ import {
   DELETE_TICKET,
   SET_OWNED_TICKETS,
   SET_ASSIGNED_TICKETS,
+  SET_UNASSIGNED_TICKETS,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_TICKET,
@@ -89,7 +90,7 @@ export const sortTicketsProfile = ( field, userType ) => async dispatch => {
 };
 
 // Add Ticket
-export const addTicket = ticket => async dispatch => {  
+export const addTicket = (newTicket, userType) => async dispatch => {  
   try {
     const config = {
       headers: {
@@ -97,11 +98,12 @@ export const addTicket = ticket => async dispatch => {
       }
     }
 
-    const res = await axios.post('/api/tickets', ticket, config);
+    const res = await axios.post('/api/tickets', newTicket, config);
+    const ticket = res.data;
 
     dispatch({
       type: ADD_TICKET,
-      payload: res.data
+      payload: {ticket, userType}
     });
   } catch (err) {
     dispatch({
@@ -129,7 +131,7 @@ export const deleteTicket = (id, userType, current_url) => async dispatch => {
 };
 
 // Update Ticket
-export const updateTicket = (ticket, userType, current_url) => async dispatch => {
+export const updateTicket = (ticket, userID, userType, current_url) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -143,6 +145,7 @@ export const updateTicket = (ticket, userType, current_url) => async dispatch =>
       type: UPDATE_TICKET,
       payload: {
         ticket: res.data,
+        userID,
         userType,
         current_url
       }
@@ -155,7 +158,7 @@ export const updateTicket = (ticket, userType, current_url) => async dispatch =>
   }
 };
 
-// Update the name on own Tickets
+// Update the name on owned/assigned Tickets
 export const updateNameOnTickets = user => async dispatch => {
   try {
     const config = {
@@ -200,6 +203,9 @@ export const setOwnedTickets = id => async dispatch => dispatch({ type: SET_OWNE
 // Set Assigned Tickets
 export const setAssignedTickets = id => async dispatch => dispatch({ type: SET_ASSIGNED_TICKETS, payload: id });
 
+// Set Unassigned Tickets
+export const setUnassignedTickets = (id, userType) => async dispatch => dispatch({ type: SET_UNASSIGNED_TICKETS, payload: { id, userType} });
+
 // Clear Current Ticket
 export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRENT });
 
@@ -207,8 +213,8 @@ export const clearCurrent = () => async dispatch => dispatch({ type: CLEAR_CURRE
 export const filterTickets = text => async dispatch => dispatch({ type: FILTER_TICKETS, payload: text });
 
 // Set Tickets by Filter
-export const setFilter = (filter, tickets, current_url) => async dispatch => {
-  dispatch({ type: SET_FILTER, payload: { filter, tickets, current_url } });
+export const setFilter = (filter, tickets, current_url, userType) => async dispatch => {
+  dispatch({ type: SET_FILTER, payload: { filter, tickets, current_url, userType } });
 };
 
 // Set Sorting method

@@ -6,8 +6,8 @@ import {
   UPDATE_PASSWORD,
   UPDATE_USER_NAME,
   AUTH_ERROR,
-  USER_ERROR,
   ACCOUNT_ERROR,
+  USER_NAME_ERROR,
   EMAIL_ERROR,
   PASSWORD_ERROR,
   LOGIN_SUCCESS,
@@ -27,8 +27,10 @@ const initialState = {
   authError: null,
   userError: null,
   accountError: null,
+  nameError: null,
   emailError: null,
   passError: null,
+  nameUpdateStatus: null,
   emailUpdateStatus: null,
   accountDeleteStatus: null,
   passwordChangeStatus: null
@@ -62,7 +64,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         user: action.payload,
-        userError: null,
+        nameError: null,
+        nameUpdateStatus: 'success',
         authLoading: false
       }
     case DELETE_ACCOUNT: {
@@ -89,29 +92,32 @@ export default (state = initialState, action) => {
       return {
         ...state,
         token: null,
-        isAuthenticated: false,
+        isAuthenticated: null,
         authLoading: false,
         user: null,
         authError: action.payload,
+        userError: null,
         accountError: null,
+        nameError: null,
         emailError: null,
         passError: null,
-        userError: null,
+        nameUpdateStatus: null,
         emailUpdateStatus: null,
         accountDeleteStatus: null,
         passwordChangeStatus: null
       };
-    case USER_ERROR:
-      return {
-        ...state,
-        userError: action.payload,
-        authLoading: false
-      }
     case ACCOUNT_ERROR: 
       return {
         ...state,
         accountError: action.payload,
         accountDeleteStatus: 'failed',
+        authLoading:false
+      }
+    case USER_NAME_ERROR: 
+      return {
+        ...state,
+        nameError: action.payload,
+        nameUpdateStatus: 'failed',
         authLoading:false
       }
     case EMAIL_ERROR: 
@@ -144,6 +150,11 @@ export default (state = initialState, action) => {
       }
     case RESET_STATUS:
       switch(action.payload) {
+        case 'name' :
+          return {
+            ...state,
+            nameUpdateStatus: null
+          }
         case 'email' :
           return {
             ...state,

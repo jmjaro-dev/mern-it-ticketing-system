@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { login } from '../../actions/authActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
@@ -41,9 +42,10 @@ const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
 
   return (
     <div className="form-container card-panel" id="login-form" style={styles.loginForm}>
-      <h4 className="center">
-        Account <span className="blue-text text-darken-2">Login</span>
-      </h4>
+      <h5 className="center">
+        <FontAwesomeIcon icon='sign-in-alt' style={{ marginRight: '0.35em'}} className="blue-text text-darken-2" />
+        <span className="grey-text text-darken-4">Login</span>
+      </h5>
 
       <form onSubmit={onSubmit}>
         <div className="form-group">
@@ -63,7 +65,8 @@ const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
 
 const styles = {
   loginForm : {
-    width: "400px",
+    minWidth: "200px",
+    maxWidth: "400px",
     margin: "10px auto"
   },
   loginBtn: {

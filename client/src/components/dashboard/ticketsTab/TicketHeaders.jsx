@@ -2,7 +2,7 @@ import React from 'react';
 import TicketHeader from './TicketHeader';
 import PropTypes from 'prop-types';
 
-const TicketHeaders = ({ assigned, onSetField, onSort }) => {
+const TicketHeaders = ({ tickets, userType, onSetField, onSort }) => {
   const emp_headers = [
     { 
       label: '#',
@@ -87,7 +87,7 @@ const TicketHeaders = ({ assigned, onSetField, onSort }) => {
   
   return (
     <tr className="ticket-info">
-      {assigned ? tech_headers.map(header => (
+      {tickets && userType !== 'technician' ? tech_headers.map(header => (
         <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
       )) : emp_headers.map(header => (
         <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>

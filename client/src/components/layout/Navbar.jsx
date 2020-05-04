@@ -20,6 +20,11 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
       setCurrentPage(window.location.pathname);
       onSetActive(window.location.pathname);
     }
+
+    if(!user) {
+      setCurrentPage(window.location.pathname);
+      onSetActive(window.location.pathname);
+    }
     // eslint-disable-next-line
   },[user]);
 
@@ -48,7 +53,31 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
         current = null
     }
 
-    // Adding/Removing 'active' class from element
+    let sideNavLinks;
+    if(current === 'Login' || current === 'Register') {
+      sideNavLinks = document.querySelector('#sidenav-guest').children;
+      // Adding/Removing 'active' class from Guest SideNav Links elements
+      for(let index=0; index < sideNavLinks.length; index++) {
+        if(sideNavLinks[index].innerText !== current) {
+          sideNavLinks[index].classList.remove('active');
+        } else {
+          sideNavLinks[index].classList.add('active');
+        }
+      }
+    } 
+    if(user) {
+      sideNavLinks = document.querySelector('#sidenav-member').children;
+      // Adding/Removing 'active' class from Member SideNav Links elements
+      for(let index=0; index < sideNavLinks.length; index++) {
+        if(sideNavLinks[index].innerText !== current) {
+          sideNavLinks[index].classList.remove('active');
+        } else {
+          sideNavLinks[index].classList.add('active');
+        }
+      }
+    }
+    
+    // Adding/Removing 'active' class from Links elements
     for(let index=0; index < links.length; index++) {
       if(links[index].innerText !== current) {
         links[index].classList.remove('active');
@@ -58,24 +87,34 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
     }
   }
 
-  const setActive = e => {
-    e.preventDefault();
-    // Gets UL element children
-    const links = e.target.parentElement.parentElement.children;
-    // Current clicked link
-    const current = e.target.innerText;
-    // Adding/Removing 'active' class from element
-    for(let index=0; index < links.length; index++) {
-      if(links[index].innerText !== current) {
-        links[index].classList.remove('active');
-      } else {
-        links[index].classList.add('active');
-      }
-    }
+  const setActive = () => {
+    onSetActive(window.location.pathname);
     setCurrentPage(window.location.pathname);
   }
 
+  const onCloseSideNav = e => {
+    let elem;
+    if(e.target.tagName === 'svg') {
+      elem = document.getElementById(e.target.parentElement.parentElement.parentElement.id);  
+    } 
+    if(e.target.tagName === 'path') {
+      elem = document.getElementById(e.target.parentElement.parentElement.parentElement.parentElement.id);
+    } 
+    
+    if(e.target.tagName === 'A') {
+      elem = document.getElementById(e.target.parentElement.parentElement.id);
+    }
+    onSetActive(window.location.pathname);
+    const instance = M.Sidenav.getInstance(elem);
+    instance.close();
+
+  }
+
   const onLogout = () => {
+    // Close Sidenav
+    const instance = M.Sidenav.getInstance(document.querySelector("#sidenav-member"));
+    instance.close();
+    // Reset all State and Logout
     resetUserState();
     resetTicketState();
     resetCommentState();
@@ -85,10 +124,16 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
   const guestLinks = (
     <Fragment>
       <li onClick={setActive}>
-        <Link to='/login' className="nav-links">Login</Link>
+        <Link to='/login' className="nav-links">
+          <FontAwesomeIcon icon='sign-in-alt' style={{ marginRight: '0.35em'}}/>
+          Login
+        </Link>
       </li>
       <li onClick={setActive}>
-        <Link to='/register' className="nav-links">Register</Link>
+        <Link to='/register' className="nav-links">
+          <FontAwesomeIcon icon='user-plus' style={{ marginRight: '0.5em'}}/>
+          Register
+        </Link>
       </li>
     </Fragment>
   )
@@ -97,44 +142,132 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
     <Fragment>
       <li onClick={setActive}>
         <Link to="/" className="nav-links">
-          <FontAwesomeIcon icon={["fas", "user"]} style={{ marginRight: "0.5em" }}/>
-          { user && user.firstName }
+          <FontAwesomeIcon icon="columns" style={{ marginRight: "0.5em" }}/>
+          <span className="hide-on-small-only">
+            Dashboard
+          </span>
         </Link>
       </li>
       
       <li onClick={setActive}>
         <Link to="/tickets" className="nav-links">
           <FontAwesomeIcon icon='file-invoice' style={{ marginRight: '0.35em'}}/>
-          Tickets
+          <span className="hide-on-small-only">
+            Tickets
+          </span>
         </Link>
       </li>
 
       <li onClick={setActive}>
         <Link to="/settings" className="nav-links">
           <FontAwesomeIcon icon='cog' style={{ marginRight: '0.35em'}}/>
-          Settings
+          <span className="hide-on-small-only">
+            Settings
+          </span>
         </Link>
       </li>
 
       <li onClick={setActive}>
         <a href="#!" className="nav-links" onClick={onLogout}>
           <FontAwesomeIcon icon='sign-out-alt' style={{ marginRight: '0.35em'}}/>
-          Logout
+          <span className="hide-on-small-only">
+            Logout
+          </span>
         </a>
       </li>
+    </Fragment>
+  )
+
+  const guestSideNav = (
+    <ul id="sidenav-guest" className="sidenav">
+      <li>
+        <div className="user-view">
+          <div className="background blue darken-2" />
+          <span className="white-text name">
+          <FontAwesomeIcon icon="file-invoice" style={{ marginRight: "1em" }} />
+            IT Ticket Tracker
+          </span>
+        </div>
+      </li>
+          
+      <li className="active" onClick={onCloseSideNav}>
+        <Link to='/login' className="nav-links">
+          <FontAwesomeIcon icon='sign-in-alt' style={{ marginRight: '0.5em'}}/>
+          Login
+        </Link>
+      </li>
+      <li onClick={onCloseSideNav}>
+        <Link to='/register' className="nav-links">
+          <FontAwesomeIcon icon='user-plus' style={{ marginRight: '0.5em'}}/>
+          Register
+        </Link>
+      </li>
+    </ul>
+  )
+
+  const memberSideNav = (
+    <Fragment>
+      {user && isAuthenticated && (
+        <ul id="sidenav-member" className="sidenav">
+          <li className="active">
+            <div className="user-view">
+              <div className="background blue darken-2" />
+              <span className="white-text name">{user.firstName} {user.lastName}</span>
+              <span className="white-text email">{user.email}</span>
+            </div>
+          </li>
+          <li onClick={setActive}>
+            <Link to="/" className="nav-links">
+              <FontAwesomeIcon icon="columns" style={{ marginRight: "1em" }} />
+              Dashboard
+            </Link>
+          </li>
+          
+          <li onClick={setActive}>
+            <Link to="/tickets" className="nav-links">
+              <FontAwesomeIcon icon='file-invoice' style={{ marginRight: '1em' }} />
+              Tickets
+            </Link>
+          </li>
+    
+          <li onClick={setActive}>
+            <Link to="/settings" className="nav-links">
+              <FontAwesomeIcon icon='cog' style={{ marginRight: '1em' }} />
+              Settings
+            </Link>
+          </li>
+    
+          <li onClick={setActive}>
+            <Link to="/login" className="nav-links" onClick={onLogout}>
+              <FontAwesomeIcon icon='sign-out-alt' style={{ marginRight: '1em' }} />
+              Logout
+            </Link>
+          </li>  
+        </ul>
+      )}
     </Fragment>
   )
 
   return (
     <Fragment>
       <nav className="blue darken-2">
+        {user && isAuthenticated ? memberSideNav : guestSideNav}
         <div className="nav-wrapper container">
           <Link to="/">
             <FontAwesomeIcon icon={icon} size="lg" style={{ marginRight: "0.5em" }} />
             {' '} {title}
           </Link>
-          <ul className="right">
-            {isAuthenticated ? authLinks : guestLinks}
+          <ul className="right hide-on-small-only">
+            {user && isAuthenticated ? authLinks : guestLinks}
+          </ul>
+
+          {/* Auth User SideNav Trigger */}
+          <ul className="right hide-on-med-and-up">
+            <li>
+              <a className="sidenav-trigger hide-on-med-and-up" href="#!" data-target={isAuthenticated ? "sidenav-member" : "sidenav-guest"}>
+              <FontAwesomeIcon icon='bars' style={{ marginRight: '0.35em'}}/>
+            </a>
+            </li>
           </ul>
         </div>
       </nav>

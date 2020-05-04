@@ -1,7 +1,6 @@
 
 :root {
   --primary-color: #1e88e5;
-  --dark-color: #333333;
   --danger-color: #f75353;
   --success-color: #28a745;
 }
@@ -17,6 +16,7 @@
   width: 90%;
   margin: 0 auto;
 }
+
 .nav-links {
   font-size: 0.9em;
 }
@@ -32,10 +32,11 @@ select {
 
 /* OVER WRITE MATERIALIZE CSS */
 
-/* Dropwdown */
-.dropdown-content li>a {
-  color: var(--primary-color);
-  font-size: 0.9em;
+/* Side Nav */
+.sidenav li.active,
+.sidenav li.active:focus {
+  background-color: #00000038;
+  color: 000;
 }
 
 /* Chip */
@@ -168,9 +169,9 @@ textarea:focus {
 /* END OF OVER WRITE */
 
 /* MENU STYLES */
-#sub-menu {
-  margin: "1em 0" !important;
-}
+/* #sub-menu {
+  margin-top: !important;
+} */
 /* END OF MENU STYLES */
 
 /* BUTTON STYLES */
@@ -327,22 +328,6 @@ textarea:focus {
 .badge-primary,
 .alert-primary {
   background: var(--primary-color);
-  color: #fff;
-}
-
-.btn-light,
-.bg-light,
-.badge-light,
-.alert-light {
-  background: var(--light-color);
-  color: #333;
-}
-
-.btn-dark,
-.bg-dark,
-.badge-dark,
-.alert-dark {
-  background: var(--dark-color);
   color: #fff;
 }
 

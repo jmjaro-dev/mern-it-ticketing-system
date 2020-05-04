@@ -55,7 +55,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
     if(title !== '' || description !== '' || priority !== '' || status !== '' || assignedTo !== '') {
       let assignedTO;
       
-      if(!assignedTo.to) {
+      if(assignedTo !== 'Unassigned') {
         assignedTO = techs.find(tech => assignedTo === tech._id);
       } else {
         assignedTO = { to: 'Unassigned' }
@@ -72,7 +72,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
         assignedTo: assignedTO
       }
       
-      updateTicket(updatedTicket, user.userType, current_url);
+      updateTicket(updatedTicket, user._id, user.userType, current_url);
 
       setTicket({
         title: '',
@@ -92,7 +92,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
 
   return (
     <Fragment>
-      <div id="update-ticket-modal" className="modal" style={styles.modal}>
+      <div id="update-ticket-modal" className="modal modal-fixed-footer" style={styles.modal}>
         {user && current !== null &&  (
           <Fragment>
             <div className="modal-content">
@@ -154,7 +154,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
                   {/* Status */}
                   <div className="form-group col s12 m6">
                     <label>Status</label>
-                    {user._id !== current.ticket.issuedBy._id && user.userType !== 'technician' ? (
+                    {user._id !== current.ticket.issuedBy._id && user.userType === 'technician' && assignedTo._id !== user._id ? (
                       <select name="status" className="browser-default" defaultValue={current.ticket.status}  onChange={onChange} disabled>
                         <option value="" disabled>- Status -</option>
                         <option value="open">open</option>
@@ -187,7 +187,7 @@ const UpdateTicketModal = ({ current, ticket_exists, user, techs, updateTicket, 
                     </div>
                   )}
                   {/* If Ticket = Unassigned & user = technician : show Assign field*/}
-                  {user && user.userType === 'technician' && current.ticket.assignedTo.to === 'Unassigned' && (
+                  {user && user.userType === 'technician' && (current.ticket.assignedTo.to === 'Unassigned' || current.ticket.assignedTo._id === user._id) && (
                     <div className="form-group col s12">
                       <label>Assign To</label>
                       <select name="assignedTo" className="browser-default" value={assignedTo._id} onChange={onChange} required>

@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { register } from '../../actions/authActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const Register = ({ isAuthenticated, error, register, setAlert, ...props }) => {
@@ -50,9 +51,10 @@ const Register = ({ isAuthenticated, error, register, setAlert, ...props }) => {
 
   return (
     <div className="form-container card-panel" id="register-form" style={styles.registerForm}>
-      <h4 className="center">
-        Account <span className="blue-text text-darken-2">Register</span>
-      </h4>
+      <h5 className="center">
+        <FontAwesomeIcon icon='user-plus' style={{ marginRight: '0.35em'}} className="blue-text text-darken-2"/>
+        <span className="grey-text text-darken-4"> Register</span>
+      </h5>
       <form onSubmit={onSubmit}>
         {/* firstName & lastName */}
         <div className="row">
@@ -128,7 +130,8 @@ const Register = ({ isAuthenticated, error, register, setAlert, ...props }) => {
 
 const styles = {
   registerForm : {
-    width: "500px",
+    maxWidth: "400px",
+    minWidth: "200px",
     margin: "10px auto"
   },
   registerBtn: {

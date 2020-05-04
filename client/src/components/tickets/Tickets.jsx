@@ -4,10 +4,9 @@ import TicketHeaders from './TicketsHeaders';
 import TicketItem from './TicketItem';
 import PreLoader from '../layout/PreLoader';
 import { getTickets, sortTickets, setSort, resetSort, clearCurrent } from '../../actions/ticketActions';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, loading, getTickets,  sortTickets, setSort, resetSort, clearCurrent }) => {
+const Tickets = ({ user, current, tickets, active_filter, mapped, sorted, filtered, sorting, loading, getTickets,  sortTickets, setSort, resetSort, clearCurrent }) => {
   useEffect(() => {
     if(current !== null) {
       clearCurrent();
@@ -67,33 +66,49 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, lo
     <Fragment>
       {tickets !== null && !loading ? (
         <Fragment>
-          <p className="ticket-label center">Tickets</p>
-          <div id="tickets" className="card-panel">
-            <table className="responsive-table striped">
-              {/* Headers */}
-              <TicketHeaders onSetField={onSetField} onSort={onSort}/>
-              {/* Body */}
-              <tbody>
-                <Fragment>
-                  {filtered !== null || sorted !== null ? 
-                  (
-                    // If filtered not null
-                    <Fragment>
-                    {sorted !== null && filtered !== null ? (filtered.map(ticket => (
-                        <TicketItem key={ticket._id} ticket={ticket} />
-                      ))
-                      ) : (mapped.map(ticket => (
+          {/* <p className="ticket-label center">Tickets</p> */}
+          <div id="tickets" className="card-panel collection">
+            <div className="center blue darken-2" style={styles.header}>
+              <span className="white-text">
+                Tickets
+              </span>
+            </div>
+            <div className="collection-item">
+              <table className="responsive-table striped">
+                {/* Headers */}
+                {tickets && (!filtered || (filtered && filtered.length !== 0)) && (
+                  <TicketHeaders onSetField={onSetField} onSort={onSort}/>
+                )}
+                {/* Body */}
+                <tbody>
+                  <Fragment>
+                    {filtered !== null && filtered.length === 0 && (
+                      <tr>
+                        <td className="center" colSpan="8">
+                          <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
+                        </td>
+                      </tr>
+                    )}
+                    {filtered !== null || sorted !== null ? 
+                    (
+                      // If filtered not null
+                      <Fragment>
+                      {sorted !== null && filtered !== null ? (filtered.map(ticket => (
                           <TicketItem key={ticket._id} ticket={ticket} />
-                      )))
-                    }
-                    </Fragment>
-                  ) 
-                  : tickets.map(ticket => (
-                    <TicketItem key={ticket._id} ticket={ticket} />
-                  ))}
-                </Fragment>
-              </tbody>
-            </table>
+                        ))
+                        ) : (mapped.map(ticket => (
+                            <TicketItem key={ticket._id} ticket={ticket} />
+                        )))
+                      }
+                      </Fragment>
+                    ) 
+                    : tickets.map(ticket => (
+                      <TicketItem key={ticket._id} ticket={ticket} />
+                    ))}
+                  </Fragment>
+                </tbody>
+              </table>
+            </div>
           </div>
         </Fragment>
       ) : (
@@ -101,6 +116,17 @@ const Tickets = ({ user, current, tickets, mapped, sorted, filtered, sorting, lo
       )}
     </Fragment>
   )
+}
+
+const styles = {
+  header: {
+    fontWeight: '500',
+    fontSize: '1.2em',
+    padding: '0.5em 0'
+  },
+  emphasized: {
+    fontWeight: '500'
+  }
 }
 
 Tickets.propTypes = {
@@ -111,6 +137,7 @@ Tickets.propTypes = {
   filtered: PropTypes.array,
   sorting: PropTypes.object,
   loading: PropTypes.bool,
+  active_filter: PropTypes.string,
   user: PropTypes.object.isRequired,
   getTickets: PropTypes.func.isRequired,
   sortTickets: PropTypes.func.isRequired,
@@ -128,6 +155,7 @@ const mapStateToProps = state => ({
   sorting: state.ticket.sorting,
   loading: state.ticket.loading,
   user: state.auth.user,
+  active_filter: state.ticket.active_filter_tickets
 });
 
 export default connect(mapStateToProps, { getTickets, sortTickets, setSort, resetSort, clearCurrent })(Tickets);

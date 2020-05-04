@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const TicketItemEmp = ({ ticket, userType, setCurrent }) => {
-  const { _id, priority, status, title, createdAt, assignedTo } = ticket;
+const TicketItemEmp = ({ ticket, setCurrent }) => {
+  const { _id, priority, status, title, createdAt } = ticket;
 
   // Set Current Ticket
   const onSetCurrent = () => {
-    setCurrent(ticket, userType, 'profile');
+    setCurrent(ticket, 'dashboard');
   }
   // Opens Modal
   const openModal = name => {
@@ -64,18 +64,6 @@ const TicketItemEmp = ({ ticket, userType, setCurrent }) => {
           <span className="truncate">{title}</span>
         </Link>  
       </td>
-      <td className="ticket-info">
-        {!assignedTo.to ? 
-          <Fragment>
-            {assignedTo.firstName} {assignedTo.lastName} 
-          </Fragment> 
-          :
-          <Fragment> 
-            {assignedTo.to}
-          </Fragment>
-        }
-        
-      </td>
       <td className="ticket-info center">
         {(priority === 'low') && (
           <span className="priority-badge grey-text text-darken-2">{priority}</span>
@@ -115,12 +103,7 @@ const TicketItemEmp = ({ ticket, userType, setCurrent }) => {
 
 TicketItemEmp.propTypes = {
   ticket: PropTypes.object.isRequired,
-  userType: PropTypes.string,
   setCurrent: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  userType: state.auth.user.userType
-});
-
-export default connect(mapStateToProps, { setCurrent })(TicketItemEmp);
+export default connect(null, { setCurrent })(TicketItemEmp);

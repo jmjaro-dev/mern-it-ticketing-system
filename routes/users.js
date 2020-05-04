@@ -244,21 +244,42 @@ router.put('/tickets/:id', [ auth, [
   }
 
   // Destructure firstName and lastName
-  const { firstName, lastName } = req.body;
+  const { firstName, lastName, userType } = req.body;
 
   // Build updated user object 
-  const userFields = {
-    issuedBy: {
-      _id: '',
-      firstName: '',
-      lastName: ''
-    }
-  };
+  let userFields;
   
-  userFields.issuedBy._id = req.params.id;
-  if(firstName) userFields.issuedBy.firstName = firstName;
-  if(lastName) userFields.issuedBy.lastName = lastName;
+  // Check userType then create the appropriate object structure
+  if(userType === 'employee') {
+    // user === 'employee'
+    userFields = {
+      issuedBy: {
+        _id: '',
+        firstName: '',
+        lastName: ''
+      }
+    };
 
+    userFields.issuedBy._id = req.params.id;
+    if(firstName) userFields.issuedBy.firstName = firstName;
+    if(lastName) userFields.issuedBy.lastName = lastName;
+  } 
+  
+  if(userType === 'technician') {
+    // user === 'technician'
+    userFields = {
+      assignedTo: {
+        _id: '',
+        firstName: '',
+        lastName: ''
+      }
+    };
+
+    userFields.assignedTo._id = req.params.id;
+    if(firstName) userFields.assignedTo.firstName = firstName;
+    if(lastName) userFields.assignedTo.lastName = lastName;
+  }
+  
   try {
     // Find user that matches the id
     let user = await User.findById(req.params.id);
@@ -269,10 +290,12 @@ router.put('/tickets/:id', [ auth, [
     } 
     else {
       // Update User's Info in Tickets database
-      Ticket.find().where({ 'issuedBy._id': req.params.id })
+      if(userType === 'employee') {
+        // IF user === 'employee' THEN update 'issuedBy' field
+        Ticket.find().where({ 'issuedBy._id': req.params.id })
         .then(tickets => {
-          tickets.forEach(ticket => {
-            Ticket.findByIdAndUpdate(ticket._id, { $set: userFields }, { new: false })
+          tickets.forEach(async ticket => {
+            await Ticket.findByIdAndUpdate(ticket._id, { $set: userFields }, { new: false })
             .then( _ => ticket)
             .catch(err => res.status(400).send({ msg: `Error: ${err}.`}));
           });
@@ -284,6 +307,25 @@ router.put('/tickets/:id', [ auth, [
           }
         })
         .catch(err => res.status(400).json({ msg: `Error: ${err}`}));
+      } 
+      if(userType === 'technician') {
+        // IF user === 'technician' THEN update 'assignedTo' field
+        Ticket.find().where({ 'assignedTo._id': req.params.id })
+        .then(tickets => {
+          tickets.forEach(async ticket => {
+            await Ticket.findByIdAndUpdate(ticket._id, { $set: userFields }, { new: false })
+            .then( _ => ticket)
+            .catch(err => res.status(400).send({ msg: `Error: ${err}.`}));
+          });
+        })
+        .then( async _ => {
+          let updated_tickets = await Ticket.find().where({ 'assignedTo._id': req.params.id });
+          if(updated_tickets) {
+            res.json(updated_tickets);
+          }
+        })
+        .catch(err => res.status(400).json({ msg: `Error: ${err}`}));
+      }
     } 
   } catch (err) {
     console.error(err.message);

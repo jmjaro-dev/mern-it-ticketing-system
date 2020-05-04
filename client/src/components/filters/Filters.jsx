@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Search from './Search';
 import Filter from './Filter';
 import { connect } from 'react-redux';
+import { setFilter } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Filters = ({ tickets, user }) => 
+const Filters = ({ tickets, user, active_filter, setFilter }) => 
 {
   const [ticketCounter, setTicketCounter] = useState({
     all: null,
@@ -15,7 +16,7 @@ const Filters = ({ tickets, user }) =>
     pending: null,
     closed: null
   });
-
+  const [activeFilter, setActiveFilter] = useState("All Tickets");
   const filters = ["All Tickets", user.userType, "Unassigned", "Open", "Pending", "Closed"];
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const Filters = ({ tickets, user }) =>
         setTicketCounter({
           ...ticketCounter,
           all: tickets.length,
-          assigned: tickets.filter(ticket => ticket.assignetTo._id === user._id).length,
+          assigned: tickets.filter(ticket => ticket.assignedTo._id === user._id).length,
           unassigned: tickets.filter(ticket => ticket.assignedTo.to === 'Unassigned').length,
           open: tickets.filter(ticket => ticket.status === 'open').length,
           pending: tickets.filter(ticket => ticket.status === 'pending').length,
@@ -42,31 +43,102 @@ const Filters = ({ tickets, user }) =>
         })
       } 
     }
+
+    if(active_filter !== activeFilter && tickets) {
+      onSetFilter(active_filter);
+      setActiveFilter(active_filter);
+    }
     // eslint-disable-next-line
-  }, [tickets]);
+  }, [tickets, active_filter]);
+
+  const onChange = e => {
+    setActiveFilter(e.target.value);
+    onSetFilter(e.target.value);
+  }
+
+  const onSetFilter = filter => {
+    const current_url = "tickets";
+    let arr = [];
+    // Set filter depending on 'filter' value
+    switch(filter) {
+      case "All Tickets":
+        setFilter(filter, tickets, current_url);
+        break;
+      case "My Tickets": 
+        arr = tickets.filter(ticket => {
+          return user._id === ticket.issuedBy._id;
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Assigned To Me":
+        arr = tickets.filter(ticket => {
+          return user._id === ticket.assignedTo._id;
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Unassigned":
+        arr = tickets.filter(ticket => {
+          return ticket.assignedTo.to === 'Unassigned';
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Open":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Pending":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Closed":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      default:
+        setFilter(filter, tickets, current_url);
+    }
+  }
 
   return (
     <Fragment>
-      <nav id="sub-menu"  className="transparent">
-        <div className="col s7 nav-wrapper">
-          <ul className="ticket-details nav-wrapper">
-            {filters.map(filter => (
-              <Filter key={filter} filter={filter} tickets={tickets} counter={ticketCounter}/>
-            ))}         
-          </ul>
+      <div id="sub-menu" className="row">
+        <div className="col s12 m6 l8 left"> 
+          {tickets && (
+            <Fragment>
+              <form>
+                <div className="form-group">
+                  <label htmlFor="ticketFilter">Ticket Filter:</label>
+                  <select name="ticketFilter" className="browser-default" defaultValue={active_filter} onChange={onChange} style={{ maxWidth: '200px' }} required>
+                  {filters.map(filter => (
+                    <Filter key={filter} filter={filter} counter={ticketCounter}/>
+                  ))}
+                </select>
+                </div>
+              </form>
+            </Fragment>
+          )}
         </div>
         <Search />
-      </nav>
+      </div>
     </Fragment>
   )
 }
 
 Filters.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  active_filter: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  user: state.auth.user,
+  active_filter: state.ticket.active_filter_tickets
 });
 
-export default connect(mapStateToProps, null)(Filters);
+export default connect(mapStateToProps, { setFilter })(Filters);
