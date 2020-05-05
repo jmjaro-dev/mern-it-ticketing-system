@@ -22,7 +22,7 @@ const DeleteCommentModal = ({ current, deleteComment, clearCurrent }) => {
         <p className="center">Click <span className="blue darken-2 white-text z-depth-1" style={styles.confirm_text}>CONFIRM</span> to <span className="red-text text-darken-2">delete</span> your comment.</p>
       </div>
 
-      <div className="modal-footer">
+      <div className="modal-footer" style={styles.footer}>
         <a href="#!" className="modal-close btn-small btn-flat">Cancel</a>
         {' '}
         <a href="#!" onClick={onConfirm} className="modal-close waves-effect btn-small blue darken-2">Confirm</a>
@@ -39,14 +39,15 @@ DeleteCommentModal.propTypes = {
 
 const styles = {
   modal: {
-    padding: '0 0.5em 0.5em 0.5em',
-    width: '450px',
-    borderRadius: '1em'
+    padding: '0 0.5em 0.5em 0.5em'
   },
   confirm_text: {
     padding: "0.5em 1em",
     borderRadius: "0.1em",
     fontSize: "0.9em",
+  },
+  footer: {
+    paddingRight: "1em"
   }
 };
 

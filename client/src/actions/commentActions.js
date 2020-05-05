@@ -29,7 +29,7 @@ export const getComments = ticket_id => async dispatch => {
   }
 };
 
-// Add Comment depending on ticket_id 
+// Add Comment depending on ticket that matches the ticket_id 
 export const addComment = (ticket_id, message, userInfo) => async dispatch => {  
   try {
     const config = {

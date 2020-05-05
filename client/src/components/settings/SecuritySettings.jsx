@@ -192,7 +192,10 @@ SecuritySettings.propTypes = {
   passwordChangeStatus: PropTypes.string,
   updatePassword: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  resetUserState: PropTypes.func.isRequired,
+  resetTicketState: PropTypes.func.isRequired,
+  resetCommentState: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

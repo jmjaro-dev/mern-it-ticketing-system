@@ -1,27 +1,36 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CreateBtn from '../layout/CreateBtn';
 import UnassignedTab from './unassignedTab/UnassignedTab';
 import TicketsTab from './ticketsTab/TicketsTab';
-import { getTickets, setOwnedTickets, setAssignedTickets, setUnassignedTickets, resetSort } from '../../actions/ticketActions';
+import { setPreviousUrl } from '../../actions/authActions';
+import { getTickets, setCurrent, setTicketExists, setOwnedTickets, setAssignedTickets, setUnassignedTickets } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.js';
 
-const Dashboard = ({ user, tickets, active_filter, loading, owned, assigned, unassigned, sorted, filtered, getTickets, setOwnedTickets, setAssignedTickets, setUnassignedTickets, resetSort }) => {
+const Dashboard = ({ user, tickets, current, active_filter, previousUrl, setPreviousUrl, loading, owned, assigned, unassigned, getTickets, setCurrent, setTicketExists, setOwnedTickets, setAssignedTickets, setUnassignedTickets }) => {
   const [activeTab, setActiveTab] = useState('#tickets');
   const [ticketCounter, setTicketCounter] = useState({
     totalOwned: null,
     totalAssigned: null,
     totalUnassigned: null
   });
-  
+  // const [current_ticket, setCurrentTicket] = useState('');
   const { totalOwned , totalAssigned, totalUnassigned } = ticketCounter;
+
+  let current_ticket = JSON.parse(localStorage.getItem('currentTicket')); 
 
   useEffect(() => {
     M.AutoInit();
-    
-    if(sorted !== null) {
-      resetSort();
+
+    if(user && !current && current_ticket && !loading) {
+      setCurrent(current_ticket, 'home');
+      setTicketExists(true);
+    }
+
+    if((previousUrl === null || previousUrl !== window.location.pathname) && !current_ticket){
+      setPreviousUrl(window.location.pathname);
     }
 
     if(!tickets && user) {
@@ -33,6 +42,15 @@ const Dashboard = ({ user, tickets, active_filter, loading, owned, assigned, una
       setTicketCounter({
         ...ticketCounter,
         totalUnassigned: tickets.filter(ticket => ticket.assignedTo.to === 'Unassigned').length
+      })
+    }
+
+    // Updates the Unassigned Tickets when employee adds/deletes and unassigned ticket
+    if(tickets && user && user.userType === 'employee' && unassigned && totalUnassigned !== null && unassigned.length !== totalUnassigned) {
+      setUnassignedTickets(user._id, user.userType);
+      setTicketCounter({
+        ...ticketCounter,
+        totalUnassigned: tickets.filter(ticket => ticket.issuedBy._id === user._id && ticket.assignedTo.to === 'Unassigned').length
       })
     }
     
@@ -95,6 +113,9 @@ const Dashboard = ({ user, tickets, active_filter, loading, owned, assigned, una
 
   return (
     <Fragment>
+      {user && current && current.ticket && current_ticket && !loading && (
+        <Redirect to={`/tickets/${current_ticket._id}`} />
+      )} 
       <CreateBtn user={user} />
       {user && tickets && unassigned && (assigned || owned) && !loading && (
         <div className="row card-panel">
@@ -133,33 +154,35 @@ const Dashboard = ({ user, tickets, active_filter, loading, owned, assigned, una
 
 Dashboard.propTypes = {
   user: PropTypes.object.isRequired,
+  current: PropTypes.object,
   tickets: PropTypes.array,
   active_filter: PropTypes.string.isRequired,
   assigned: PropTypes.array,
   owned: PropTypes.array,
   unassigned: PropTypes.array,
   sorting: PropTypes.object,
-  sorted: PropTypes.array,
-  filtered: PropTypes.array,
+  previousUrl: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   getTickets: PropTypes.func.isRequired,
+  setCurrent: PropTypes.func.isRequired, 
+  setTicketExists: PropTypes.func.isRequired,
+  setPreviousUrl: PropTypes.func.isRequired,
   setOwnedTickets: PropTypes.func.isRequired,
   setAssignedTickets: PropTypes.func.isRequired,
-  setUnassignedTickets: PropTypes.func.isRequired,
-  resetSort: PropTypes.func.isRequired
+  setUnassignedTickets: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   user: state.auth.user,
-  active_filter: state.ticket.active_filter_profile,
+  current: state.ticket.current,
+  active_filter: state.ticket.active_filter_dashboard,
   owned: state.ticket.owned,
   assigned: state.ticket.assigned,
   unassigned: state.ticket.unassigned,
-  sorted: state.ticket.sorted,
-  filtered: state.ticket.filtered,
   sorting: state.ticket.sorting,
+  previousUrl: state.auth.previousUrl,
   loading: state.ticket.ticketLoading
 });
 
-export default connect(mapStateToProps, { getTickets, setOwnedTickets, setAssignedTickets, setUnassignedTickets, resetSort })(Dashboard);
+export default connect(mapStateToProps, { getTickets, setCurrent, setTicketExists, setPreviousUrl, setOwnedTickets, setAssignedTickets, setUnassignedTickets })(Dashboard);

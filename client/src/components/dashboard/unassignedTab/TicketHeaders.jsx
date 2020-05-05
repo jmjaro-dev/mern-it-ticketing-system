@@ -2,7 +2,7 @@ import React from 'react';
 import TicketHeader from './TicketHeader';
 import PropTypes from 'prop-types';
 
-const TicketHeaders = ({ tickets, userType, onSetField, onSort }) => {
+const TicketHeaders = ({ tickets, userType, onSetField }) => {
   const emp_headers = [
     { 
       label: '#',
@@ -83,17 +83,18 @@ const TicketHeaders = ({ tickets, userType, onSetField, onSort }) => {
   return (
     <tr className="ticket-info">
       {tickets && userType !== 'employee' ? tech_headers.map(header => (
-        <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
+        <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} />
       )) : emp_headers.map(header => (
-        <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
+        <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} />
       ))}
     </tr>
   )
 }
 
 TicketHeaders.propTypes = {
-  onSetField: PropTypes.func.isRequired,
-  onSort: PropTypes.func.isRequired
+  tickets: PropTypes.array,
+  userType: PropTypes.string,
+  onSetField: PropTypes.func.isRequired
 };
 
 export default TicketHeaders;

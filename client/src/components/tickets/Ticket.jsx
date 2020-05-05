@@ -12,8 +12,10 @@ import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 
-const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTicket, getComments, setCurrent, clearCurrent, setTicketExists }) => {
+const Ticket = ({ match, user, current, ticket_exists, comments, previousUrl, loading, getTicket, getComments, setCurrent, clearCurrent, setTicketExists }) => {
   const [updatedTicket, setUpdatedTicket] = useState(null);
+
+  let current_ticket;
 
   useEffect(() => {
     if(user && current && updatedTicket === null) {
@@ -23,6 +25,11 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
       setTicketExists(true);
       setUpdatedTicket(current.ticket);
     } 
+
+    if(current && current.ticket && !loading) {
+      current_ticket = JSON.stringify(current.ticket); 
+      localStorage.setItem('currentTicket', current_ticket );
+    }
 
     if(current && updatedTicket !== current.ticket && updatedTicket) {
       setUpdatedTicket(current.ticket);
@@ -34,6 +41,7 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
   const onBack = () => {
     clearCurrent();
     setTicketExists(false);
+    localStorage.removeItem('currentTicket');
   }
   
   // Opens Modal
@@ -65,54 +73,172 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
               {/* Navigation & actions*/}
               <div className="row">
                 <span className="left ticket-links">
-                  <Link to="/" className="grey-text text-darken-2" onClick={onBack}>
+                  <Link to={previousUrl} className="grey-text text-darken-2" onClick={onBack}>
                     <FontAwesomeIcon icon="chevron-left"/>
-                    <span className="btn-label"> Back to Tickets</span>
+                      <span className="btn-label"> 
+                        Back to {previousUrl !== '/tickets' ? "Dashboard" : "Tickets"}
+                      </span>
                   </Link>
                 </span>  
               </div>
-              <div className="col s9" id="ticket-left-panel">
-                {/* Ticket info Section */}
-                <div className="card-panel">
-                  {/* Ticket Title, Alert Level, IssuedBy, DateIssued*/}
-                  <div className="center ticket-info-header">Ticket Information</div>
-                  <div className="row">
-                    <div className="col s12">
-                      {/* Ticket ID */}
-                      <span className="ticket-label">[ Ticket ID ]</span> {' '}
-                      <span className="ticket-details black-text">{current.ticket._id} </span>
-                    </div>
-                    <div className="col s12">
-                      {/* Title */}
-                      <span className="ticket-label">[ Subject ]</span> {' '}
-                      <span id="ticket-title" className="blue-text text-darken-2">{current.ticket.title}</span>
-                    </div>
-                    <div className="col s12">
+              <div className="row">
+                <div className="col s12 m7 l8">
+                  {/* Ticket info Section */}
+                  <div className="card-panel">
+                    {/* Ticket Title, Alert Level, IssuedBy, DateIssued*/}
+                    <div className="center ticket-info-header">Ticket Information</div>
+                    <div className="row">
+                      <div className="col s12">
+                        {/* Ticket ID */}
+                        <span className="ticket-label">[ Ticket ID ]</span> {' '}
+                        <span className="ticket-details black-text">{current.ticket._id} </span>
+                      </div>
+                      <div className="col s12">
+                        {/* Title */}
+                        <span className="ticket-label">[ Subject ]</span> {' '}
+                        <span id="ticket-title" className="blue-text text-darken-2">{current.ticket.title}</span>
+                      </div>
+                      <div className="col s12">
+                        <span className="ticket-label">
+                          [ Issued By ] 
+                        </span> <span className="ticket-details">{current.ticket.issuedBy.firstName} {' '} {current.ticket.issuedBy.lastName} </span>
+                      </div>
+                      <div className="col s12">
+                        <span className="ticket-label">[ Date Issued ]</span> {' '}
+                        <Moment format="MM-DD-YYYY, " className="ticket-details">
+                        {current.ticket.createdAt} 
+                        </Moment>
+                        <span className="ticket-details"> @ </span>
+                        <Moment format="h:mm A" className="ticket-details">
+                        {current.ticket.createdAt} 
+                        </Moment>
+                      </div>
+                    </div>                  
+                    <div className="divider"></div>
+                    {/* Ticket Description */}
+                    <p>
                       <span className="ticket-label">
-                        [ Issued By ] 
-                      </span> <span className="ticket-details">{current.ticket.issuedBy.firstName} {' '} {current.ticket.issuedBy.lastName} </span>
-                    </div>
-                    <div className="col s12">
-                      <span className="ticket-label">[ Date Issued ]</span> {' '}
-                      <Moment format="MM-DD-YYYY, " className="ticket-details">
-                      {current.ticket.createdAt} 
-                      </Moment>
-                      <span className="ticket-details"> @ </span>
-                      <Moment format="h:mm A" className="ticket-details">
-                      {current.ticket.createdAt} 
-                      </Moment>
-                    </div>
-                  </div>                  
-                  <div className="divider"></div>
-                  {/* Ticket Description */}
-                  <p>
-                    <span className="ticket-label">
-                      Description <FontAwesomeIcon icon="chevron-right"/> 
-                    </span> <span className="ticket-desc">{current.ticket.description}</span>
-                  </p>
+                        Description <FontAwesomeIcon icon="chevron-right"/> 
+                      </span> <span className="ticket-desc">{current.ticket.description}</span>
+                    </p>
+                  </div>
                 </div>
+                {/* Other Details Panel */}
+                <div className="col s12 m5 l4">
+                  <div className="card-panel">
+                    <div className="center ticket-info-header">Other Details</div>
+                    <p>
+                      {/* Lastest Update */}
+                      <span className="ticket-label">Latest Update <FontAwesomeIcon icon="chevron-right"/> </span>
+                      <Moment fromNow className="ticket-details">
+                      {!current.ticket.isUpdated ? current.ticket.createdAt : current.ticket.updatedAt} 
+                      </Moment>
+                      <br/>
+                      {/* Status */}
+                      <span className="ticket-label">Status <FontAwesomeIcon icon="chevron-right"/> </span> 
+                      {(current.ticket.status === 'open') && (
+                        <span className="ticket-details green-text text-darken-2">{current.ticket.status}</span> 
+                      )}
+                      {(current.ticket.status === 'pending') && (
+                        <span className="ticket-details orange-text text-darken-2">{current.ticket.status}</span> 
+                      )}
+                      {(current.ticket.status === 'closed') && (
+                        <span className="ticket-details red-text text-darken-2">{current.ticket.status}</span> 
+                      )}
+                      <br/>
+                      {/* Priority Level */}
+                      <span className="ticket-label">Priority Level <FontAwesomeIcon icon="chevron-right"/> </span>
+                      {(current.ticket.priority === 'low') && (
+                        <span className="priority-badge ticket-details grey-text text-darken-2">{current.ticket.priority}</span>
+                      )}
+                      {(current.ticket.priority === 'normal') && (
+                        <span className="priority-badge ticket-details green-text text-darken-2">{current.ticket.priority}</span>
+                      )}
+                      {(current.ticket.priority === 'high') && (
+                        <span className="priority-badge ticket-details red-text text-darken-2">{current.ticket.priority}</span>
+                      )}
+                      <br/>
+                      {/* Alert Level */}
+                      <span className="ticket-label">Alert Level <FontAwesomeIcon icon="chevron-right"/> </span>{' '}
+                      {(current.ticket.priority === 'low') && (
+                        <span className="priority-badge ticket-details grey-text text-darken-2">{current.ticket.priority}</span>
+                      )}
+                      {(current.ticket.priority === 'normal') && (
+                        <span className="priority-badge ticket-details green-text text-darken-2">{current.ticket.priority}</span>
+                      )}
+                      {(current.ticket.priority === 'high') && (
+                        <span className="priority-badge ticket-details red-text text-darken-2">{current.ticket.priority}</span>
+                      )}
+                      <br/>
+                      {/* Assigned To */}
+                      <span className="ticket-label"> Assigned to <FontAwesomeIcon icon="chevron-right"/> </span>{' '}
+                      {current.ticket.assignedTo._id !== user._id ? (
+                        <Fragment>
+                          <span className="ticket-details">
+                            {current.ticket.assignedTo.to !== 'Unassigned' ? (
+                              <Fragment>
+                                {current.ticket.assignedTo.firstName} {current.ticket.assignedTo.lastName}
+                              </Fragment>
+                            ) : (
+                              <Fragment>
+                                {current.ticket.assignedTo.to}
+                              </Fragment>
+                            )}
+                          </span>
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          <span className="ticket-details blue-text">
+                            {user.firstName} {user.lastName}
+                          </span>
+                        </Fragment>
+                      )}
+                    </p> 
+                    {/* Show update action for Technicians if Ticket is Unassigned */}
+                    {current.ticket.assignedTo.to === 'Unassigned' && user.userType === 'technician' && (
+                      <Fragment>
+                        <div className="divider"></div>
+                        <div className="center ticket-actions-header">Actions</div>
+                        <div className="ticket-actions-container row">
+                          <div className="col s6 m6 center">
+                            <a href="#!" onClick={onUpdate}>
+                              <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
+                              <span className="ticket-actions-label grey-text text-darken-2">update</span>
+                            </a>
+                          </div>
+                        </div>
+                      </Fragment>
+                    )}  
+                    {/* Show Actions for Ticket owner && Assigned Technician */}
+                    {(current.ticket.issuedBy._id === user._id || current.ticket.assignedTo._id === user._id) && (
+                      <Fragment>
+                        <div className="divider"></div>
+                        <div className="center ticket-actions-header">Actions</div>
+                        <div className="ticket-actions-container row">
+                          <div className="col s6 m6 center">
+                            <a href="#!" onClick={onUpdate}>
+                              <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
+                              <span className="ticket-actions-label grey-text text-darken-2">update</span>
+                            </a>
+                          </div>
+                          {/* Show delete action for ticket owner only */}
+                          {current.ticket.issuedBy._id === user._id && (
+                            <div className="col s6 m6 center">
+                              <a href="#!" onClick={onDelete}>
+                                <FontAwesomeIcon icon={[ "far", "trash-alt" ]} className="red-text text-darken-2" />
+                                <span className="ticket-actions-label grey-text text-darken-2"> delete</span>
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      </Fragment>
+                    )}  
+                  </div>
+                </div>
+              </div>
                 {/* Comments Section */}
                 <div className="divider"></div>
+              <div className="row">
                 <p className="center section-label"> 
                     Comments
                 </p>   
@@ -140,124 +266,13 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
                   </Fragment>
                 )}
               </div> 
-              {/* Right Panel */}
-              <div className="col s3 card-panel" id="ticket-right-panel">
-                <div className="center ticket-info-header">Other Details</div>
-                <p>
-                  {/* Lastest Update */}
-                  <span className="ticket-label">Latest Update <FontAwesomeIcon icon="chevron-right"/> </span>
-                  <Moment fromNow className="ticket-details">
-                  {!current.ticket.isUpdated ? current.ticket.createdAt : current.ticket.updatedAt} 
-                  </Moment>
-                  <br/>
-                  {/* Status */}
-                  <span className="ticket-label">Status <FontAwesomeIcon icon="chevron-right"/> </span> 
-                  {(current.ticket.status === 'open') && (
-                    <span className="ticket-details green-text text-darken-2">{current.ticket.status}</span> 
-                  )}
-                  {(current.ticket.status === 'pending') && (
-                    <span className="ticket-details orange-text text-darken-2">{current.ticket.status}</span> 
-                  )}
-                  {(current.ticket.status === 'closed') && (
-                    <span className="ticket-details red-text text-darken-2">{current.ticket.status}</span> 
-                  )}
-                  <br/>
-                  {/* Priority Level */}
-                  <span className="ticket-label">Priority Level <FontAwesomeIcon icon="chevron-right"/> </span>
-                  {(current.ticket.priority === 'low') && (
-                    <span className="priority-badge ticket-details grey-text text-darken-2">{current.ticket.priority}</span>
-                  )}
-                  {(current.ticket.priority === 'normal') && (
-                    <span className="priority-badge ticket-details green-text text-darken-2">{current.ticket.priority}</span>
-                  )}
-                  {(current.ticket.priority === 'high') && (
-                    <span className="priority-badge ticket-details red-text text-darken-2">{current.ticket.priority}</span>
-                  )}
-                  <br/>
-                  {/* Alert Level */}
-                  <span className="ticket-label">Alert Level <FontAwesomeIcon icon="chevron-right"/> </span>{' '}
-                  {(current.ticket.priority === 'low') && (
-                    <span className="priority-badge ticket-details grey-text text-darken-2">{current.ticket.priority}</span>
-                  )}
-                  {(current.ticket.priority === 'normal') && (
-                    <span className="priority-badge ticket-details green-text text-darken-2">{current.ticket.priority}</span>
-                  )}
-                  {(current.ticket.priority === 'high') && (
-                    <span className="priority-badge ticket-details red-text text-darken-2">{current.ticket.priority}</span>
-                  )}
-                  <br/>
-                  {/* Assigned To */}
-                  <span className="ticket-label"> Assigned to <FontAwesomeIcon icon="chevron-right"/> </span>{' '}
-                  {current.ticket.assignedTo._id !== user._id ? (
-                    <Fragment>
-                      <span className="ticket-details">
-                        {current.ticket.assignedTo.to !== 'Unassigned' ? (
-                          <Fragment>
-                            {current.ticket.assignedTo.firstName} {current.ticket.assignedTo.lastName}
-                          </Fragment>
-                        ) : (
-                          <Fragment>
-                            {current.ticket.assignedTo.to}
-                          </Fragment>
-                        )}
-                      </span>
-                    </Fragment>
-                  ) : (
-                    <Fragment>
-                      <span className="ticket-details blue-text">
-                        {user.firstName} {user.lastName}
-                      </span>
-                    </Fragment>
-                  )}
-                </p> 
-                {/* Show update action for Technicians if Ticket is Unassigned */}
-                {current.ticket.assignedTo.to === 'Unassigned' && user.userType === 'technician' && (
-                  <Fragment>
-                    <div className="divider"></div>
-                    <div className="center ticket-actions-header">Actions</div>
-                    <div className="ticket-actions-container row">
-                      <div className="col s12 m6 center">
-                        <a href="#!" onClick={onUpdate}>
-                          <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
-                          <span className="ticket-actions-label grey-text text-darken-2">update</span>
-                        </a>
-                      </div>
-                    </div>
-                  </Fragment>
-                )}  
-                {/* Show Actions for Ticket owner && Assigned Technician */}
-                {(current.ticket.issuedBy._id === user._id || current.ticket.assignedTo._id === user._id) && (
-                  <Fragment>
-                    <div className="divider"></div>
-                    <div className="center ticket-actions-header">Actions</div>
-                    <div className="ticket-actions-container row">
-                      <div className="col s12 m6 center">
-                        <a href="#!" onClick={onUpdate}>
-                          <FontAwesomeIcon icon="edit" className="green-text text-darken-2" />
-                          <span className="ticket-actions-label grey-text text-darken-2">update</span>
-                        </a>
-                      </div>
-                      {/* Show delete action for ticket owner only */}
-                      {current.ticket.issuedBy._id === user._id && (
-                        <div className="col s12 m6 center">
-                          <a href="#!" onClick={onDelete}>
-                            <FontAwesomeIcon icon={[ "far", "trash-alt" ]} className="red-text text-darken-2" />
-                            <span className="ticket-actions-label grey-text text-darken-2"> delete</span>
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </Fragment>
-                )}  
-                
-              </div>
             </div>
           </div>
         </div>
       ) : (
         <Fragment>
-          {!current && !ticket_exists ? (
-            <Redirect to="/" />
+          {!current && !ticket_exists && !current_ticket ? (
+            <Redirect to={previousUrl} />
           ) : (
             <PreLoader/>
           )}
@@ -269,9 +284,10 @@ const Ticket = ({ match, user, current, ticket_exists, comments, loading, getTic
 
 Ticket.propTypes = {
   user: PropTypes.object.isRequired,
-  ticket: PropTypes.object,
+  current: PropTypes.object,
   ticket_exists: PropTypes.bool,
   comments: PropTypes.array,
+  previousUrl: PropTypes.string,
   loading: PropTypes.bool,
   getTicket: PropTypes.func.isRequired,
   getComments: PropTypes.func.isRequired,
@@ -284,7 +300,8 @@ const mapStateToProps = state => ({
   user: state.auth.user,
   current: state.ticket.current,
   ticket_exists: state.ticket.ticket_exists,
-  loading: state.ticket.loading,
+  previousUrl: state.auth.previousUrl,
+  loading: state.ticket.ticketLoading,
   comments: state.comment.comments
 });
 

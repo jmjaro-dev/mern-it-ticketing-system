@@ -136,6 +136,8 @@ const Filters = ({ tickets, filtered, user, active_filter, setFilter }) =>
 }
 
 Filters.propTypes = {
+  tickets: PropTypes.array,
+  filtered: PropTypes.array,
   user: PropTypes.object.isRequired,
   active_filter: PropTypes.string.isRequired,
   setFilter: PropTypes.func.isRequired

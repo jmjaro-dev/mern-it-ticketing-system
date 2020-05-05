@@ -21,18 +21,18 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
     setEditMode();
   }
 
-  const onCancel = async e => {
+  const onCancel = e => {
     e.preventDefault();
     clearCurrent();
     setEditMode();
     setNewMessage('')
   }
 
-  const onDelete = async e => {
+  const onDelete = e => {
     e.preventDefault();
 
     if(current === false) {
-      await setCurrent(comment._id);
+      setCurrent(comment._id);
       setCurrentComment(true);
       let instance = M.Modal.getInstance(document.getElementById("delete-comment-modal"));
       instance.open();
@@ -40,10 +40,10 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
     } 
   }
 
-  const onSave = async e => {
+  const onSave = e => {
     e.preventDefault();
     if(!current) {
-      await setCurrentComment(true);
+      setCurrentComment(true);
 
       const newCommentInfo = {
         message: newMessage.message,
@@ -54,7 +54,7 @@ const CommentItem = ({ comment, current_user, current_comment, edit_mode, update
           userType: user.userType
         }
       }
-      await updateComment(comment._id, newCommentInfo);
+      updateComment(comment._id, newCommentInfo);
       setCurrentComment(false);
       setEditMode();
     } 

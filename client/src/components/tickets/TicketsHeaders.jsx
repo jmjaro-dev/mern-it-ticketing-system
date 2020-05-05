@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import TicketHeader from './TicketHeader';
 import PropTypes from 'prop-types';
 
-const TicketHeaders = ({ onSetField, onSort }) => {
+const TicketHeaders = ({ onSetField }) => {
   const headers = [
     { 
       label: '#',
@@ -56,7 +56,7 @@ const TicketHeaders = ({ onSetField, onSort }) => {
           {headers.map((header) => (
             <Fragment key={header.label}>
             {header.label !== 'Actions' ? (
-              <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField} onSort={onSort}/>
+              <TicketHeader key={header.label} label={header.label} id={header.id} data_sort={header.data_sort} onSetField={onSetField}/>
             ) : (
               <TicketHeader key={header.label} label={header.label}/>
             )}
@@ -69,8 +69,7 @@ const TicketHeaders = ({ onSetField, onSort }) => {
 }
 
 TicketHeaders.propTypes = {
-  onSetField: PropTypes.func.isRequired,
-  onSort: PropTypes.func.isRequired
+  onSetField: PropTypes.func.isRequired
 };
 
 export default TicketHeaders;

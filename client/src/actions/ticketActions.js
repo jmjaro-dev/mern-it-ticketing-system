@@ -3,7 +3,7 @@ import {
   GET_TICKET,
   GET_TICKETS,
   SORT_TICKETS,
-  SORT_TICKETS_PROFILE,
+  SORT_TICKETS_DASHBOARD,
   ADD_TICKET,
   DELETE_TICKET,
   SET_OWNED_TICKETS,
@@ -80,11 +80,11 @@ export const sortTickets = field => async dispatch => {
   });
 };
 
-// Sort Tickets in Profile
-export const sortTicketsProfile = ( field, userType ) => async dispatch => {
+// Sort Tickets in Dashboard
+export const sortTicketsDashboard = ( field, userType ) => async dispatch => {
   const info = { field, userType }
   dispatch({ 
-    type: SORT_TICKETS_PROFILE, 
+    type: SORT_TICKETS_DASHBOARD, 
     payload: info 
   });
 };

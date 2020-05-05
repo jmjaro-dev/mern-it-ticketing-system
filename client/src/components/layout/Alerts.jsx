@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
+
 
 const Alerts = ({ alerts }) => {
   return (
@@ -11,6 +13,10 @@ const Alerts = ({ alerts }) => {
       </div>
     ))
   )
+}
+
+Alerts.propTypes = {
+  alerts: PropTypes.array
 }
 
 const mapPropsToState = state => ({

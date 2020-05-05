@@ -1,15 +1,20 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import TicketHeaders from './TicketHeaders';
 import TicketItemTech from './TicketItemTech';
 import TicketItemEmp from './TicketItemEmp';
 import TicketFilters from './filters/TicketFilters';
-import { setSort, sortTicketsProfile } from '../../../actions/ticketActions';
+import { setSort, sortTicketsDashboard, resetSort } from '../../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, filtered, sorting, setSort, sortTicketsProfile }) => {
+const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, filtered, sorting, setSort, sortTicketsDashboard, resetSort }) => {
   const { isSorted, order } = sorting;
   let sortBy = null;
+
+  useEffect(() => {
+    resetSort();
+    // eslint-disable-next-line
+  }, []);
 
   const onSetField = e => {
     e.preventDefault();
@@ -26,14 +31,14 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
           field: sortBy,
           order: 'desc'
         })
-        sortTicketsProfile(field, user.userType);
+        sortTicketsDashboard(field, user.userType);
       } else {
         setSort({ 
           ...sorting,
           field: sortBy,
           order: 'asc'
         })
-        sortTicketsProfile(field, user.userType);
+        sortTicketsDashboard(field, user.userType);
       }
     } else {
       setSort({ 
@@ -41,7 +46,7 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
         field: sortBy,
         order: 'desc'
       })
-      sortTicketsProfile(field, user.userType);
+      sortTicketsDashboard(field, user.userType);
     }
   }
 
@@ -69,39 +74,13 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
               {tickets && (owned || assigned) && filtered && filtered.length !== 0 && (
                 <thead>
                   {/* Table Headers */}
-                  <TicketHeaders tickets={tickets} userType={user.userType} onSetField={onSetField} onSort={onSort}/>
+                  <TicketHeaders tickets={tickets} userType={user.userType} onSetField={onSetField} />
                 </thead>
               )}
               {/* Table Body */}
               <tbody>
                 {/* Ticket Items for Technicians */}
-                {!filtered ? (
-                  <Fragment>
-                    {( assigned && assigned.length === 0 && owned === null) || (assigned === null && owned && owned.length === 0) ? (
-                      <tr>
-                        <td className="center" colSpan="9">
-                          <p>There are no tickets<span style={styles.emphasized}>assigned to you</span>.</p>
-                        </td>
-                      </tr>
-                    ) : (
-                      <Fragment>
-                        {assigned && !owned ? (
-                          <Fragment>
-                            {assigned.map(ticket => (
-                              <TicketItemTech key={ticket._id} ticket={ticket} />
-                            ))}
-                          </Fragment>
-                        ) : (
-                          <Fragment>
-                            {owned.map(ticket => (
-                              <TicketItemEmp key={ticket._id} ticket={ticket} />
-                            ))}
-                          </Fragment>
-                        )}  
-                      </Fragment>
-                    )}
-                  </Fragment>
-                ) : (
+                {filtered  && (
                   <Fragment>
                     {user.userType !== 'employee' ? (
                       <Fragment>
@@ -110,11 +89,31 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
                         ))}
 
                         {filtered.length === 0 && (
-                          <tr>
-                            <td className="center" colSpan="9">
-                              <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
-                            </td>
-                          </tr>
+                          <Fragment>
+                            {active_filter !== 'all' ? (
+                              <tr>
+                                <td className="center" colSpan="9">
+                                  <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
+                                </td>
+                              </tr>
+                            ) : (
+                              <Fragment>
+                                {user.userType === 'employee' ? (
+                                  <tr>
+                                    <td className="center" colSpan="9">
+                                      <p>There are no tickets yet.</p>
+                                    </td>
+                                  </tr>
+                                ) : (
+                                  <tr>
+                                    <td className="center" colSpan="9">
+                                      <p>There are no tickets assigned to you.</p>
+                                    </td>
+                                  </tr>
+                                )}
+                              </Fragment>
+                            )}
+                          </Fragment>
                         )}
                       </Fragment>
                     ) : (
@@ -164,16 +163,17 @@ TicketsTab.propTypes = {
   owned: PropTypes.array,
   assigned: PropTypes.array,
   loading: PropTypes.bool,
-  sortTicketsProfile: PropTypes.func.isRequired,
-  setSort: PropTypes.func.isRequired
+  sortTicketsDashboard: PropTypes.func.isRequired,
+  setSort: PropTypes.func.isRequired,
+  resetSort: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   filtered: state.ticket.filtered,
   sorting: state.ticket.sorting,
-  active_filter: state.ticket.active_filter_profile,
+  active_filter: state.ticket.active_filter_dashboard,
   loading: state.ticket.ticketLoading
 });
 
-export default connect(mapStateToProps, { setSort, sortTicketsProfile })(TicketsTab);
+export default connect(mapStateToProps, { setSort, sortTicketsDashboard, resetSort })(TicketsTab);

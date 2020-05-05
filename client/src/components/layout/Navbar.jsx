@@ -11,20 +11,29 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, resetTicketState, resetCommentState }) => {
   const [currentPage, setCurrentPage] = useState(null);
+  const [currentTicketExists, setCurrentTicketExists] = useState(false);
+  
+  let current_ticket = localStorage.getItem('currentTicket'); 
+
   useEffect(() => {
     M.AutoInit();
 
-    setCurrentPage(window.location.pathname)
-    
-    if(currentPage) {
-      setCurrentPage(window.location.pathname);
-      onSetActive(window.location.pathname);
-    }
+    setCurrentPage(window.location.pathname);
 
     if(!user) {
       setCurrentPage(window.location.pathname);
       onSetActive(window.location.pathname);
     }
+
+    if(currentPage) {
+      setCurrentPage(window.location.pathname);
+      onSetActive(window.location.pathname);
+    }
+
+    if(current_ticket && !currentTicketExists) {
+      setCurrentTicketExists(true);
+    } 
+
     // eslint-disable-next-line
   },[user, currentPage]);
 
@@ -90,6 +99,10 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
   const setActive = () => {
     onSetActive(window.location.pathname);
     setCurrentPage(window.location.pathname);
+    if(current_ticket) {
+      localStorage.removeItem('currentTicket');
+      setCurrentTicketExists(false);
+    }
   }
 
   const onCloseSideNav = e => {

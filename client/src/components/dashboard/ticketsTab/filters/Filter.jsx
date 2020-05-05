@@ -283,7 +283,7 @@ Filter.propTypes = {
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   user: state.auth.user,
-  active_filter: state.ticket.active_filter_profile
+  active_filter: state.ticket.active_filter_dashboard
 });
 
 export default connect(mapStateToProps, { setFilter })(Filter);

@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import TicketHeaders from './TicketHeaders';
 import TicketItemTech from './TicketItemTech';
 import TicketItemEmp from './TicketItemEmp';
-import { setSort, sortTicketsProfile, setFilter, clearFilter } from '../../../actions/ticketActions';
+import { setSort, sortTicketsDashboard, resetSort, setFilter, clearFilter } from '../../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const UnassignedTab = ({ user, activeTab, active_filter, tickets, unassigned, loading, sorting, setSort, sortTicketsProfile, setFilter, clearFilter }) => {
+const UnassignedTab = ({ user, activeTab, active_filter, tickets, unassigned, loading, sorting, setSort, sortTicketsDashboard, resetSort, setFilter, clearFilter }) => {
   const { isSorted, order } = sorting;
   let sortBy = null;
 
   useEffect(() => {
+    resetSort();
+  
     if(activeTab === '#unassigned') {
       clearFilter('unassigned');
       onSetFilter(user.userType);
@@ -50,14 +52,14 @@ const UnassignedTab = ({ user, activeTab, active_filter, tickets, unassigned, lo
           field: sortBy,
           order: 'desc'
         })
-        sortTicketsProfile(field, user.userType);
+        sortTicketsDashboard(field, user.userType);
       } else {
         setSort({ 
           ...sorting,
           field: sortBy,
           order: 'asc'
         })
-        sortTicketsProfile(field, user.userType);
+        sortTicketsDashboard(field, user.userType);
       }
     } else {
       setSort({ 
@@ -65,7 +67,7 @@ const UnassignedTab = ({ user, activeTab, active_filter, tickets, unassigned, lo
         field: sortBy,
         order: 'desc'
       })
-      sortTicketsProfile(field, user.userType);
+      sortTicketsDashboard(field, user.userType);
     }
   }
 
@@ -143,12 +145,14 @@ const styles = {
 UnassignedTab.propTypes = {
   user: PropTypes.object,
   tickets: PropTypes.array,
+  activeTab: PropTypes.string,
   active_filter: PropTypes.string,
   unassigned: PropTypes.array,
   sorting: PropTypes.object,
   loading: PropTypes.bool,
-  sortTicketsProfile: PropTypes.func.isRequired,
+  sortTicketsDashboard: PropTypes.func.isRequired,
   setSort: PropTypes.func.isRequired,
+  resetSort: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
   clearFilter: PropTypes.func.isRequired
 }
@@ -157,8 +161,8 @@ const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   unassigned: state.ticket.unassigned,
   sorting: state.ticket.sorting,
-  active_filter: state.ticket.active_filter_profile,
+  active_filter: state.ticket.active_filter_dashboard,
   loading: state.ticket.ticketLoading
 });
 
-export default connect(mapStateToProps, { setSort, sortTicketsProfile, setFilter, clearFilter })(UnassignedTab);
+export default connect(mapStateToProps, { setSort, sortTicketsDashboard, resetSort, setFilter, clearFilter })(UnassignedTab);

@@ -254,16 +254,6 @@ textarea:focus {
   margin-right: 0.5em; 
 }
 
-#ticket-left-panel {
-  width: 73%;
-  margin-right: 2%;
-  padding: 0;
-}
-
-#ticket-right-panel {
-  width: 25%;
-  padding: 1em;
-}
 /* END OF TICKET STYLES /*
 
 /* COMMENTS STYLES */

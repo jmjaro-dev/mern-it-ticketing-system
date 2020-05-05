@@ -1,14 +1,33 @@
 import React, { Fragment, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import TicketHeaders from './TicketsHeaders';
 import TicketItem from './TicketItem';
 import PreLoader from '../layout/PreLoader';
-import { getTickets, sortTickets, setSort, resetSort, clearCurrent } from '../../actions/ticketActions';
+import { setPreviousUrl } from '../../actions/authActions';
+import { getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, current, tickets, active_filter, mapped, sorted, filtered, sorting, loading, getTickets,  sortTickets, setSort, resetSort, clearCurrent }) => {
+const Tickets = ({ user, current, tickets, active_filter, previousUrl, setPreviousUrl, mapped, sorted, filtered, sorting, loading, getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, clearCurrent }) => {
+  let current_ticket = JSON.parse(localStorage.getItem('currentTicket')); 
+
   useEffect(() => {
-    if(current !== null) {
+    clearFilter();
+
+    if((previousUrl === null || previousUrl !== window.location.pathname) && !current_ticket){
+      setPreviousUrl(window.location.pathname);
+    }
+
+    if(user && !current && current_ticket && !loading) {
+      setCurrent(current_ticket, 'home');
+      setTicketExists(true);
+    }
+
+    if(active_filter) {
+      onSetFilter(active_filter);
+    }
+    
+    if(current !== null && !current_ticket) {
       clearCurrent();
     }
 
@@ -24,6 +43,55 @@ const Tickets = ({ user, current, tickets, active_filter, mapped, sorted, filter
 
   const { isSorted, order } = sorting;
   let sortBy = null;
+
+  const onSetFilter = filter => {
+    const current_url = "tickets";
+    let arr = [];
+    // Set filter depending on 'filter' value
+    switch(filter) {
+      case "All Tickets":
+        setFilter(filter, tickets, current_url);
+        break;
+      case "My Tickets": 
+        arr = tickets.filter(ticket => {
+          return user._id === ticket.issuedBy._id;
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Assigned To Me":
+        arr = tickets.filter(ticket => {
+          return user._id === ticket.assignedTo._id;
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Unassigned":
+        arr = tickets.filter(ticket => {
+          return ticket.assignedTo.to === 'Unassigned';
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Open":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Pending":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      case "Closed":
+        arr = tickets.filter(ticket => {
+          return ticket.status === filter.toLowerCase();
+        })
+        setFilter(filter, arr, current_url);
+        break;
+      default:
+        setFilter(filter, tickets, current_url);
+    }
+  }
 
   const onSetField = e => {
     e.preventDefault();
@@ -66,6 +134,9 @@ const Tickets = ({ user, current, tickets, active_filter, mapped, sorted, filter
     <Fragment>
       {tickets !== null && !loading ? (
         <Fragment>
+          {user && tickets && current && current.ticket && current_ticket && !loading && (
+            <Redirect to={`/tickets/${current.ticket._id}`} />
+          )}
           {/* <p className="ticket-label center">Tickets</p> */}
           <div id="tickets" className="card-panel collection">
             <div className="center blue darken-2" style={styles.header}>
@@ -77,17 +148,27 @@ const Tickets = ({ user, current, tickets, active_filter, mapped, sorted, filter
               <table className="responsive-table striped">
                 {/* Headers */}
                 {tickets && (!filtered || (filtered && filtered.length !== 0)) && (
-                  <TicketHeaders onSetField={onSetField} onSort={onSort}/>
+                  <TicketHeaders onSetField={onSetField} />
                 )}
                 {/* Body */}
                 <tbody>
                   <Fragment>
                     {filtered !== null && filtered.length === 0 && (
-                      <tr>
-                        <td className="center" colSpan="8">
-                          <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
-                        </td>
-                      </tr>
+                      <Fragment>
+                        {active_filter !== 'All Tickets' ? (
+                          <tr>
+                            <td className="center" colSpan="8">
+                              <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
+                            </td>
+                          </tr>
+                        ) : (
+                          <tr>
+                            <td className="center" colSpan="8">
+                              <p>There are no tickets yet.</p>
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
                     )}
                     {filtered !== null || sorted !== null ? 
                     (
@@ -137,12 +218,18 @@ Tickets.propTypes = {
   filtered: PropTypes.array,
   sorting: PropTypes.object,
   loading: PropTypes.bool,
+  previousUrl: PropTypes.string,
   active_filter: PropTypes.string,
   user: PropTypes.object.isRequired,
   getTickets: PropTypes.func.isRequired,
   sortTickets: PropTypes.func.isRequired,
   setSort: PropTypes.func.isRequired,
   resetSort: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  setCurrent: PropTypes.func.isRequired, 
+  setTicketExists: PropTypes.func.isRequired,
+  setPreviousUrl: PropTypes.func.isRequired,
+  clearFilter: PropTypes.func.isRequired,
   clearCurrent: PropTypes.func.isRequired
 };
 
@@ -155,7 +242,8 @@ const mapStateToProps = state => ({
   sorting: state.ticket.sorting,
   loading: state.ticket.loading,
   user: state.auth.user,
+  previousUrl: state.auth.previousUrl,
   active_filter: state.ticket.active_filter_tickets
 });
 
-export default connect(mapStateToProps, { getTickets, sortTickets, setSort, resetSort, clearCurrent })(Tickets);
+export default connect(mapStateToProps, { getTickets, setPreviousUrl, sortTickets, setSort, resetSort, setFilter, setCurrent, setTicketExists, clearFilter, clearCurrent })(Tickets);

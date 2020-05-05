@@ -18,6 +18,7 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   DELETE_ACCOUNT,
+  SET_PREVIOUS_URL,
   SET_AUTHLOADING,
   RESET_STATUS
 } from './types';
@@ -256,6 +257,9 @@ export const deleteAccount = (id, password) => async dispatch => {
     }, 4000);
   }
 };
+
+// Set Previous URL
+export const setPreviousUrl = url => async dispatch => dispatch({ type: SET_PREVIOUS_URL, payload: url });
 
 // Reset Status
 export const resetStatus = status => async dispatch => dispatch({ type: RESET_STATUS, payload: status });

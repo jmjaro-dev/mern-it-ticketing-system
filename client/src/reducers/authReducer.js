@@ -15,6 +15,7 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   DELETE_ACCOUNT,
+  SET_PREVIOUS_URL,
   SET_AUTHLOADING,
   RESET_STATUS
 } from '../actions/types';
@@ -33,7 +34,8 @@ const initialState = {
   nameUpdateStatus: null,
   emailUpdateStatus: null,
   accountDeleteStatus: null,
-  passwordChangeStatus: null
+  passwordChangeStatus: null,
+  previousUrl: '/'
 }
 
 export default (state = initialState, action) => {
@@ -142,6 +144,11 @@ export default (state = initialState, action) => {
         accountError: null,
         emailError: null,
         passError: null,
+      }
+    case SET_PREVIOUS_URL:
+      return {
+        ...state,
+        previousUrl: action.payload
       }
     case SET_AUTHLOADING:
       return {

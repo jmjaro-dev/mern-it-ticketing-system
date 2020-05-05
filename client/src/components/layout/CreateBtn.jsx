@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 const CreateBtn = ({ user }) => {
@@ -32,5 +33,9 @@ const CreateBtn = ({ user }) => {
     </Fragment>
   )
 };
+
+CreateBtn.propTypes = {
+  user: PropTypes.object.isRequired
+}
 
 export default CreateBtn;

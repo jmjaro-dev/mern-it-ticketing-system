@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import CommentItem from './CommentItem';
 import PropTypes from 'prop-types';
 
-const Comments = ({ comments, current_user, loading }) => {
-  if(comments !== null && comments.length === 0 && !loading) {
+const Comments = ({ comments, current_user }) => {
+  if(comments !== null && comments.length === 0) {
     return <p>There are no comments yet.</p>
   }
 
   return (
     <Fragment>
-      {comments !== null && !loading && (
+      {comments !== null && (
         <Fragment>
           {comments.map((comment, index) => (
             <CommentItem key={comment._id} index={index} comment={comment} current_user={current_user} />
@@ -23,13 +23,11 @@ const Comments = ({ comments, current_user, loading }) => {
 
 Comments.propTypes = {
   comments: PropTypes.array,
-  loading: PropTypes.bool,
   current_user: PropTypes.string
 };
 
 const mapStateToProps = state => ({
-  comments: state.comment.comments,
-  loading: state.comment.loading
+  comments: state.comment.comments
 });
 
 export default connect(mapStateToProps, null)(Comments);

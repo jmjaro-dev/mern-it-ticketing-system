@@ -27,7 +27,7 @@ TicketFilters.propTypes = {
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   filtered: state.ticket.filtered,
-  loading: state.ticket.loading
+  loading: state.ticket.ticketLoading
 });
 
 export default connect(mapStateToProps, null)(TicketFilters);

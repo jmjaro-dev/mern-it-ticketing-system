@@ -2,7 +2,7 @@ import {
   GET_TICKET,
   GET_TICKETS,
   SORT_TICKETS,
-  SORT_TICKETS_PROFILE,
+  SORT_TICKETS_DASHBOARD,
   ADD_TICKET,
   DELETE_TICKET,
   SET_OWNED_TICKETS,
@@ -28,7 +28,7 @@ const initialState = {
   tickets: null,
   current: null,
   active_filter_tickets: 'All Tickets',
-  active_filter_profile: 'all',
+  active_filter_dashboard: 'all',
   mapped: null,
   sorted: null,
   sorting: {
@@ -586,7 +586,7 @@ export default (state = initialState, action) => {
           return state;
       }
       break;
-    case SORT_TICKETS_PROFILE:
+    case SORT_TICKETS_DASHBOARD:
       switch(action.payload.field) {
         case '_id':
           if(!state.isAscending) {
@@ -2168,7 +2168,7 @@ export default (state = initialState, action) => {
         })
       }
     case DELETE_TICKET:
-      if(action.payload.current_url === 'home') {
+      if(action.payload.current_url === 'tickets') {
         if(state.sorted !== null && state.filtered !== null) {
           return {
             ...state,
@@ -2300,14 +2300,14 @@ export default (state = initialState, action) => {
         if(action.payload.userType === 'employee') {
           return {
             ...state,
-            active_filter_profile: action.payload.filter,
+            active_filter_dashboard: action.payload.filter,
             owned: action.payload.tickets,
             filtered: action.payload.tickets
           };
         } else {
           return {
             ...state,
-            active_filter_profile: action.payload.filter,
+            active_filter_dashboard: action.payload.filter,
             assigned: action.payload.tickets,
             filtered: action.payload.tickets
           };
@@ -2358,7 +2358,7 @@ export default (state = initialState, action) => {
         tickets: null,
         current: null,
         active_filter_tickets: 'All Tickets',
-        active_filter_profile: 'all',
+        active_filter_dashboard: 'all',
         mapped: null,
         sorted: null,
         sorting: {
