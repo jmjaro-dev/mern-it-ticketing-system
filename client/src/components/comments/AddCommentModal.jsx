@@ -35,7 +35,7 @@ const AddCommentModal = ({ current, user, addComment }) => {
     <Fragment>
       {user && current && (
         <div id="add-comment-modal" className="modal" style={styles.modal}>
-          <div className="modal-content collection comment-add-container">
+          <div className="modal-content collection comment-add-container" style={styles.modal_content}>
             <p className="center grey-text text-darken-2" style={styles.header}>
               <FontAwesomeIcon icon="comment-dots" size="lg" className="blue-text text-darken-2" />
               {' '} Add Comment
@@ -75,7 +75,10 @@ const AddCommentModal = ({ current, user, addComment }) => {
 
 const styles = {
   modal: {
-    padding: '2em'
+    padding: '0'
+  },
+  modal_content: {
+    padding: '0 !important'
   },
   header: {
     fontSize: "1.5em"

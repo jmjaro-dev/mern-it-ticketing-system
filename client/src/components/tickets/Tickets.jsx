@@ -147,7 +147,7 @@ const Tickets = ({ user, current, current_ticket_exists, tickets, active_filter,
           )}
           {/* <p className="ticket-label center">Tickets</p> */}
           <div id="tickets" className="card-panel collection">
-            <div className="center grey lighten-3" style={styles.header}>
+            <div className="center" style={styles.header}>
               <span>
                 <FontAwesomeIcon icon="file-invoice" className="blue-text text-darken-2" /> {' '}
                 Tickets

@@ -257,7 +257,7 @@ textarea:focus {
 
 .comment-add-container {
   border: none;
-  border-radius: 0.5em;
+  padding: 0 !important;
 }
 
 .comment-message {
