@@ -2461,6 +2461,7 @@ export default (state = initialState, action) => {
         ticketLoading: true
       }
     case RESET_TICKET_STATE:
+      localStorage.removeItem('currentTicket');
       return {
         tickets: null,
         current: null,
