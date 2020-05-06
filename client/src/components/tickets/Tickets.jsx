@@ -6,6 +6,7 @@ import TicketItem from './TicketItem';
 import PreLoader from '../layout/PreLoader';
 import { setPreviousUrl } from '../../actions/authActions';
 import { getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, clearCurrent } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const Tickets = ({ user, current, current_ticket_exists, tickets, active_filter, previousUrl, setPreviousUrl, mapped, sorted, filtered, sorting, loading, getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, clearCurrent }) => {
@@ -146,8 +147,9 @@ const Tickets = ({ user, current, current_ticket_exists, tickets, active_filter,
           )}
           {/* <p className="ticket-label center">Tickets</p> */}
           <div id="tickets" className="card-panel collection">
-            <div className="center blue darken-2" style={styles.header}>
-              <span className="white-text">
+            <div className="center grey lighten-3" style={styles.header}>
+              <span>
+                <FontAwesomeIcon icon="file-invoice" className="blue-text text-darken-2" /> {' '}
                 Tickets
               </span>
             </div>

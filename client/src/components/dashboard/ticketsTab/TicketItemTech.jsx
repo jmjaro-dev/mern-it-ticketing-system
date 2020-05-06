@@ -27,7 +27,7 @@ const TicketItemTech = ({ ticket, setCurrent }) => {
   }
     
   return (
-    <tr key={_id}>
+    <tr key={_id} className="hoverable">
       <td className="ticket-info center">
         {_id}
       </td>

@@ -301,7 +301,7 @@ Navbar.propTypes = {
 }
 
 Navbar.defaultProps = {
-  title: 'IT Ticket Tracker',
+  title: 'IT Ticketing System',
   icon: 'file-invoice'
 }
 
