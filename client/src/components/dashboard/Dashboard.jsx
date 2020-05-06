@@ -132,7 +132,7 @@ const Dashboard = ({ user, tickets, current, current_ticket_exists, active_filte
                 <a className="active" href="#tickets" onClick={setActive} >
                 {user && user.userType !== 'employee' ? (
                   <Fragment>
-                    Assigned Tickets ({ assigned.length })
+                    Assigned ({ assigned.length })
                   </Fragment>
                 ) : (
                   <Fragment>
@@ -142,7 +142,7 @@ const Dashboard = ({ user, tickets, current, current_ticket_exists, active_filte
                 </a>
               </li>
               <li className="tab col">
-                <a href="#unassigned" onClick={setActive} >Unassigned Tickets ({ unassigned.length })</a>
+                <a href="#unassigned" onClick={setActive} >Unassigned ({ unassigned.length })</a>
               </li>
             </ul>
             <div className="row">
