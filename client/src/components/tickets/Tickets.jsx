@@ -136,7 +136,11 @@ const Tickets = ({ user, current, current_ticket_exists, tickets, active_filter,
   }
 
   if(tickets !== null && tickets.length === 0 && !loading) {
-    return <h4>There are no tickets yet. Create one.</h4>
+    return (
+      <div className="card-panel center">
+        <p>There are no tickets yet.</p>
+      </div>
+    )
   }
   return (
     <Fragment>
