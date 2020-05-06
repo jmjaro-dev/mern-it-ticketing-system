@@ -2071,7 +2071,7 @@ export default (state = initialState, action) => {
         }
       }
     case UPDATE_TICKET:
-      if(action.payload.current_url !== 'dashboard') {
+      if(action.payload.current_url === 'tickets') {
         if(state.sorted !== null && state.filtered !== null) {
           return {
             ...state,
@@ -2097,6 +2097,88 @@ export default (state = initialState, action) => {
             }
           }
         }
+      } else if (action.payload.current_url === 'ticket') {
+        if(action.payload.userType !== 'employee') {
+          if(state.sorted !== null && state.filtered !== null) {
+            return {
+              ...state,
+              tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
+              sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
+              unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned'),
+              current: {
+                ticket: action.payload.ticket,
+                current_url: action.payload.current_url
+              }
+            }
+          } else {
+            if(state.filtered !== null) {
+              return {
+                ...state,
+                tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
+                filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned'),
+                current: {
+                  ticket: action.payload.ticket,
+                  current_url: action.payload.current_url
+                }
+              }
+            } else {
+              return {
+                ...state,
+                tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned'),
+                current: {
+                  ticket: action.payload.ticket,
+                  current_url: action.payload.current_url
+                }
+              }
+            }
+          }
+        } else {
+          if(state.sorted !== null && state.filtered !== null) {
+            return {
+              ...state,
+              tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+              unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned' && ticket.issuedBy._id === action.payload.userID),
+              current: {
+                ticket: action.payload.ticket,
+                current_url: action.payload.current_url
+              }
+            }
+          } else {
+            if(state.filtered !== null) {
+              return {
+                ...state,
+                tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned' && ticket.issuedBy._id === action.payload.userID),
+                current: {
+                  ticket: action.payload.ticket,
+                  current_url: action.payload.current_url
+                }
+              }
+            } else {
+              return {
+                ...state,
+                tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                owned: state.owned.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned' && ticket.issuedBy._id === action.payload.userID),
+                current: {
+                  ticket: action.payload.ticket,
+                  current_url: action.payload.current_url
+                }
+              }
+            }
+          }
+        }
       } else {
         if(action.payload.userType !== 'employee') {
           if(state.sorted !== null && state.filtered !== null) {
@@ -2106,7 +2188,11 @@ export default (state = initialState, action) => {
               assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
               sorted: state.sorted.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
               filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
-              unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
+              unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned'),
+              current: {
+                ticket: action.payload.ticket,
+                current_url: action.payload.current_url
+              }
             }
           } else {
             if(state.filtered !== null) {
@@ -2115,14 +2201,22 @@ export default (state = initialState, action) => {
                 tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
                 assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
                 filtered: state.filtered.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
-                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned'),
+                current: {
+                  ticket: action.payload.ticket,
+                  current_url: action.payload.current_url
+                }
               }
             } else {
               return {
                 ...state,
                 tickets: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
                 assigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo._id === action.payload.userID),
-                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned')
+                unassigned: state.tickets.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket).filter(ticket => ticket.assignedTo.to === 'Unassigned'),
+                current: {
+                  ticket: action.payload.ticket,
+                  current_url: action.payload.current_url
+                }
               }
             }
           }
@@ -2280,11 +2374,11 @@ export default (state = initialState, action) => {
         ...state,
         filtered: state.tickets.filter(ticket => {
           const regex = new RegExp(`${action.payload}`, 'gi');
-          return ticket._id.toString().match(regex) || ticket.title.match(regex) || ticket.description.match(regex) || ticket.priority.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex) || ticket.assignedTo.firstName.match(regex) || ticket.assignedTo.lastName.match(regex);
+          return ticket._id.toString().match(regex) || ticket.title.match(regex) || ticket.description.match(regex) || ticket.priority.match(regex) || ticket.status.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex);
         }),
         mapped: state.tickets.filter(ticket => {
           const regex = new RegExp(`${action.payload}`, 'gi');
-          return ticket._id.toString().match(regex) || ticket.title.match(regex) || ticket.description.match(regex) || ticket.priority.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex) || ticket.assignedTo.firstName.match(regex) || ticket.assignedTo.lastName.match(regex);
+          return ticket._id.toString().match(regex) || ticket.title.match(regex) || ticket.description.match(regex) || ticket.priority.match(regex) || ticket.status.match(regex) || ticket.issuedBy.firstName.match(regex) || ticket.issuedBy.lastName.match(regex);
         }) 
       };
     case SET_FILTER:

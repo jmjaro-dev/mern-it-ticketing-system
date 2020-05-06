@@ -28,7 +28,7 @@ export default (state = initialState, action) => {
     case ADD_COMMENT:
       return {
         ...state,
-        comments: [...state.comments, action.payload]
+        comments: [action.payload, ...state.comments]
       };
     case UPDATE_COMMENT:
       return {

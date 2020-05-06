@@ -12,6 +12,7 @@ import Ticket from './components/tickets/Ticket';
 import CreateTicketModal from './components/tickets/CreateTicketModal';
 import UpdateTicketModal from './components/tickets/UpdateTicketModal';
 import DeleteTicketModal from './components/tickets/DeleteTicketModal';
+import AddCommentModal from './components/comments/AddCommentModal';
 import DeleteCommentModal from './components/comments/DeleteCommentModal';
 import Alerts from './components/layout/Alerts';
 // Redux
@@ -38,6 +39,7 @@ import {
   faSignInAlt,
   faSignOutAlt,
   faBars,
+  faFilter,
   faSort,
   faSortAmountUp,
   faSortAmountDown,
@@ -52,10 +54,12 @@ import {
   faChevronLeft,
   faChevronRight,
   faChevronCircleDown,
-  faPaperPlane
+  faPaperPlane,
+  faCommentDots,
+  faComments
 } from '@fortawesome/free-solid-svg-icons';
 // icons library 
-library.add(faSpinner, faUser, faUserPlus, faColumns, faFileInvoice, faExclamationCircle, faSearch, faCog, faSignInAlt, faSignOutAlt, faBars, faSort, faSortAmountUp, faSortAmountDown, faSortAlphaUp, faSortAlphaDown, faSortNumericDown, faSortNumericUp, faEye, faPlus, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane);
+library.add(faSpinner, faUser, faUserPlus, faColumns, faFileInvoice, faExclamationCircle, faSearch, faCog, faSignInAlt, faSignOutAlt, faBars, faFilter, faSort, faSortAmountUp, faSortAmountDown, faSortAlphaUp, faSortAlphaDown, faSortNumericDown, faSortNumericUp, faEye, faPlus, faEdit, faPencilAlt, faTrashAlt, faChevronLeft, faChevronRight, faChevronCircleDown, faPaperPlane, faCommentDots, faComments);
 
 
 if(localStorage.token) {
@@ -78,6 +82,7 @@ const App = () => {
               <CreateTicketModal />
               <DeleteTicketModal />
               <UpdateTicketModal />
+              <AddCommentModal />
               <DeleteCommentModal />
               <Switch>
                 <PrivateRoute exact path='/' component={Dashboard} />

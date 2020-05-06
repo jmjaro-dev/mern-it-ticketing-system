@@ -25,7 +25,7 @@ const Dashboard = ({ user, tickets, current, active_filter, previousUrl, setPrev
     M.AutoInit();
 
     if(user && !current && current_ticket && !loading) {
-      setCurrent(current_ticket, 'home');
+      setCurrent(current_ticket, 'dashboard');
       setTicketExists(true);
     }
 

@@ -3,6 +3,7 @@ import Search from './Search';
 import Filter from './Filter';
 import { connect } from 'react-redux';
 import { setFilter } from '../../actions/ticketActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 const Filters = ({ tickets, filtered, user, active_filter, setFilter }) => 
@@ -118,12 +119,15 @@ const Filters = ({ tickets, filtered, user, active_filter, setFilter }) =>
             <Fragment>
               <form>
                 <div className="form-group">
-                  <label htmlFor="ticketFilter">Ticket Filter:</label>
+                  <span style={{ fontSize: '0.92em', fontWeight: 'bold'}}>
+                    Ticket Filter {' '}
+                    <FontAwesomeIcon icon="filter" className="blue-text text-darken-2" />
+                  </span>
                   <select name="ticketFilter" className="browser-default" defaultValue={active_filter} onChange={onChange} style={{ maxWidth: '200px' }} required>
                   {filters.map(filter => (
                     <Filter key={filter} filter={filter} counter={ticketCounter}/>
                   ))}
-                </select>
+                  </select>
                 </div>
               </form>
             </Fragment>

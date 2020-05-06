@@ -19,7 +19,7 @@ const Tickets = ({ user, current, tickets, active_filter, previousUrl, setPrevio
     }
 
     if(user && !current && current_ticket && !loading) {
-      setCurrent(current_ticket, 'home');
+      setCurrent(current_ticket, 'tickets');
       setTicketExists(true);
     }
 
@@ -155,18 +155,38 @@ const Tickets = ({ user, current, tickets, active_filter, previousUrl, setPrevio
                   <Fragment>
                     {filtered !== null && filtered.length === 0 && (
                       <Fragment>
-                        {active_filter !== 'All Tickets' ? (
+                        {active_filter !== 'All Tickets' && active_filter !== 'My Tickets' && active_filter !== 'Assigned To Me' ? (
                           <tr>
                             <td className="center" colSpan="8">
                               <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
                             </td>
                           </tr>
                         ) : (
-                          <tr>
-                            <td className="center" colSpan="8">
-                              <p>There are no tickets yet.</p>
-                            </td>
-                          </tr>
+                          <Fragment>
+                            {active_filter === 'All Tickets' && (
+                              <tr>
+                              <td className="center" colSpan="8">
+                                <p>There are no tickets yet.</p>
+                              </td>
+                            </tr>
+                            )}
+
+                            {active_filter === 'My Tickets' && (
+                              <tr>
+                                <td className="center" colSpan="8">
+                                  <p>You haven't created a ticket yet.</p>
+                                </td>
+                              </tr>
+                            )}
+
+                            {active_filter === 'Assigned To Me' && (
+                              <tr>
+                                <td className="center" colSpan="8">
+                                  <p>There are no tickets assigned to you.</p>
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
                         )}
                       </Fragment>
                     )}

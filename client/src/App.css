@@ -168,12 +168,6 @@ textarea:focus {
 
 /* END OF OVER WRITE */
 
-/* MENU STYLES */
-/* #sub-menu {
-  margin-top: !important;
-} */
-/* END OF MENU STYLES */
-
 /* BUTTON STYLES */
 #createBtnContainer {
   height: 100%;
@@ -259,7 +253,6 @@ textarea:focus {
 /* COMMENTS STYLES */
 .comment-container {
   border: none;
-  border-radius: 0.5em;
 }
 
 .comment-add-container {
@@ -313,9 +306,6 @@ textarea:focus {
   margin: auto;
 }
 
-.btn-primary,
-.bg-primary,
-.badge-primary,
 .alert-primary {
   background: var(--primary-color);
   color: #fff;
@@ -335,13 +325,4 @@ textarea:focus {
 .alert-success {
   background: var(--success-color);
   color: #fff;
-}
-
-.btn-white,
-.bg-white,
-.badge-white,
-.alert-white {
-  background: #fff;
-  color: #333;
-  border: #ccc solid 1px;
 }
