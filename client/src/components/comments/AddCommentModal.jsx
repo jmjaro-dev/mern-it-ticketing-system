@@ -9,6 +9,12 @@ const AddCommentModal = ({ current, user, addComment }) => {
   
   const onChange = e => setMessage(e.target.value);
 
+  const onCancel = e => {
+    e.preventDefault();
+    setMessage('');
+    document.getElementsByName("comment-message").value = '';
+  }
+  
   const onSubmit = e => {
     e.preventDefault();
 
@@ -47,7 +53,7 @@ const AddCommentModal = ({ current, user, addComment }) => {
             </div>
           </div>
           <div className="modal-footer" style={styles.footer}>
-            <a href="#!" className="modal-close btn-small btn-flat">Cancel</a>
+            <a href="#!" className="modal-close btn-small btn-flat" onClick={onCancel}>Cancel</a>
             {' '}
             {message !== '' ? (
               <a href="#!" className="modal-close btn-small blue darken-2" onClick={onSubmit} >

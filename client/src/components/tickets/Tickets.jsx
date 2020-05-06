@@ -5,10 +5,10 @@ import TicketHeaders from './TicketsHeaders';
 import TicketItem from './TicketItem';
 import PreLoader from '../layout/PreLoader';
 import { setPreviousUrl } from '../../actions/authActions';
-import { getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, clearCurrent } from '../../actions/ticketActions';
+import { getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, clearCurrent } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 
-const Tickets = ({ user, current, tickets, active_filter, previousUrl, setPreviousUrl, mapped, sorted, filtered, sorting, loading, getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, clearCurrent }) => {
+const Tickets = ({ user, current, current_ticket_exists, tickets, active_filter, previousUrl, setPreviousUrl, mapped, sorted, filtered, sorting, loading, getTickets, sortTickets, setSort, resetSort, setFilter, clearFilter, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, clearCurrent }) => {
   let current_ticket = JSON.parse(localStorage.getItem('currentTicket')); 
 
   useEffect(() => {
@@ -21,6 +21,13 @@ const Tickets = ({ user, current, tickets, active_filter, previousUrl, setPrevio
     if(user && !current && current_ticket && !loading) {
       setCurrent(current_ticket, 'tickets');
       setTicketExists(true);
+      setCurrentTicketExists();
+    }
+
+    if(user && current && current_ticket && !loading) {
+      setTicketExists(false);
+      clearCurrentTicketExists();
+      localStorage.removeItem('currentTicket');
     }
 
     if(active_filter) {
@@ -134,7 +141,7 @@ const Tickets = ({ user, current, tickets, active_filter, previousUrl, setPrevio
     <Fragment>
       {tickets !== null && !loading ? (
         <Fragment>
-          {user && tickets && current && current.ticket && current_ticket && !loading && (
+          {user && tickets && current && current.ticket && current_ticket && current_ticket_exists &&!loading && (
             <Redirect to={`/tickets/${current.ticket._id}`} />
           )}
           {/* <p className="ticket-label center">Tickets</p> */}
@@ -233,6 +240,7 @@ const styles = {
 Tickets.propTypes = {
   tickets: PropTypes.array,
   current: PropTypes.object,
+  current_ticket_exists: PropTypes.bool,
   mapped: PropTypes.array,
   sorted: PropTypes.array,
   filtered: PropTypes.array,
@@ -248,6 +256,8 @@ Tickets.propTypes = {
   setFilter: PropTypes.func.isRequired,
   setCurrent: PropTypes.func.isRequired, 
   setTicketExists: PropTypes.func.isRequired,
+  setCurrentTicketExists: PropTypes.func.isRequired,
+  clearCurrentTicketExists: PropTypes.func.isRequired,
   setPreviousUrl: PropTypes.func.isRequired,
   clearFilter: PropTypes.func.isRequired,
   clearCurrent: PropTypes.func.isRequired
@@ -256,6 +266,7 @@ Tickets.propTypes = {
 const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   current: state.ticket.current,
+  current_ticket_exists: state.ticket.current_ticket_exists,
   mapped: state.ticket.mapped,
   sorted: state.ticket.sorted,
   filtered: state.ticket.filtered,
@@ -266,4 +277,4 @@ const mapStateToProps = state => ({
   active_filter: state.ticket.active_filter_tickets
 });
 
-export default connect(mapStateToProps, { getTickets, setPreviousUrl, sortTickets, setSort, resetSort, setFilter, setCurrent, setTicketExists, clearFilter, clearCurrent })(Tickets);
+export default connect(mapStateToProps, { getTickets, setPreviousUrl, sortTickets, setSort, resetSort, setFilter, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, clearFilter, clearCurrent })(Tickets);

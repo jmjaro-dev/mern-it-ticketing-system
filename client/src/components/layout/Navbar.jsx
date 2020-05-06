@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
 import { resetUserState } from '../../actions/userActions';
-import { resetTicketState } from '../../actions/ticketActions';
+import { setCurrentTicketExists, clearCurrentTicketExists, resetTicketState } from '../../actions/ticketActions';
 import { resetCommentState } from '../../actions/commentActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, resetTicketState, resetCommentState }) => {
+const Navbar = ({ title, icon, isAuthenticated, user, current_ticket_exists, setCurrentTicketExists, clearCurrentTicketExists, logout, resetUserState, resetTicketState, resetCommentState }) => {
   const [currentPage, setCurrentPage] = useState(null);
-  const [currentTicketExists, setCurrentTicketExists] = useState(false);
   
   let current_ticket = localStorage.getItem('currentTicket'); 
 
@@ -30,12 +29,12 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
       onSetActive(window.location.pathname);
     }
 
-    if(current_ticket && !currentTicketExists) {
-      setCurrentTicketExists(true);
+    if(current_ticket && !current_ticket_exists) {
+      setCurrentTicketExists();
     } 
 
     // eslint-disable-next-line
-  },[user, currentPage]);
+  },[user, currentPage, window.location.pathname ]);
 
   const onSetActive = path => {
     const links = document.querySelector('ul.right').children;
@@ -101,7 +100,7 @@ const Navbar = ({ title, icon, isAuthenticated, user, logout, resetUserState, re
     setCurrentPage(window.location.pathname);
     if(current_ticket) {
       localStorage.removeItem('currentTicket');
-      setCurrentTicketExists(false);
+      clearCurrentTicketExists();
     }
   }
 
@@ -292,6 +291,9 @@ Navbar.propTypes = {
   icon: PropTypes.string,
   isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
+  current_ticket_exists: PropTypes.bool,
+  setCurrentTicketExists: PropTypes.func.isRequired, 
+  clearCurrentTicketExists: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   resetUserState: PropTypes.func.isRequired,
   resetTicketState: PropTypes.func.isRequired,
@@ -305,7 +307,8 @@ Navbar.defaultProps = {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
+  user: state.auth.user,
+  current_ticket_exists: state.ticket.current_ticket_exists
 });
 
-export default connect(mapStateToProps, { logout, resetUserState, resetTicketState, resetCommentState })(Navbar);
+export default connect(mapStateToProps, { setCurrentTicketExists, clearCurrentTicketExists, logout, resetUserState, resetTicketState, resetCommentState })(Navbar);

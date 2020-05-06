@@ -20,6 +20,8 @@ import {
   CLEAR_FILTER,
   TICKET_ERROR,
   SET_TICKET_EXISTS,
+  SET_CURRENT_TICKET_EXISTS,
+  CLEAR_CURRENT_TICKET_EXISTS,
   SET_TICKETLOADING,
   RESET_TICKET_STATE
 } from '../actions/types';
@@ -43,7 +45,8 @@ const initialState = {
   error: null,
   ticketLoading: false,
   isAscending: false,
-  ticket_exists: false
+  ticket_exists: false,
+  current_ticket_exists: false,
 };
 
 export default (state = initialState, action) => {
@@ -2442,6 +2445,16 @@ export default (state = initialState, action) => {
         ...state,
         ticket_exists: action.payload
       }
+    case SET_CURRENT_TICKET_EXISTS:
+      return {
+        ...state,
+        current_ticket_exists: true
+      }
+    case CLEAR_CURRENT_TICKET_EXISTS:
+      return {
+        ...state,
+        current_ticket_exists: false
+      }
     case SET_TICKETLOADING:
       return {
         ...state,
@@ -2467,7 +2480,8 @@ export default (state = initialState, action) => {
         error: null,
         ticketLoading: false,
         isAscending: false,
-        ticket_exists: false
+        ticket_exists: false,
+        current_ticket_exists: false
       }
     default:
       return state;

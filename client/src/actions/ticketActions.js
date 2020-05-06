@@ -21,6 +21,8 @@ import {
   CLEAR_FILTER,
   TICKET_ERROR,
   SET_TICKET_EXISTS,
+  SET_CURRENT_TICKET_EXISTS,
+  CLEAR_CURRENT_TICKET_EXISTS,
   SET_TICKETLOADING,
   RESET_TICKET_STATE
 } from './types';
@@ -196,6 +198,12 @@ export const setCurrent = (ticket, current_url) => async dispatch => dispatch({
 
 // Set Ticket Exists
 export const setTicketExists = exist => async dispatch => dispatch({ type: SET_TICKET_EXISTS, payload: exist });
+
+// Set Ticket Exists
+export const setCurrentTicketExists = () => async dispatch => dispatch({ type: SET_CURRENT_TICKET_EXISTS });
+
+// Clear Current Ticket Exists
+export const clearCurrentTicketExists = () => async dispatch => dispatch({ type: CLEAR_CURRENT_TICKET_EXISTS });
 
 // Set Owned Tickets
 export const setOwnedTickets = id => async dispatch => dispatch({ type: SET_OWNED_TICKETS, payload: id });

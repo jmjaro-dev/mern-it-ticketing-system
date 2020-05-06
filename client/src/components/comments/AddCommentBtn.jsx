@@ -19,7 +19,7 @@ const AddCommentBtn = ({ user, current }) => {
     <Fragment>
       {user && current && (current.ticket.issuedBy._id === user._id || current.ticket.assignedTo._id === user._id) && (
         <div className="fixed-action-btn">
-          <a href="#add-comment-modal" className="btn-floating btn-large blue darken-2 tooltipped" data-position="left" data-tooltip="Create Comment" onClick={onCreate}>
+          <a href="#add-comment-modal" className="btn-floating btn-large blue darken-2 tooltipped" data-position="left" data-tooltip="Add Comment" onClick={onCreate}>
           <FontAwesomeIcon icon="comment-dots" size="lg" />
           </a>
         </div>

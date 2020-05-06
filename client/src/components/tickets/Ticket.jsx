@@ -88,7 +88,10 @@ const Ticket = ({ user, current, ticket_exists, comments, previousUrl, loading, 
                     {/* Ticket info Section */}
                     <div className="card-panel">
                       {/* Ticket Title, Alert Level, IssuedBy, DateIssued*/}
-                      <div className="center ticket-info-header">Ticket Information</div>
+                      <div className="center ticket-info-header">
+                        <FontAwesomeIcon icon="file-invoice"  className="blue-text text-darken-2" size="lg" style={{ marginRight: '0.5em' }} />
+                        Ticket Information
+                      </div>
                       <div className="row">
                         <div className="col s12">
                           {/* Ticket ID */}

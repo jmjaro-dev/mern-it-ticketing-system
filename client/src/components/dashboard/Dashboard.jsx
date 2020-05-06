@@ -5,11 +5,11 @@ import CreateBtn from '../layout/CreateBtn';
 import UnassignedTab from './unassignedTab/UnassignedTab';
 import TicketsTab from './ticketsTab/TicketsTab';
 import { setPreviousUrl } from '../../actions/authActions';
-import { getTickets, setCurrent, setTicketExists, setOwnedTickets, setAssignedTickets, setUnassignedTickets } from '../../actions/ticketActions';
+import { getTickets, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists,  setOwnedTickets, setAssignedTickets, setUnassignedTickets } from '../../actions/ticketActions';
 import PropTypes from 'prop-types';
 import M from 'materialize-css/dist/js/materialize.js';
 
-const Dashboard = ({ user, tickets, current, active_filter, previousUrl, setPreviousUrl, loading, owned, assigned, unassigned, getTickets, setCurrent, setTicketExists, setOwnedTickets, setAssignedTickets, setUnassignedTickets }) => {
+const Dashboard = ({ user, tickets, current, current_ticket_exists, active_filter, previousUrl, setPreviousUrl, loading, owned, assigned, unassigned, getTickets, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, setOwnedTickets, setAssignedTickets, setUnassignedTickets }) => {
   const [activeTab, setActiveTab] = useState('#tickets');
   const [ticketCounter, setTicketCounter] = useState({
     totalOwned: null,
@@ -27,6 +27,13 @@ const Dashboard = ({ user, tickets, current, active_filter, previousUrl, setPrev
     if(user && !current && current_ticket && !loading) {
       setCurrent(current_ticket, 'dashboard');
       setTicketExists(true);
+      setCurrentTicketExists();
+    }
+
+    if(user && current && current_ticket && !loading) {
+      setTicketExists(false);
+      clearCurrentTicketExists();
+      localStorage.removeItem('currentTicket');
     }
 
     if((previousUrl === null || previousUrl !== window.location.pathname) && !current_ticket){
@@ -113,7 +120,7 @@ const Dashboard = ({ user, tickets, current, active_filter, previousUrl, setPrev
 
   return (
     <Fragment>
-      {user && current && current.ticket && current_ticket && !loading && (
+      {user && current && current.ticket && current_ticket && current_ticket_exists && !loading && (
         <Redirect to={`/tickets/${current_ticket._id}`} />
       )} 
       <CreateBtn user={user} />
@@ -155,6 +162,7 @@ const Dashboard = ({ user, tickets, current, active_filter, previousUrl, setPrev
 Dashboard.propTypes = {
   user: PropTypes.object.isRequired,
   current: PropTypes.object,
+  curent_ticket_exists: PropTypes.bool,
   tickets: PropTypes.array,
   active_filter: PropTypes.string.isRequired,
   assigned: PropTypes.array,
@@ -166,6 +174,8 @@ Dashboard.propTypes = {
   getTickets: PropTypes.func.isRequired,
   setCurrent: PropTypes.func.isRequired, 
   setTicketExists: PropTypes.func.isRequired,
+  setCurrentTicketExists: PropTypes.func.isRequired, 
+  clearCurrentTicketExists: PropTypes.func.isRequired,
   setPreviousUrl: PropTypes.func.isRequired,
   setOwnedTickets: PropTypes.func.isRequired,
   setAssignedTickets: PropTypes.func.isRequired,
@@ -176,6 +186,7 @@ const mapStateToProps = state => ({
   tickets: state.ticket.tickets,
   user: state.auth.user,
   current: state.ticket.current,
+  current_ticket_exists: state.ticket.current_ticket_exists,
   active_filter: state.ticket.active_filter_dashboard,
   owned: state.ticket.owned,
   assigned: state.ticket.assigned,
@@ -185,4 +196,4 @@ const mapStateToProps = state => ({
   loading: state.ticket.ticketLoading
 });
 
-export default connect(mapStateToProps, { getTickets, setCurrent, setTicketExists, setPreviousUrl, setOwnedTickets, setAssignedTickets, setUnassignedTickets })(Dashboard);
+export default connect(mapStateToProps, { getTickets, setCurrent, setTicketExists, setCurrentTicketExists, clearCurrentTicketExists, setPreviousUrl, setOwnedTickets, setAssignedTickets, setUnassignedTickets })(Dashboard);
