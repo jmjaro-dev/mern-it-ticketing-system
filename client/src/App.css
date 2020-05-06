@@ -1,7 +1,7 @@
 
 :root {
   --primary-color: #1e88e5;
-  --danger-color: #f75353;
+  --danger-color: #f02a2a;
   --success-color: #28a745;
 }
 
@@ -35,7 +35,7 @@ select {
 /* Side Nav */
 .sidenav li.active,
 .sidenav li.active:focus {
-  background-color: #00000038;
+  background-color: #0000001a;
   color: 000;
 }
 

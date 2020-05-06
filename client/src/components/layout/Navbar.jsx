@@ -194,9 +194,9 @@ const Navbar = ({ title, icon, isAuthenticated, user, current_ticket_exists, set
       <li>
         <div className="user-view">
           <div className="background blue darken-2" />
-          <span className="white-text name">
+          <span className="white-text name" style={{ paddingBottom: "2em" }}>
           <FontAwesomeIcon icon="file-invoice" style={{ marginRight: "1em" }} />
-            IT Ticket Tracker
+            IT Ticketing System
           </span>
         </div>
       </li>
