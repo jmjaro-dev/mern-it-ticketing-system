@@ -80,7 +80,7 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
               {/* Table Body */}
               <tbody>
                 {/* Ticket Items for Technicians */}
-                {filtered  && (
+                {filtered && (
                   <Fragment>
                     {user.userType !== 'employee' ? (
                       <Fragment>
@@ -98,7 +98,7 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
                               </tr>
                             ) : (
                               <Fragment>
-                                {user.userType === 'employee' ? (
+                                {user && user.userType === 'employee' ? (
                                   <tr>
                                     <td className="center" colSpan="9">
                                       <p>There are no tickets yet.</p>
@@ -122,10 +122,16 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
                           <TicketItemEmp key={ticket._id} ticket={ticket} />
                         ))}
 
-                        {filtered !== null && filtered.length === 0 && (
+                        {filtered !== null && filtered.length === 0 && active_filter !== 'all' ? (
                           <tr>
                             <td className="center" colSpan="9">
                               <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
+                            </td>
+                          </tr>
+                        ) : (
+                          <tr>
+                            <td className="center" colSpan="9">
+                              <p>There are no tickets yet.</p>
                             </td>
                           </tr>
                         )}
