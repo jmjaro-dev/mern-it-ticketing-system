@@ -98,13 +98,7 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
                               </tr>
                             ) : (
                               <Fragment>
-                                {user && user.userType === 'employee' ? (
-                                  <tr>
-                                    <td className="center" colSpan="9">
-                                      <p>There are no tickets yet.</p>
-                                    </td>
-                                  </tr>
-                                ) : (
+                                {user && user.userType === 'technician' && assigned.length === 0 && (
                                   <tr>
                                     <td className="center" colSpan="9">
                                       <p>There are no tickets assigned to you.</p>
@@ -122,7 +116,29 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
                           <TicketItemEmp key={ticket._id} ticket={ticket} />
                         ))}
 
-                        {filtered !== null && filtered.length === 0 && active_filter !== 'all' ? (
+                        {filtered.length === 0 && (
+                          <Fragment>
+                            {active_filter !== 'all' ? (
+                              <tr>
+                                <td className="center" colSpan="9">
+                                  <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
+                                </td>
+                              </tr>
+                            ) : (
+                              <Fragment>
+                                {user && user.userType === 'employee' && owned.length === 0 && (
+                                  <tr>
+                                    <td className="center" colSpan="9">
+                                      <p>You don't have any tickets yet.</p>
+                                    </td>
+                                  </tr>
+                                )}
+                              </Fragment>
+                            )}
+                          </Fragment>
+                        )}
+
+                        {/* {filtered !== null && filtered.length === 0 && active_filter !== 'all' ? (
                           <tr>
                             <td className="center" colSpan="9">
                               <p>There are no <span style={styles.emphasized}>{active_filter}</span> tickets.</p>
@@ -134,7 +150,7 @@ const TicketsTab = ({ user, active_filter, loading, tickets, owned, assigned, fi
                               <p>There are no tickets yet.</p>
                             </td>
                           </tr>
-                        )}
+                        )} */}
                       </Fragment>
                     )}   
                   </Fragment>
