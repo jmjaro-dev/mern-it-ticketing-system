@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
 import { resetUserState } from '../../actions/userActions';
 import { setCurrentTicketExists, clearCurrentTicketExists, resetTicketState } from '../../actions/ticketActions';
@@ -11,6 +11,7 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Navbar = ({ title, icon, isAuthenticated, user, current_ticket_exists, setCurrentTicketExists, clearCurrentTicketExists, logout, resetUserState, resetTicketState, resetCommentState }) => {
   const [currentPage, setCurrentPage] = useState(null);
+  let location = useLocation();
   
   let current_ticket = localStorage.getItem('currentTicket'); 
 
@@ -34,7 +35,7 @@ const Navbar = ({ title, icon, isAuthenticated, user, current_ticket_exists, set
     } 
 
     // eslint-disable-next-line
-  },[user, currentPage, window.location.pathname ]);
+  },[user, currentPage, window.location.pathname, location ]);
 
   const onSetActive = path => {
     const links = document.querySelector('ul.right').children;

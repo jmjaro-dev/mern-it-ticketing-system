@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { register } from '../../actions/authActions';
@@ -121,6 +122,8 @@ const Register = ({ isAuthenticated, error, register, setAlert, ...props }) => {
 
           </div>
         </div>
+        <br/>
+        <p>Already have an account? Login <Link to="/login">here</Link>.</p>
         <br/>
         <input type="submit" value="Register" className="btn blue darken-2" style={styles.registerBtn}/>
       </form>

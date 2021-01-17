@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alertActions';
 import { login } from '../../actions/authActions';
@@ -56,6 +57,8 @@ const Login =  ({ isAuthenticated, error, login, setAlert, ...props })  => {
           <label htmlFor="password">Password</label>
           <input type="password" name="password" value={password} onChange={onChange} required/>
         </div>
+        <br/>
+        <p>No Account yet? Register <Link to="/register">here</Link>.</p>
         <br/>
         <input type="submit" value="Login" className="btn blue darken-2" style={styles.loginBtn}/>
       </form>
